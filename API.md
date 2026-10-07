@@ -19,20 +19,23 @@ without telling the other person.
 
 ---
 
-## `POST /api/read`: document → action card
+## `POST /api/read`: document → action card (photo, PDF, link or text)
 
 **Request** (`multipart/form-data`):
 
 | Field | Required | Value |
 |---|---|---|
-| `file` | yes | JPEG / PNG / WEBP / HEIC photo or PDF, **max 4 MB** (resize phone photos to ~1600 px wide first) |
+| `file` | one of these three | Photo / screenshot / PDF (see below) |
+| `url` | one of these three | A link to an e-bill page, government notice or PDF; the backend fetches and reads it (private/local addresses are refused) |
+| `text` | one of these three | A pasted or shared **SMS / WhatsApp message** or any text; the scam rules run on these exact words |
+| (file details) | | JPEG / PNG / WEBP / HEIC photo or PDF, **max 4 MB** (resize phone photos to ~1600 px wide first) |
 | `lang` | no | `mr` (default), `hi`, `en` |
 | `history` | no | JSON string from localStorage: `{"msedcl:000123456789": 300}` (see Bill spike below) |
 | `familyPhone` | no | 10-digit number for the WhatsApp button, e.g. `9876543210` |
 | `userName` | no | How to address the person, e.g. `प्रकाश काका`; the spoken card then starts "प्रकाश काका, …" |
 | `edgeText` | no | Text from **Tesseract.js run on the same photo in the browser**; turns on the dual-engine check (see below) |
 
-JSON also works: `{ "fileBase64": "data:image/jpeg;base64,...", "lang": "mr", "history": {...}, "familyPhone": "...", "edgeText": "..." }`
+JSON also works: `{ "text": "..." }` or `{ "url": "https://..." }` or `{ "fileBase64": "data:image/jpeg;base64,...", "lang": "mr", "history": {...}, "familyPhone": "...", "edgeText": "..." }`
 
 **Response** (`200`):
 
@@ -65,6 +68,8 @@ JSON also works: `{ "fileBase64": "data:image/jpeg;base64,...", "lang": "mr", "h
   "rawText": "MAHARASHTRA STATE ELECTRICITY ..."
 }
 ```
+
+Every card also has `source: { kind: "image" | "pdf" | "text", url }`. Only `image` cards have highlight boxes.
 
 ### Field notes
 - **`fields.*.text`** is in the chosen language. Empty string = not applicable (hide that row).

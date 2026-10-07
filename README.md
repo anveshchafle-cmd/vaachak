@@ -11,6 +11,7 @@ Built for THINK AI 4.0 (IETE TCET Mumbai), PS10: AI-Powered Accessibility Assist
 
 | Feature | How |
 |---|---|
+| **Any digital content in** | Photo, screenshot, PDF, a **link** (e-bill page, government notice) or **pasted/shared text** (SMS, WhatsApp forward), all turned into the same card. "Share to Vaachak" from any app |
 | **5-field action card** | What is this · What to do · By when · How much · Warning, in Marathi / Hindi / English |
 | **Confidence on every field** | Unsure readings say "please ask someone" instead of guessing |
 | **"Show me where" proof** | Each field comes with the box where it is printed on the photo |

@@ -36,7 +36,8 @@ Honesty line: "हे साफ दिसत नाही. कृपया क�
 7. Mobile first: design for a 360-412 px wide Android phone held in one hand. Test in Chrome DevTools phone mode.
 
 == API (summary; full details in API.md) ==
-- POST /api/read   multipart: file (photo/PDF, max 4 MB, resize photos to ≤1600 px), lang (mr|hi|en),
+- POST /api/read   multipart or JSON. Give ONE of: file (photo/PDF, max 4 MB, resize photos to ≤1600 px),
+                   url (link to an e-bill / govt page / PDF), text (pasted SMS or WhatsApp message). Plus lang (mr|hi|en),
                    history (JSON string), familyPhone, userName, edgeText (Tesseract text)  → CARD JSON
 - POST /api/ask    JSON { question, card, lang }  or multipart { audio, card (JSON string), lang } → { heard, answer, answerable, speak }
 - POST /api/tts    JSON { text, lang } → audio/wav (Sarvam voice, ~2 s)
@@ -49,7 +50,9 @@ consensus.{badge,label}, payment.{method,upiUrl,officialUrl,copyText,confirmText
 dates.{daysLeft,overdue}, actions.{whatsappText,whatsappUrl,calendarUrl}, speak, mode ("online"|"offline").
 
 == SCREENS ==
-1. HOME: huge high-contrast UI, 3 giant buttons: SNAP (camera) · UPLOAD (screenshot/PDF) · ASK (voice).
+1. HOME: huge high-contrast UI, giant buttons: SNAP (camera) · UPLOAD (screenshot/PDF) · PASTE (message or link) · ASK (voice).
+   PASTE: one big text box + "Paste" button (navigator.clipboard.readText()); if it starts with http send it as url, else as text.
+   This is the "digital content" path the problem statement asks for, so make it prominent.
    Language toggle मराठी / हिंदी / English at top. Optional one-time setup: user's name (e.g. "प्रकाश काका")
    and family WhatsApp number, saved in localStorage.
 2. CAMERA: full-screen <video> using startViewfinder(video, { lang, onStatus, onCapture }). It speaks
@@ -77,7 +80,14 @@ dates.{daysLeft,overdue}, actions.{whatsappText,whatsappUrl,calendarUrl}, speak,
      navigator.canShare({files}) is true, else open card.actions.whatsappUrl.
    - ⏰ REMIND ME: open card.actions.calendarUrl (only if not null).
    - ❓ ASK: hold-to-talk with MediaRecorder → POST /api/ask (multipart audio + card) → show and speak the answer.
-6. DEMO MODE: hidden toggle (e.g. long-press the logo). Uses the bundled sample cards (copy samples/*.json into
+6. SHARE TO VAACHAK (PWA): add a web app manifest (frontend/public/manifest.webmanifest) with
+   "share_target": { "action": "/share", "method": "GET", "params": { "title": "title", "text": "text", "url": "url" } }
+   plus icons and "display": "standalone", and a minimal service worker so Chrome offers "Install app".
+   The /share route reads ?text= / ?url= and sends them to /api/read. Then in WhatsApp/SMS: long-press a message →
+   Share → Vaachak → the card appears. (Sharing images needs method POST + service-worker handling: optional.)
+7. READ EVERYTHING ALOUD (for blind users): a button that sends { question: "हे पूर्ण कागद सोप्या भाषेत वाचून दाखवा", card } to
+   /api/ask and plays the answer.
+8. DEMO MODE: hidden toggle (e.g. long-press the logo). Uses the bundled sample cards (copy samples/*.json into
    frontend/src/samples/) and the offline audio in samples/audio/*.wav (copy into frontend/public/audio/).
    Must work with Wi-Fi OFF.
 
