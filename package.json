@@ -8,7 +8,7 @@
     "node": "22.x"
   },
   "scripts": {
-    "dev": "node server.js",
+    "dev": "node dev-server.js",
     "test": "node --test \"test/*.test.js\"",
     "try": "node scripts/try.js",
     "samples": "node scripts/make-samples.js",

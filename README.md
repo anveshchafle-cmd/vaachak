@@ -74,7 +74,7 @@ api/            Vercel functions: read.js, ask.js, tts.js, health.js
 lib/            card.js (builds the card) · rules.js · scam.js · prompts.js · gemini.js · i18n.js
 samples/        Ready-made cards for offline Demo mode
 test/           node:test suites + fixtures
-server.js       Local dev server that runs the same handlers
+dev-server.js   Local dev server that runs the same handlers
 API.md          The contract between frontend and backend
 frontend/       React app (built separately, merged here)
 ```
