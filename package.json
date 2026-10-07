@@ -11,6 +11,7 @@
     "dev": "node server.js",
     "test": "node --test \"test/*.test.js\"",
     "try": "node scripts/try.js",
-    "samples": "node scripts/make-samples.js"
+    "samples": "node scripts/make-samples.js",
+    "audio": "node scripts/make-audio.js"
   }
 }

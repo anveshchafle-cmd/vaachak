@@ -38,7 +38,7 @@ test('amount not printed on the document lowers confidence', () => {
   assert.equal(card.fields.amount.verified, false);
   assert.ok(card.fields.amount.confidence <= 0.5);
   assert.ok(card.flags.includes('LOW_CONFIDENCE'));
-  assert.match(card.speak, /नीट वाचता येत नाही/);
+  assert.match(card.speak, /हे साफ दिसत नाही. कृपया कुणालातरी विचारून घ्या./);
 });
 
 test('expired medicine: rule overrides AI, red flag, no pill schedule', () => {

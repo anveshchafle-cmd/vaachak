@@ -1,4 +1,5 @@
 {
+  "mode": "online",
   "docType": "sms_message",
   "lang": "mr",
   "fields": {
@@ -43,6 +44,25 @@
   "flags": [
     "SCAM"
   ],
+  "alert": {
+    "flag": "SCAM",
+    "level": "danger",
+    "vibrate": [
+      400,
+      200,
+      400,
+      200,
+      800
+    ]
+  },
+  "consensus": {
+    "available": false,
+    "engines": [
+      "gemini"
+    ],
+    "badge": null
+  },
+  "payment": null,
   "scam": {
     "isSuspect": true,
     "score": 4,

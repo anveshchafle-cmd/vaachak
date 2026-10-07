@@ -1,4 +1,5 @@
 {
+  "mode": "online",
   "docType": "prescription",
   "lang": "mr",
   "fields": {
@@ -52,6 +53,21 @@
     }
   },
   "flags": [],
+  "alert": {
+    "flag": null,
+    "level": "ok",
+    "vibrate": [
+      60
+    ]
+  },
+  "consensus": {
+    "available": false,
+    "engines": [
+      "gemini"
+    ],
+    "badge": null
+  },
+  "payment": null,
   "scam": {
     "isSuspect": false,
     "score": 0,

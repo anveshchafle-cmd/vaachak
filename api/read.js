@@ -20,10 +20,11 @@ async function readInput(req) {
       lang: form.get('lang'),
       history: parseJsonField(form.get('history'), {}),
       familyPhone: form.get('familyPhone'),
+      edgeText: form.get('edgeText'),
     };
   }
 
-  // Also accepts JSON: { fileBase64: "data:image/jpeg;base64,...", mimeType?, lang, history, familyPhone }
+  // Also accepts JSON: { fileBase64: "data:image/jpeg;base64,...", mimeType?, lang, history, familyPhone, edgeText }
   const body = await readJson(req);
   if (!body.fileBase64) throw new HttpError(400, 'NO_FILE', 'Send "fileBase64" (or use multipart form data)');
   const dataUrl = /^data:([^;]+);base64,/.exec(body.fileBase64);
@@ -33,6 +34,7 @@ async function readInput(req) {
     lang: body.lang,
     history: parseJsonField(body.history, {}),
     familyPhone: body.familyPhone,
+    edgeText: body.edgeText,
   };
 }
 
@@ -53,7 +55,8 @@ export const POST = handle(async (req) => {
   });
 
   const history = input.history && typeof input.history === 'object' && !Array.isArray(input.history) ? input.history : {};
-  return json(buildCard(extraction, { lang, history, familyPhone: input.familyPhone, isPdf }));
+  const edgeText = typeof input.edgeText === 'string' ? input.edgeText.slice(0, 20_000) : null;
+  return json(buildCard(extraction, { lang, history, familyPhone: input.familyPhone, isPdf, edgeText }));
 });
 
 export const OPTIONS = preflight;

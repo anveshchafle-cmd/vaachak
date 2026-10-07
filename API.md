@@ -29,8 +29,9 @@ without telling the other person.
 | `lang` | no | `mr` (default), `hi`, `en` |
 | `history` | no | JSON string from localStorage: `{"msedcl:000123456789": 300}` (see Bill spike below) |
 | `familyPhone` | no | 10-digit number for the WhatsApp button, e.g. `9876543210` |
+| `edgeText` | no | Text from **Tesseract.js run on the same photo in the browser**; turns on the dual-engine check (see below) |
 
-JSON also works: `{ "fileBase64": "data:image/jpeg;base64,...", "lang": "mr", "history": {...}, "familyPhone": "..." }`
+JSON also works: `{ "fileBase64": "data:image/jpeg;base64,...", "lang": "mr", "history": {...}, "familyPhone": "...", "edgeText": "..." }`
 
 **Response** (`200`):
 
@@ -102,6 +103,73 @@ localStorage.setItem('vaachak.history', JSON.stringify(h));
 
 ---
 
+## Safety & accessibility keys (v2)
+
+Every card from `/api/read` (and from offline mode) also has these:
+
+```json
+"mode": "online",                       // or "offline"
+"alert": { "flag": "EXPIRED", "level": "danger", "vibrate": [400, 200, 400, 200, 800] },
+"consensus": { "available": true, "engines": ["gemini", "tesseract"],
+               "amount": "agree", "deadline": "agree", "badge": "VERIFIED_BY_EDGE" },
+"payment": {
+  "method": "official_site",            // or "upi"
+  "billerId": "msedcl", "billerName": "MSEDCL (Mahavitaran)", "amount": 840,
+  "consumerNumber": "000123456789",
+  "upiUrl": null,                        // "upi://pay?pa=...&am=840.00..." only if the bill prints a UPI ID
+  "upiSource": null,                     // "document" when upiUrl is set
+  "officialUrl": "https://wss.mahadiscom.in/wss/wss?uiActionName=getViewPayBill",
+  "copyText": "000123456789",
+  "confirmText": "तुम्ही MSEDCL (Mahavitaran) ला ₹840 भरत आहात. बरोबर आहे ना?",
+  "copiedText": "ग्राहक क्रमांक कॉपी केला आहे. पुढच्या पानावर पेस्ट करा."
+}
+```
+
+### Haptic alerts: `alert`
+Right after showing the card: `if (navigator.vibrate) navigator.vibrate(card.alert.vibrate)`.
+`level` is `danger` (SCAM/EXPIRED, long buzz), `warning` (URGENT/BILL_SPIKE), `info` (LOW_CONFIDENCE) or `ok` (tiny tick).
+Works on **Android Chrome**; iPhones ignore it, so demo on an Android phone.
+
+### Dual-engine check: `consensus`
+1. In the browser, run Tesseract.js on the same photo (`eng` is enough for bills and strips).
+2. Send its text as `edgeText` with the photo.
+3. If both engines agree on the amount/date → `consensus.badge === "VERIFIED_BY_EDGE"`: show a **"✓ Verified by 2 engines"** badge.
+   If they disagree → that field's confidence drops, `LOW_CONFIDENCE` is raised, and payment is hidden.
+   `fields.amount.edge` / `fields.deadline.edge` = `"agree"` or `"disagree"` per field.
+   If OCR text is junk or missing, `consensus.available` is `false` and nothing is penalised.
+
+### Zero-type payment: `payment`
+`null` unless it's a bill with a trusted amount (never for SCAM or LOW_CONFIDENCE). The Pay button should:
+1. Show `payment.confirmText` with **Yes / No** (and speak it).
+2. If `payment.upiUrl` → `location.href = payment.upiUrl` (opens GPay/PhonePe with the amount filled in).
+3. Else → `navigator.clipboard.writeText(payment.copyText)`, show/speak `payment.copiedText`, then open `payment.officialUrl`.
+
+Vaachak never invents a UPI ID: UPI links are only made for a UPI ID **printed on the bill**.
+
+---
+
+## Offline mode (no internet at all)
+
+The backend's rule engine runs in the browser too. Copy the backend's `lib/` folder into the frontend (or import it from `../lib/`), then:
+
+```js
+import Tesseract from 'tesseract.js';
+import { offlineRead } from '../lib/offline.js';
+
+const { data } = await Tesseract.recognize(photoFile, 'eng');
+const card = offlineRead(data.text, { lang: 'mr', history });   // same card shape as /api/read
+```
+
+- Knows ~35 common Indian medicines (Crocin, Dolo, Pantocid, Metformin, Telma, Thyronorm, Azithral…), tolerant of OCR spelling mistakes.
+- Still runs **expiry, due-date, scam and bill-spike rules**, so an expired Crocin strip gives a red `EXPIRED` card offline.
+- `card.mode === "offline"`, `card.offline.note` = "इंटरनेट नाही. फोनवरच वाचले." (show it as a small badge).
+- No boxes, no Q&A offline. For voice, play `samples/audio/*.wav` (expired / scam / low-confidence) or use `speechSynthesis`.
+
+Recommended flow: run Tesseract **first** (it's needed for `edgeText` anyway). If `navigator.onLine` is false or `/api/read`
+fails (`GEMINI_BUSY`, `QUOTA`, network error), show `offlineRead(...)` instead of an error.
+
+---
+
 ## `POST /api/ask`: question about the current document
 
 Typed (`application/json`):
@@ -129,8 +197,10 @@ Returns **`audio/wav`** (binary). Play it with:
 const res = await fetch(`${API}/api/tts`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text, lang }) });
 new Audio(URL.createObjectURL(await res.blob())).play();
 ```
-Max 800 characters. Spoken slowly for elderly listeners. If it fails (quota/offline), fall back to
-the browser's `speechSynthesis` with `lang: 'mr-IN'` / `'hi-IN'`, or the pre-recorded MP3s.
+Max 800 characters. Spoken slowly for elderly listeners. Uses **Sarvam AI Bulbul v3** (natural Indian voice) when the
+server has a Sarvam key, otherwise Gemini; the `X-Voice-Provider` response header says which.
+The free Gemini voice quota is small, so **always have a fallback**: the browser's `speechSynthesis`
+(`lang: 'mr-IN'` / `'hi-IN'`) or the pre-recorded `samples/audio/*.wav` clips.
 
 ---
 
