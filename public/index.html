@@ -1,0 +1,555 @@
+<!doctype html>
+<html lang="mr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Vaachak · वाचक</title>
+<meta name="description" content="Vaachak reads any bill, medicine strip or notice, on paper or on screen, and tells you in Marathi or Hindi exactly what to do.">
+<meta name="theme-color" content="#7a2e0e">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1b1410; --muted: #5d4c40; --paper: #fff8ef; --card: #ffffff; --line: #ead9c6;
+    --brand: #7a2e0e; --brand-ink: #ffffff; --accent: #f2a541;
+    --danger: #b3121b; --warn: #b85c00; --caution: #8a6d00; --ok: #1d6b3a; --info: #4a4a4a;
+    --radius: 22px;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--paper); color: var(--ink); overflow-x: hidden; }
+  body { font-family: "Noto Sans Devanagari", system-ui, sans-serif; font-size: 21px; line-height: 1.45; }
+  button, input, textarea { font: inherit; }
+  .wrap { max-width: 560px; margin: 0 auto; padding: 16px 16px 120px; }
+  header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+  .logo { display: flex; align-items: baseline; gap: 10px; }
+  .logo b { font-size: 40px; font-weight: 800; color: var(--brand); letter-spacing: .5px; }
+  .logo span { font-size: 16px; color: var(--muted); }
+  .langs { display: flex; gap: 4px; align-items: center; }
+  .langs button { border: 2px solid var(--brand); background: transparent; color: var(--brand); border-radius: 999px; padding: 3px 10px; font-size: 16px; font-weight: 600; cursor: pointer; }
+  .langs button[aria-pressed="true"] { background: var(--brand); color: var(--brand-ink); }
+  .tag { font-size: 19px; color: var(--muted); margin: 0 0 18px; }
+  .big { display: flex; align-items: center; gap: 16px; width: 100%; min-height: 84px; margin: 0 0 12px; padding: 14px 20px;
+    border: none; border-radius: var(--radius); background: var(--brand); color: var(--brand-ink); font-size: 26px; font-weight: 800; text-align: left; cursor: pointer;
+    box-shadow: 0 4px 0 #4b1b07; }
+  .big.alt { background: var(--card); color: var(--brand); border: 3px solid var(--brand); box-shadow: 0 4px 0 var(--line); }
+  .big .ico { font-size: 38px; line-height: 1; }
+  .big:active { transform: translateY(2px); box-shadow: none; }
+  .paste { display: none; background: var(--card); border: 2px solid var(--line); border-radius: var(--radius); padding: 14px; margin-bottom: 12px; }
+  .paste.open { display: block; }
+  textarea { width: 100%; min-height: 120px; border: 2px solid var(--line); border-radius: 14px; padding: 12px; resize: vertical; font-size: 20px; }
+  .row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+  .btn { flex: 1 1 auto; min-height: 60px; border-radius: 16px; border: none; background: var(--brand); color: #fff; font-weight: 700; font-size: 20px; padding: 10px 16px; cursor: pointer; }
+  .btn.ghost { background: transparent; color: var(--brand); border: 2px solid var(--brand); }
+  .demo { margin-top: 18px; }
+  .demo h3 { font-size: 17px; color: var(--muted); font-weight: 600; margin: 0 0 8px; }
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; }
+  .chip { border: 2px solid var(--line); background: var(--card); border-radius: 999px; padding: 8px 14px; font-size: 17px; cursor: pointer; }
+  .loading { display: none; text-align: center; padding: 48px 8px; }
+  .loading.on { display: block; }
+  .spinner { width: 72px; height: 72px; margin: 0 auto 16px; border: 8px solid var(--line); border-top-color: var(--brand); border-radius: 50%; animation: spin 1s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading p { font-size: 26px; font-weight: 700; margin: 0; }
+  .loading small { display: block; color: var(--muted); margin-top: 8px; font-size: 17px; }
+  #result { display: none; }
+  #result.on { display: block; }
+  .banner { overflow-wrap: anywhere; border-radius: var(--radius); padding: 16px 18px; color: #fff; margin-bottom: 12px; }
+  .banner h2 { margin: 0; font-size: 30px; line-height: 1.2; }
+  .banner p { margin: 6px 0 0; font-size: 20px; }
+  .banner ul { margin: 8px 0 0; padding-left: 22px; font-size: 18px; }
+  .b-SCAM, .b-EXPIRED { background: var(--danger); animation: pulse 1.2s ease-in-out 3; }
+  .b-URGENT { background: var(--warn); }
+  .b-BILL_SPIKE { background: var(--caution); }
+  .b-LOW_CONFIDENCE { background: var(--info); }
+  @keyframes pulse { 50% { filter: brightness(1.25); } }
+  .card { background: var(--card); border: 2px solid var(--line); border-radius: var(--radius); padding: 6px 16px; }
+  .field { display: grid; grid-template-columns: 44px 1fr; gap: 10px; padding: 12px 0; border-bottom: 1px solid var(--line); cursor: default; }
+  .field:last-child { border-bottom: none; }
+  .field.has-box { cursor: pointer; }
+  .field .fi { font-size: 30px; line-height: 1.2; }
+  .field label { display: block; font-size: 15px; color: var(--muted); font-weight: 600; }
+  .field > div { min-width: 0; }
+  .field .val { font-size: 24px; font-weight: 700; overflow-wrap: anywhere; }
+  .field .val.money { font-size: 40px; color: var(--brand); line-height: 1.1; }
+  .badge { display: inline-block; font-size: 14px; font-weight: 700; border-radius: 999px; padding: 2px 10px; margin: 4px 6px 0 0; }
+  .badge.rule { background: #e7f2ea; color: var(--ok); }
+  .badge.unsure { background: #f4e4e4; color: var(--danger); }
+  .badge.where { background: #f6ecdf; color: var(--brand); }
+  .chipline { display: flex; gap: 8px; flex-wrap: wrap; margin: 0 0 10px; }
+  .vchip { border-radius: 999px; padding: 6px 14px; font-weight: 700; font-size: 17px; }
+  .vchip.good { background: #dff1e5; color: var(--ok); }
+  .vchip.bad { background: #fff0d6; color: var(--warn); }
+  .vchip.off { background: #ececec; color: var(--info); }
+  .pills { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 12px 0 4px; text-align: center; }
+  .pill { background: #fff3e0; border-radius: 16px; padding: 10px 4px; }
+  .pill .e { font-size: 34px; } .pill .n { font-size: 38px; font-weight: 800; } .pill .t { font-size: 15px; color: var(--muted); }
+  .food { text-align: center; font-weight: 700; margin: 4px 0 8px; }
+  .list { margin: 8px 0; padding-left: 26px; }
+  .actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 14px 0; }
+  .act { min-height: 78px; border-radius: 18px; border: 2px solid var(--line); background: var(--card); font-size: 19px; font-weight: 700; color: var(--ink); cursor: pointer; padding: 8px; }
+  .act .e { display: block; font-size: 30px; }
+  .act.primary { background: var(--ok); color: #fff; border-color: var(--ok); }
+  .ask { background: var(--card); border: 2px solid var(--line); border-radius: var(--radius); padding: 14px; }
+  .ask input { flex: 1 1 160px; min-width: 0; width: 100%; min-height: 56px; border: 2px solid var(--line); border-radius: 14px; padding: 8px 12px; font-size: 20px; }
+  .answer { margin-top: 10px; font-size: 22px; font-weight: 600; }
+  .photo { position: relative; margin: 12px 0; display: none; }
+  .photo.on { display: block; }
+  .photo img { width: 100%; border-radius: 16px; display: block; }
+  .hl { position: absolute; border: 4px solid var(--accent); background: rgba(242,165,65,.25); border-radius: 6px; box-shadow: 0 0 0 9999px rgba(0,0,0,.35); transition: all .3s; }
+  .note { font-size: 15px; color: var(--muted); text-align: center; margin-top: 18px; }
+  dialog { border: none; border-radius: var(--radius); padding: 20px; max-width: 480px; width: calc(100% - 32px); }
+  dialog::backdrop { background: rgba(0,0,0,.5); }
+  dialog h3 { margin: 0 0 10px; font-size: 24px; }
+  dialog input { width: 100%; min-height: 54px; margin: 6px 0 12px; border: 2px solid var(--line); border-radius: 12px; padding: 8px 12px; font-size: 20px; }
+  .gear { background: none; border: none; font-size: 28px; cursor: pointer; padding: 4px; }
+  .offline { display: inline-block; background: #ececec; border-radius: 999px; padding: 4px 12px; font-size: 15px; margin-bottom: 8px; }
+  footer { text-align: center; color: var(--muted); font-size: 14px; margin-top: 28px; }
+  footer a { color: var(--brand); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo"><b data-t="title">वाचक</b><span>Vaachak</span></div>
+    <div class="langs" role="group" aria-label="Language">
+      <button data-lang="mr">मराठी</button><button data-lang="hi">हिंदी</button><button data-lang="en">EN</button>
+      <button class="gear" id="gear" aria-label="Settings">⚙️</button>
+    </div>
+  </header>
+
+  <section id="home">
+    <p class="tag" data-t="tagline"></p>
+    <button class="big" id="snap"><span class="ico">📷</span><span data-t="snap"></span></button>
+    <button class="big alt" id="upload"><span class="ico">🖼️</span><span data-t="upload"></span></button>
+    <button class="big alt" id="pasteBtn"><span class="ico">💬</span><span data-t="paste"></span></button>
+    <div class="paste" id="pasteBox">
+      <textarea id="pasteText" data-tp="pastePh"></textarea>
+      <div class="row">
+        <button class="btn ghost" id="fromClipboard" data-t="clip"></button>
+        <button class="btn" id="readText" data-t="read"></button>
+      </div>
+    </div>
+    <input type="file" id="camFile" accept="image/*" capture="environment" hidden>
+    <input type="file" id="anyFile" accept="image/*,application/pdf" hidden>
+    <div class="demo">
+      <h3 data-t="demoTitle"></h3>
+      <div class="chips">
+        <button class="chip" data-sample="electricity-bill">⚡ <span data-t="sBill"></span></button>
+        <button class="chip" data-sample="medicine-expired">💊 <span data-t="sMed"></span></button>
+        <button class="chip" data-sample="scam-sms">🚨 <span data-t="sScam"></span></button>
+        <button class="chip" data-sample="prescription">🩺 <span data-t="sRx"></span></button>
+      </div>
+    </div>
+  </section>
+
+  <section class="loading" id="loading" aria-live="polite">
+    <div class="spinner"></div>
+    <p data-t="reading"></p>
+    <small id="loadingNote" data-t="readingNote"></small>
+  </section>
+
+  <section id="result" aria-live="polite">
+    <div id="banner"></div>
+    <div id="offlineTag"></div>
+    <div class="chipline" id="chips"></div>
+    <div class="card" id="fields"></div>
+    <div id="extra"></div>
+    <div class="photo" id="photo"><img id="photoImg" alt=""><div class="hl" id="hl" hidden></div></div>
+    <div class="actions" id="actions"></div>
+    <div class="ask">
+      <div class="row" style="margin-top:0">
+        <input id="askInput" data-tp="askPh">
+        <button class="btn" id="askBtn" style="flex:0 0 auto">❓</button>
+        <button class="btn ghost" id="micBtn" style="flex:0 0 auto" aria-label="Speak">🎤</button>
+      </div>
+      <div class="answer" id="answer"></div>
+    </div>
+    <button class="big alt" id="again" style="margin-top:14px"><span class="ico">↩️</span><span data-t="again"></span></button>
+  </section>
+
+  <footer>
+    <span data-t="footer"></span><br>
+    THINK AI 4.0 · PS10 · <a href="https://github.com/anveshchafle-cmd/vaachak">GitHub</a>
+  </footer>
+</div>
+
+<dialog id="confirm"><h3 id="confirmText"></h3><div class="row"><button class="btn" id="yes" data-t="yes"></button><button class="btn ghost" id="no" data-t="no"></button></div></dialog>
+<dialog id="settings">
+  <h3 data-t="settings"></h3>
+  <label data-t="name"></label><input id="sName" placeholder="प्रकाश काका">
+  <label data-t="phone"></label><input id="sPhone" inputmode="tel" placeholder="98XXXXXXXX">
+  <div class="row"><button class="btn" id="sSave" data-t="save"></button></div>
+</dialog>
+
+<script type="module">
+const T = {
+  mr: {
+    title: 'वाचक', tagline: 'कोणताही कागद, बिल, औषध किंवा मेसेज: वाचून सांगतो नक्की काय करायचं.',
+    snap: 'फोटो काढा', upload: 'स्क्रीनशॉट / PDF', paste: 'मेसेज किंवा लिंक', pastePh: 'इथे SMS, WhatsApp मेसेज किंवा लिंक पेस्ट करा',
+    clip: '📋 पेस्ट', read: 'वाचा', demoTitle: 'नमुना पाहा (इंटरनेटशिवाय)', sBill: 'वीज बिल', sMed: 'जुने औषध', sScam: 'फसवा SMS', sRx: 'चिठ्ठी',
+    reading: 'वाचत आहे…', readingNote: 'कृपया थांबा', slow: 'सर्व्हर व्यस्त आहे, थोडा वेळ लागेल…', fallback: 'इंटरनेट/सर्व्हर अडचण: फोनवरच वाचले',
+    what: 'काय आहे', action: 'काय करायचं', deadline: 'कधीपर्यंत', amount: 'किती', warning: 'सावधान',
+    unclear: 'साफ दिसत नाही', checked: '🛡️ नियमाने तपासले', where: '👁️ कागदावर दाखवा',
+    listen: 'पुन्हा ऐका', pay: 'बिल भरा', family: 'घरच्यांना पाठवा', remind: 'आठवण', again: 'नवीन कागद',
+    askPh: 'प्रश्न विचारा… उदा. UPI ने भरू शकतो का?', listening: 'बोला… थांबवण्यासाठी 🎤 पुन्हा दाबा',
+    yes: 'हो', no: 'नाही', settings: 'सेटिंग्ज', name: 'तुमचे नाव (आवाजात येईल)', phone: 'घरच्यांचा WhatsApp नंबर', save: 'जतन करा',
+    morning: 'सकाळ', noon: 'दुपार', night: 'रात्र', before: '🍽️ जेवणाआधी', after: '🍽️ जेवणानंतर', any: '',
+    carry: 'सोबत न्या', why: 'का?', b_SCAM: '🚨 फसवणूक!', b_EXPIRED: '⛔ मुदत संपलेले औषध', b_URGENT: '⏰ लवकर करा', b_BILL_SPIKE: '⚠️ बिल खूप जास्त', b_LOW_CONFIDENCE: '🤔 साफ दिसत नाही',
+    error: 'काहीतरी चुकले. पुन्हा प्रयत्न करा किंवा नमुना पाहा.', footer: 'वाचक कधीही पैसे किंवा औषधांबद्दल अंदाज लावत नाही.',
+  },
+  hi: {
+    title: 'वाचक', tagline: 'कोई भी कागज़, बिल, दवा या मैसेज: पढ़कर बताता है कि ठीक क्या करना है.',
+    snap: 'फ़ोटो लें', upload: 'स्क्रीनशॉट / PDF', paste: 'मैसेज या लिंक', pastePh: 'यहाँ SMS, WhatsApp मैसेज या लिंक पेस्ट करें',
+    clip: '📋 पेस्ट', read: 'पढ़ो', demoTitle: 'नमूना देखें (बिना इंटरनेट)', sBill: 'बिजली बिल', sMed: 'पुरानी दवा', sScam: 'धोखे का SMS', sRx: 'पर्ची',
+    reading: 'पढ़ रहे हैं…', readingNote: 'कृपया रुकिए', slow: 'सर्वर व्यस्त है, थोड़ा समय लगेगा…', fallback: 'इंटरनेट/सर्वर दिक्कत: फ़ोन पर ही पढ़ा',
+    what: 'क्या है', action: 'क्या करना है', deadline: 'कब तक', amount: 'कितना', warning: 'सावधान',
+    unclear: 'साफ़ नहीं दिख रहा', checked: '🛡️ नियम से जाँचा', where: '👁️ कागज़ पर दिखाओ',
+    listen: 'फिर से सुनें', pay: 'बिल भरें', family: 'घरवालों को भेजें', remind: 'याद दिलाओ', again: 'नया कागज़',
+    askPh: 'सवाल पूछिए… जैसे UPI से भर सकते हैं?', listening: 'बोलिए… रोकने के लिए 🎤 फिर दबाइए',
+    yes: 'हाँ', no: 'नहीं', settings: 'सेटिंग्स', name: 'आपका नाम (आवाज़ में आएगा)', phone: 'घरवालों का WhatsApp नंबर', save: 'सेव करें',
+    morning: 'सुबह', noon: 'दोपहर', night: 'रात', before: '🍽️ खाने से पहले', after: '🍽️ खाने के बाद', any: '',
+    carry: 'साथ ले जाएँ', why: 'क्यों?', b_SCAM: '🚨 धोखाधड़ी!', b_EXPIRED: '⛔ एक्सपायर दवा', b_URGENT: '⏰ जल्दी कीजिए', b_BILL_SPIKE: '⚠️ बिल बहुत ज़्यादा', b_LOW_CONFIDENCE: '🤔 साफ़ नहीं दिख रहा',
+    error: 'कुछ गड़बड़ हुई. फिर कोशिश करें या नमूना देखें.', footer: 'वाचक पैसे या दवा के बारे में कभी अंदाज़ा नहीं लगाता.',
+  },
+  en: {
+    title: 'Vaachak', tagline: 'Any bill, medicine strip or message: read out, with exactly what to do.',
+    snap: 'Take a photo', upload: 'Screenshot / PDF', paste: 'Message or link', pastePh: 'Paste an SMS, WhatsApp message or a link here',
+    clip: '📋 Paste', read: 'Read', demoTitle: 'Try a sample (works offline)', sBill: 'Electricity bill', sMed: 'Expired medicine', sScam: 'Scam SMS', sRx: 'Prescription',
+    reading: 'Reading…', readingNote: 'Please wait', slow: 'Server is busy, this may take a moment…', fallback: 'Network problem: read on this phone',
+    what: 'What is it', action: 'What to do', deadline: 'By when', amount: 'How much', warning: 'Warning',
+    unclear: 'Not clear', checked: '🛡️ Rule-checked', where: '👁️ Show on paper',
+    listen: 'Listen again', pay: 'Pay bill', family: 'Send to family', remind: 'Remind me', again: 'New document',
+    askPh: 'Ask a question… e.g. Can I pay by UPI?', listening: 'Speak… tap 🎤 again to stop',
+    yes: 'Yes', no: 'No', settings: 'Settings', name: 'Your name (used in the voice)', phone: "Family member's WhatsApp number", save: 'Save',
+    morning: 'Morning', noon: 'Afternoon', night: 'Night', before: '🍽️ Before food', after: '🍽️ After food', any: '',
+    carry: 'Take with you', why: 'Why?', b_SCAM: '🚨 Scam!', b_EXPIRED: '⛔ Expired medicine', b_URGENT: '⏰ Act soon', b_BILL_SPIKE: '⚠️ Bill unusually high', b_LOW_CONFIDENCE: '🤔 Not clear',
+    error: 'Something went wrong. Try again or open a sample.', footer: 'Vaachak never guesses with money or medicine.',
+  },
+};
+const ICONS = { what: '📄', action: '👉', deadline: '📅', amount: '₹', warning: '⚠️' };
+const SPEECH_LANG = { mr: 'mr-IN', hi: 'hi-IN', en: 'en-IN' };
+const READ_TIMEOUT_MS = 45000;
+
+const $ = (id) => document.getElementById(id);
+const store = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} },
+};
+let lang = store.get('vaachak.lang', 'mr');
+let card = null;
+let photoUrl = null;
+let photoBlob = null;
+let audio = null;
+let offline = null;
+
+function t(k) { return T[lang][k] ?? T.en[k] ?? k; }
+function el(tag, attrs = {}, ...kids) {
+  const n = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === 'class') n.className = v; else if (k.startsWith('on')) n.addEventListener(k.slice(2), v); else n.setAttribute(k, v);
+  }
+  for (const c of kids.flat()) if (c != null && c !== false) n.append(c.nodeType ? c : document.createTextNode(String(c)));
+  return n;
+}
+
+function applyLang() {
+  document.documentElement.lang = lang;
+  document.querySelectorAll('[data-t]').forEach((n) => (n.textContent = t(n.dataset.t)));
+  document.querySelectorAll('[data-tp]').forEach((n) => (n.placeholder = t(n.dataset.tp)));
+  document.querySelectorAll('[data-lang]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
+  if (card) render(card);
+}
+document.querySelectorAll('[data-lang]').forEach((b) => b.addEventListener('click', () => { lang = b.dataset.lang; store.set('vaachak.lang', lang); applyLang(); }));
+
+function show(which) {
+  $('home').style.display = which === 'home' ? '' : 'none';
+  $('loading').classList.toggle('on', which === 'loading');
+  $('result').classList.toggle('on', which === 'result');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ---------- voice ----------
+function stopVoice() { if (audio) { audio.pause(); audio = null; } if ('speechSynthesis' in window) speechSynthesis.cancel(); }
+function browserSpeak(text) {
+  if (!('speechSynthesis' in window)) return;
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = SPEECH_LANG[lang]; u.rate = 0.9;
+  speechSynthesis.speak(u);
+}
+async function speak(text, clip) {
+  stopVoice();
+  if (!text) return;
+  try {
+    if (!navigator.onLine) throw new Error('offline');
+    const res = await fetch('/api/tts', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text, lang }) });
+    if (!res.ok) throw new Error('tts');
+    audio = new Audio(URL.createObjectURL(await res.blob()));
+    await audio.play();
+  } catch {
+    if (clip) { try { audio = new Audio(clip); await audio.play(); return; } catch {} }
+    browserSpeak(text);
+  }
+}
+function offlineClip(c) {
+  const l = lang === 'hi' ? 'hi' : 'mr';
+  if (c.flags.includes('SCAM')) return `/samples/audio/scam.${l}.wav`;
+  if (c.flags.includes('EXPIRED')) return `/samples/audio/expired.${l}.wav`;
+  if (c.flags.includes('LOW_CONFIDENCE')) return `/samples/audio/low-confidence.${l}.wav`;
+  return null;
+}
+
+// ---------- reading ----------
+async function shrink(file) {
+  if (!file.type.startsWith('image/')) return file;
+  const img = await createImageBitmap(file).catch(() => null);
+  if (!img) return file;
+  const scale = Math.min(1, 1600 / Math.max(img.width, img.height));
+  const c = document.createElement('canvas');
+  c.width = Math.round(img.width * scale); c.height = Math.round(img.height * scale);
+  c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+  return await new Promise((r) => c.toBlob(r, 'image/jpeg', 0.85));
+}
+
+function commonFields(form) {
+  const s = store.get('vaachak.settings', {});
+  form.append('lang', lang);
+  form.append('history', JSON.stringify(store.get('vaachak.history', {})));
+  if (s.name) form.append('userName', s.name);
+  if (s.phone) form.append('familyPhone', s.phone);
+}
+
+async function callRead(form) {
+  const ctrl = new AbortController();
+  const slow = setTimeout(() => ($('loadingNote').textContent = t('slow')), 12000);
+  const timer = setTimeout(() => ctrl.abort(), READ_TIMEOUT_MS);
+  try {
+    const res = await fetch('/api/read', { method: 'POST', body: form, signal: ctrl.signal });
+    const data = await res.json();
+    if (!res.ok) throw Object.assign(new Error(data.error || 'error'), { code: data.code });
+    return data;
+  } finally { clearTimeout(slow); clearTimeout(timer); }
+}
+
+async function loadOffline() {
+  if (!offline) offline = await import('/vaachak-offline.js');
+  return offline;
+}
+async function ocr(blob) {
+  // On-device OCR: the second engine for the "verified" check and the offline fallback.
+  const { default: Tesseract } = await import('https://cdn.jsdelivr.net/npm/tesseract.js@5/+esm');
+  const { data } = await Tesseract.recognize(blob, 'eng');
+  return data.text || '';
+}
+
+async function readFile(file) {
+  stopVoice();
+  photoBlob = await shrink(file);
+  photoUrl = photoBlob.type.startsWith('image/') ? URL.createObjectURL(photoBlob) : null;
+  $('loadingNote').textContent = t('readingNote');
+  show('loading');
+
+  // Run on-device OCR for up to 6 s first so the server can cross-check Gemini against it.
+  const ocrPromise = photoUrl ? ocr(photoBlob).catch(() => '') : Promise.resolve('');
+  const edgeText = await Promise.race([ocrPromise, new Promise((r) => setTimeout(() => r(''), 6000))]);
+
+  const form = new FormData();
+  form.append('file', photoBlob, photoBlob.type === 'application/pdf' ? 'doc.pdf' : 'photo.jpg');
+  if (edgeText) form.append('edgeText', edgeText);
+  commonFields(form);
+  try {
+    if (!navigator.onLine) throw new Error('offline');
+    showCard(await callRead(form));
+  } catch (e) {
+    const text = edgeText || (await ocrPromise);
+    if (text) return showCard(await offlineCard(text));
+    showError();
+  }
+}
+
+async function readText(value) {
+  value = value.trim();
+  if (!value) return;
+  stopVoice();
+  photoUrl = null; photoBlob = null;
+  $('loadingNote').textContent = t('readingNote');
+  show('loading');
+  const form = new FormData();
+  if (/^https?:\/\/\S+$/i.test(value)) form.append('url', value); else form.append('text', value);
+  commonFields(form);
+  try {
+    if (!navigator.onLine) throw new Error('offline');
+    showCard(await callRead(form));
+  } catch {
+    if (/^https?:\/\//i.test(value)) return showError();
+    showCard(await offlineCard(value));
+  }
+}
+
+async function offlineCard(text) {
+  const { offlineRead } = await loadOffline();
+  const s = store.get('vaachak.settings', {});
+  return offlineRead(text, { lang, history: store.get('vaachak.history', {}), userName: s.name, familyPhone: s.phone });
+}
+
+async function openSample(name) {
+  stopVoice();
+  photoUrl = null; photoBlob = null;
+  const res = await fetch(`/samples/${name}.json`);
+  showCard(await res.json(), true);
+}
+
+function showError() { show('home'); alert(t('error')); }
+
+function showCard(c, isSample = false) {
+  card = c;
+  if (c.billerKey && c.fields?.amount?.value) {
+    const h = store.get('vaachak.history', {}); h[c.billerKey] = c.fields.amount.value; store.set('vaachak.history', h);
+  }
+  render(c);
+  show('result');
+  if (navigator.vibrate && c.alert?.vibrate) navigator.vibrate(c.alert.vibrate);
+  const clip = c.mode === 'offline' || isSample ? offlineClip(c) : null;
+  if (isSample && c.flags.includes('URGENT')) speak(c.speak, '/samples/electricity-bill.wav');
+  else speak(c.speak, clip);
+}
+
+// ---------- rendering ----------
+function render(c) {
+  const flag = c.flags[0];
+  const banner = $('banner'); banner.replaceChildren();
+  if (flag) {
+    const reasons = flag === 'SCAM' ? el('ul', {}, c.scam.reasons.map((r) => el('li', {}, r.text))) : null;
+    const sub = flag === 'URGENT' && c.dates?.daysLeft != null ? c.fields.warning.text : flag === 'LOW_CONFIDENCE' ? '' : c.fields.warning.text;
+    banner.append(el('div', { class: `banner b-${flag}` }, el('h2', {}, t(`b_${flag}`)), sub ? el('p', {}, sub) : null, reasons));
+  }
+  $('offlineTag').replaceChildren(c.mode === 'offline' && c.offline ? el('span', { class: 'offline' }, '📴 ', c.offline.note) : '');
+
+  const chips = $('chips'); chips.replaceChildren();
+  if (c.consensus?.label) chips.append(el('span', { class: `vchip ${c.consensus.badge ? 'good' : 'bad'}` }, c.consensus.label));
+
+  const box = $('fields'); box.replaceChildren();
+  for (const k of ['what', 'action', 'deadline', 'amount', 'warning']) {
+    const f = c.fields[k];
+    if (!f?.text) continue;
+    if (k === 'warning' && flag && ['SCAM', 'EXPIRED'].includes(flag)) continue;
+    const badges = [];
+    if (f.source === 'rule') badges.push(el('span', { class: 'badge rule' }, t('checked')));
+    if (f.confidence < 0.6) badges.push(el('span', { class: 'badge unsure' }, t('unclear')));
+    if (f.box && photoUrl) badges.push(el('span', { class: 'badge where' }, t('where')));
+    const row = el('div', { class: `field${f.box && photoUrl ? ' has-box' : ''}` },
+      el('div', { class: 'fi' }, ICONS[k]),
+      el('div', {}, el('label', {}, t(k)), el('div', { class: `val${k === 'amount' ? ' money' : ''}` }, f.text), badges));
+    if (f.box && photoUrl) row.addEventListener('click', () => highlight(f.box));
+    box.append(row);
+  }
+
+  const extra = $('extra'); extra.replaceChildren();
+  if (c.pills) {
+    extra.append(el('div', { class: 'pills' },
+      [['☀️', c.pills.morning, 'morning'], ['🌤️', c.pills.noon, 'noon'], ['🌙', c.pills.night, 'night']].map(([e, n, k]) =>
+        el('div', { class: 'pill' }, el('div', { class: 'e' }, e), el('div', { class: 'n' }, n), el('div', { class: 't' }, t(k))))));
+    if (c.pills.food !== 'any') extra.append(el('div', { class: 'food' }, t(c.pills.food)));
+  }
+  if (c.checklist) extra.append(el('div', { class: 'card', style: 'margin-top:10px' }, el('label', {}, t('carry')), el('ul', { class: 'list' }, c.checklist.map((i) => el('li', {}, i)))));
+
+  $('photo').classList.toggle('on', Boolean(photoUrl));
+  if (photoUrl) { $('photoImg').src = photoUrl; $('hl').hidden = true; }
+
+  const acts = $('actions'); acts.replaceChildren();
+  const act = (e, label, fn, primary) => acts.append(el('button', { class: `act${primary ? ' primary' : ''}`, onclick: fn }, el('span', { class: 'e' }, e), label));
+  act('🔊', t('listen'), () => speak(c.speak, offlineClip(c)));
+  if (c.payment) act('💳', t('pay'), () => pay(c.payment), true);
+  act('👨‍👩‍👦', t('family'), () => sendFamily(c));
+  if (c.actions?.calendarUrl) act('⏰', t('remind'), () => window.open(c.actions.calendarUrl, '_blank'));
+  $('answer').textContent = '';
+}
+
+function highlight([ymin, xmin, ymax, xmax]) {
+  const hl = $('hl');
+  Object.assign(hl.style, { top: `${ymin / 10}%`, left: `${xmin / 10}%`, height: `${(ymax - ymin) / 10}%`, width: `${(xmax - xmin) / 10}%` });
+  hl.hidden = false;
+  $('photo').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+// ---------- actions ----------
+function confirmDialog(text) {
+  return new Promise((resolve) => {
+    $('confirmText').textContent = text;
+    const d = $('confirm');
+    const done = (v) => { d.close(); resolve(v); };
+    $('yes').onclick = () => done(true); $('no').onclick = () => done(false);
+    d.showModal();
+    speak(text);
+  });
+}
+async function pay(p) {
+  if (!(await confirmDialog(p.confirmText))) return;
+  if (p.upiUrl) { location.href = p.upiUrl; return; }
+  if (p.copyText) { try { await navigator.clipboard.writeText(p.copyText); } catch {} if (p.copiedText) { speak(p.copiedText); alert(p.copiedText); } }
+  if (p.officialUrl) window.open(p.officialUrl, '_blank');
+}
+async function sendFamily(c) {
+  const text = c.actions.whatsappText;
+  if (photoBlob && navigator.canShare) {
+    const file = new File([photoBlob], photoBlob.type === 'application/pdf' ? 'document.pdf' : 'document.jpg', { type: photoBlob.type });
+    if (navigator.canShare({ files: [file] })) { try { await navigator.share({ files: [file], text }); return; } catch {} }
+  }
+  window.open(c.actions.whatsappUrl, '_blank');
+}
+
+async function ask(body, isForm) {
+  $('answer').textContent = '…';
+  try {
+    const res = await fetch('/api/ask', isForm ? { method: 'POST', body } : { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error);
+    $('answer').textContent = data.answer;
+    speak(data.speak);
+  } catch { $('answer').textContent = t('error'); }
+}
+$('askBtn').addEventListener('click', () => { const q = $('askInput').value.trim(); if (q && card) ask({ question: q, card, lang }); });
+$('askInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') $('askBtn').click(); });
+
+let recorder = null;
+$('micBtn').addEventListener('click', async () => {
+  if (recorder) { recorder.stop(); return; }
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const chunks = [];
+    recorder = new MediaRecorder(stream);
+    recorder.ondataavailable = (e) => chunks.push(e.data);
+    recorder.onstop = () => {
+      stream.getTracks().forEach((tr) => tr.stop());
+      const blob = new Blob(chunks, { type: recorder.mimeType || 'audio/webm' });
+      recorder = null; $('micBtn').textContent = '🎤';
+      const form = new FormData();
+      form.append('audio', blob, 'question.webm'); form.append('card', JSON.stringify(card)); form.append('lang', lang);
+      ask(form, true);
+    };
+    recorder.start(); $('micBtn').textContent = '⏹️'; $('answer').textContent = t('listening');
+    setTimeout(() => recorder?.stop(), 20000);
+  } catch { $('answer').textContent = t('error'); }
+});
+
+// ---------- home wiring ----------
+$('snap').addEventListener('click', () => $('camFile').click());
+$('upload').addEventListener('click', () => $('anyFile').click());
+for (const id of ['camFile', 'anyFile']) $(id).addEventListener('change', (e) => { const f = e.target.files[0]; e.target.value = ''; if (f) readFile(f); });
+$('pasteBtn').addEventListener('click', () => { $('pasteBox').classList.toggle('open'); $('pasteText').focus(); });
+$('fromClipboard').addEventListener('click', async () => { try { $('pasteText').value = await navigator.clipboard.readText(); } catch {} });
+$('readText').addEventListener('click', () => readText($('pasteText').value));
+document.querySelectorAll('[data-sample]').forEach((b) => b.addEventListener('click', () => openSample(b.dataset.sample)));
+$('again').addEventListener('click', () => { stopVoice(); card = null; show('home'); });
+
+$('gear').addEventListener('click', () => { const s = store.get('vaachak.settings', {}); $('sName').value = s.name || ''; $('sPhone').value = s.phone || ''; $('settings').showModal(); });
+$('sSave').addEventListener('click', () => { store.set('vaachak.settings', { name: $('sName').value.trim(), phone: $('sPhone').value.trim() }); $('settings').close(); });
+
+// Shared from another app (PWA share target / ?text= / ?url=)
+const params = new URLSearchParams(location.search);
+applyLang();
+const shared = params.get('url') || params.get('text');
+if (shared) readText(shared);
+else if (/^[a-z-]+$/.test(params.get('sample') || '')) openSample(params.get('sample'));
+</script>
+</body>
+</html>

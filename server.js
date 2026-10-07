@@ -3,6 +3,9 @@
 import http from 'node:http';
 import fs from 'node:fs';
 import { Readable } from 'node:stream';
+import path from 'node:path';
+
+const PUBLIC_DIR = path.resolve('public');
 
 function loadEnv(file = '.env') {
   if (!fs.existsSync(file)) return;
@@ -23,10 +26,24 @@ const routes = {
 
 const PORT = Number(process.env.PORT) || 3000;
 
+// Serves public/ the way Vercel does, so the demo page works locally too.
+const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.json': 'application/json', '.wav': 'audio/wav', '.png': 'image/png', '.svg': 'image/svg+xml', '.webmanifest': 'application/manifest+json' };
+function serveStatic(pathname, res) {
+  const rel = decodeURIComponent(pathname === '/' ? '/index.html' : pathname);
+  const file = path.join(PUBLIC_DIR, rel);
+  if (!file.startsWith(PUBLIC_DIR) || !fs.existsSync(file) || fs.statSync(file).isDirectory()) {
+    res.writeHead(404, { 'Content-Type': 'text/plain' });
+    return res.end('Not found');
+  }
+  res.writeHead(200, { 'Content-Type': TYPES[path.extname(file)] || 'application/octet-stream' });
+  fs.createReadStream(file).pipe(res);
+}
+
 http
   .createServer(async (req, res) => {
     const url = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
     const handler = routes[url.pathname]?.[req.method];
+    if (!handler && req.method === 'GET' && !url.pathname.startsWith('/api/')) return serveStatic(url.pathname, res);
     if (!handler) {
       res.writeHead(routes[url.pathname] ? 405 : 404, { 'Content-Type': 'application/json' });
       return res.end(JSON.stringify({ error: 'Not found', code: 'NOT_FOUND' }));
