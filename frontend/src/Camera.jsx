@@ -56,12 +56,12 @@ export default function Camera({ lang, onCapture, onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black z-50 flex flex-col font-sans" style={{ fontFamily: '"Noto Sans Devanagari", sans-serif' }}>
+    <div className="fixed inset-0 bg-black z-50 flex flex-col font-sans" >
       <video ref={videoRef} autoPlay playsInline muted className="absolute inset-0 w-full h-full object-cover" />
       <div className="relative z-10 w-full p-4 flex justify-between items-start bg-gradient-to-b from-black/70 to-transparent pb-10">
         <button onClick={onClose} aria-label={t('close')} className="text-white text-6xl leading-none w-16 h-16 flex items-center justify-center active:bg-white/20 rounded-full">×</button>
         {(statusMsg || error) && (
-          <div role="status" aria-live="polite" className="bg-black/80 text-white text-[24px] font-bold px-6 py-3 rounded-2xl animate-pulse text-center max-w-[65%] border-2 border-white/20 shadow-lg">
+          <div role="status" aria-live="polite" className="bg-stamp text-paper text-[24px] font-bold px-6 py-3 rounded-2xl text-center max-w-[65%] shadow-lg">
             {error || statusMsg}
           </div>
         )}

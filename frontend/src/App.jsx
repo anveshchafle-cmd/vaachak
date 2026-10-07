@@ -68,16 +68,16 @@ export default function App() {
   const changeLang = useCallback((l) => setLang(l), []);
 
   return (
-    <div className="w-full max-w-[480px] mx-auto bg-gray-50 min-h-screen shadow-2xl relative overflow-hidden font-sans" style={{ fontFamily: '"Noto Sans Devanagari", sans-serif' }}>
+    <div className="w-full max-w-[480px] mx-auto bg-inland min-h-screen relative overflow-hidden font-body text-ink sm:shadow-[0_0_0_1px_rgba(20,33,61,.08),0_30px_60px_-20px_rgba(20,33,61,.4)]">
 
       {demoMode && (
-        <div className="absolute top-0 inset-x-0 bg-yellow-400 text-black text-center text-[14px] font-bold py-1 z-40">
+        <div className="absolute top-0 inset-x-0 bg-turmeric text-ink text-center text-[15px] font-bold py-1.5 z-40">
           {t('demoOn')}
         </div>
       )}
 
       {toast && screen === 'HOME' && (
-        <div role="alert" className="mx-4 mt-10 -mb-6 bg-red-100 border-2 border-red-300 text-red-900 rounded-2xl p-4 text-[20px] font-bold">
+        <div role="alert" className="mx-5 mt-5 -mb-2 bg-postred text-paper rounded-2xl p-4 text-[20px] font-bold">
           {toast}
         </div>
       )}

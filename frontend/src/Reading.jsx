@@ -98,15 +98,16 @@ export default function Reading({ input, isDemo, onSuccess, onError, onCancel })
   }, [input, isDemo]);
 
   return (
-    <div className="fixed inset-0 bg-gray-50 z-50 flex flex-col items-center justify-center p-8 text-center font-sans" role="status" aria-live="polite">
-      <div className="relative w-32 h-32 mb-10">
-        <div className="absolute inset-0 border-[10px] border-gray-200 rounded-full"></div>
-        <div className="absolute inset-0 border-[10px] border-blue-600 rounded-full border-t-transparent animate-spin"></div>
-        <div className="absolute inset-0 flex items-center justify-center text-4xl" aria-hidden="true">👀</div>
+    <div className="inland fixed inset-0 z-50 flex flex-col items-center justify-center px-8 text-center" role="status" aria-live="polite">
+      <div className="slip relative w-56 h-64 px-6 pb-6 mb-10" aria-hidden="true">
+        {[70, 90, 55, 85, 65, 80, 45].map((w, i) => (
+          <div key={i} className="h-3 rounded-full bg-ink/15 mt-5" style={{ width: `${w}%` }} />
+        ))}
+        <div className="scanbar absolute inset-x-2 h-2 rounded-full bg-stamp shadow-[0_0_24px_6px_rgba(74,44,143,.45)]" />
       </div>
-      <h2 className="text-[36px] font-bold text-gray-900 animate-pulse tracking-wide">{status}</h2>
-      <p className="text-[22px] text-gray-600 mt-4 max-w-[80%]">{note}</p>
-      <button onClick={onCancel} className="mt-16 text-[24px] font-bold text-gray-700 bg-white border-4 border-gray-300 px-10 py-5 rounded-full shadow-md active:bg-gray-100 active:scale-95 transition-transform">
+      <h2 className="font-display text-[40px] text-stamp leading-tight">{status}</h2>
+      <p className="text-[22px] text-ink-soft mt-3 max-w-[22ch]">{note}</p>
+      <button onClick={onCancel} className="mt-12 text-[22px] font-bold text-ink border-[3px] border-ink px-10 py-4 rounded-full active:bg-paper">
         {t('cancel')}
       </button>
     </div>

@@ -1,6 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { makeT } from './i18n';
 import { load, save } from './storage';
+import Icon from './Icons';
+
+const LANGS = [['mr', 'मराठी'], ['hi', 'हिंदी'], ['en', 'Eng']];
 
 export default function Home({ lang, onLang, onNavigate, demoMode, onToggleDemo }) {
   const [userName, setUserName] = useState(load('vaachak.userName', ''));
@@ -37,18 +40,17 @@ export default function Home({ lang, onLang, onNavigate, demoMode, onToggleDemo 
   };
 
   const samples = [
-    ['electricity-bill', '⚡', 'sBill'],
-    ['medicine-expired', '💊', 'sMed'],
-    ['scam-sms', '🚨', 'sScam'],
-    ['prescription', '🩺', 'sRx'],
+    ['electricity-bill', 'bolt', 'sBill', 'text-turmeric'],
+    ['medicine-expired', 'pill', 'sMed', 'text-postred'],
+    ['scam-sms', 'alert', 'sScam', 'text-postred'],
+    ['prescription', 'note', 'sRx', 'text-leaf'],
   ];
 
   return (
-    <div className={`min-h-screen ${demoMode ? 'bg-yellow-50' : 'bg-gray-50'} flex flex-col p-4 w-full mx-auto`}>
-
-      <div className={`flex justify-between items-center mb-3 w-full ${demoMode ? 'mt-6' : ''}`}>
+    <div className={`inland min-h-screen flex flex-col px-5 pb-6 ${demoMode ? 'pt-10' : 'pt-6'}`}>
+      <header className="flex items-start justify-between gap-3">
         <h1
-          className="text-4xl font-extrabold text-gray-900 tracking-tight select-none"
+          className="font-display text-[64px] leading-[1.05] text-stamp select-none"
           onTouchStart={startPress}
           onTouchEnd={endPress}
           onMouseDown={startPress}
@@ -57,41 +59,45 @@ export default function Home({ lang, onLang, onNavigate, demoMode, onToggleDemo 
         >
           वाचक
         </h1>
-        <div className="flex gap-3">
-          <select
-            value={lang}
-            onChange={(e) => onLang(e.target.value)}
-            aria-label="Language / भाषा"
-            className="text-[22px] px-3 py-2 bg-white border-2 border-gray-300 rounded-xl font-bold text-gray-800"
-          >
-            <option value="mr">मराठी</option>
-            <option value="hi">हिंदी</option>
-            <option value="en">ENG</option>
-          </select>
+        <button
+          onClick={() => setShowSettings(!showSettings)}
+          aria-label={t('settings')}
+          aria-expanded={showSettings}
+          className="mt-3 w-14 h-14 rounded-full bg-paper text-ink grid place-items-center border-2 border-ink/15 active:bg-stamp-soft"
+        >
+          <Icon name="gear" size={28} />
+        </button>
+      </header>
+
+      <p className="text-[21px] leading-snug text-ink-soft mt-1 max-w-[30ch]">{t('tagline')}</p>
+
+      <div role="radiogroup" aria-label="भाषा / Language" className="flex gap-2 mt-5">
+        {LANGS.map(([code, label]) => (
           <button
-            onClick={() => setShowSettings(!showSettings)}
-            aria-label={t('settings')}
-            aria-expanded={showSettings}
-            className="text-[28px] w-14 h-14 bg-white border-2 border-gray-300 rounded-xl flex items-center justify-center active:bg-gray-100"
+            key={code}
+            role="radio"
+            aria-checked={lang === code}
+            onClick={() => onLang(code)}
+            className={`flex-1 min-h-[52px] rounded-full text-[20px] font-bold border-2 ${
+              lang === code ? 'bg-stamp text-paper border-stamp' : 'bg-paper/70 text-ink border-ink/20'
+            }`}
           >
-            ⚙️
+            {label}
           </button>
-        </div>
+        ))}
       </div>
-      <p className="text-[19px] text-gray-700 mb-6 leading-snug">{t('tagline')}</p>
 
       {showSettings && (
-        <div className="bg-white p-5 rounded-3xl shadow-xl border-2 border-gray-200 mb-8 animate-fade-in">
-          <label htmlFor="userName" className="block text-[22px] mb-2 font-bold text-gray-800">{t('name')}</label>
+        <div className="slip mt-5 px-5 pb-5 animate-fade-in">
+          <label htmlFor="userName" className="block text-[20px] font-bold mb-1 mt-2">{t('name')}</label>
           <input
             id="userName"
-            type="text"
             value={userName}
             onChange={(e) => setUserName(e.target.value)}
             placeholder={t('namePh')}
-            className="w-full p-4 mb-5 text-[22px] border-2 border-gray-300 rounded-2xl bg-gray-50 focus:bg-white"
+            className="w-full px-4 py-3 mb-4 text-[22px] border-b-4 border-ink/25 bg-inland/40 rounded-t-lg focus:border-stamp outline-none"
           />
-          <label htmlFor="familyPhone" className="block text-[22px] mb-2 font-bold text-gray-800">{t('phone')}</label>
+          <label htmlFor="familyPhone" className="block text-[20px] font-bold mb-1">{t('phone')}</label>
           <input
             id="familyPhone"
             type="tel"
@@ -99,49 +105,61 @@ export default function Home({ lang, onLang, onNavigate, demoMode, onToggleDemo 
             value={familyPhone}
             onChange={(e) => setFamilyPhone(e.target.value)}
             placeholder="9876543210"
-            className="w-full p-4 mb-6 text-[22px] border-2 border-gray-300 rounded-2xl bg-gray-50 focus:bg-white"
+            className="w-full px-4 py-3 mb-5 text-[22px] border-b-4 border-ink/25 bg-inland/40 rounded-t-lg focus:border-stamp outline-none"
           />
-          <button
-            onClick={saveSettings}
-            className="w-full bg-gray-900 text-white text-[24px] font-bold py-5 rounded-2xl active:bg-gray-700"
-          >
+          <button onClick={saveSettings} className="press w-full bg-stamp text-paper text-[22px] font-bold py-4 rounded-2xl">
             {t('save')}
           </button>
         </div>
       )}
 
-      <div className="flex flex-col gap-5 flex-1 w-full mt-2">
-        <button onClick={() => onNavigate('CAMERA')} className="w-full bg-blue-700 text-white rounded-[32px] py-12 shadow-lg flex flex-col items-center gap-3 active:scale-95 transition-transform">
-          <span className="text-7xl" aria-hidden="true">📷</span>
-          <span className="text-[32px] font-bold tracking-wide">{t('snap')}</span>
+      <div className="flex flex-col gap-4 mt-7">
+        <button
+          onClick={() => onNavigate('CAMERA')}
+          className="press w-full bg-stamp text-paper rounded-[28px] px-6 py-8 flex items-center gap-5 text-left"
+        >
+          <span className="w-20 h-20 shrink-0 rounded-full bg-paper/15 grid place-items-center">
+            <Icon name="camera" size={46} />
+          </span>
+          <span className="font-display text-[38px] leading-tight">{t('snap')}</span>
         </button>
-        <button onClick={() => fileRef.current?.click()} className="w-full bg-emerald-700 text-white rounded-[32px] py-9 shadow-lg flex flex-col items-center gap-3 active:scale-95 transition-transform">
-          <span className="text-6xl" aria-hidden="true">🖼️</span>
-          <span className="text-[30px] font-bold tracking-wide">{t('upload')}</span>
-        </button>
+
+        <div className="grid grid-cols-2 gap-4">
+          <button
+            onClick={() => fileRef.current?.click()}
+            className="press bg-paper text-ink rounded-[24px] p-5 min-h-[150px] flex flex-col justify-between text-left border-2 border-ink"
+          >
+            <Icon name="file" size={40} className="text-stamp" />
+            <span className="text-[22px] font-bold leading-tight">{t('upload')}</span>
+          </button>
+          <button
+            onClick={() => onNavigate('PASTE')}
+            className="press bg-paper text-ink rounded-[24px] p-5 min-h-[150px] flex flex-col justify-between text-left border-2 border-ink"
+          >
+            <Icon name="chat" size={40} className="text-stamp" />
+            <span className="text-[22px] font-bold leading-tight">{t('paste')}</span>
+          </button>
+        </div>
         <input ref={fileRef} type="file" accept="image/*,application/pdf" hidden onChange={onFile} />
-        <button onClick={() => onNavigate('PASTE')} className="w-full bg-purple-700 text-white rounded-[32px] py-9 shadow-lg flex flex-col items-center gap-3 active:scale-95 transition-transform">
-          <span className="text-6xl" aria-hidden="true">💬</span>
-          <span className="text-[30px] font-bold tracking-wide">{t('paste')}</span>
-        </button>
       </div>
 
-      <div className="mt-8">
-        <p className="text-[18px] font-bold text-gray-700 mb-3">{t('samples')}</p>
+      <section className="mt-9" aria-labelledby="samples-h">
+        <h2 id="samples-h" className="font-display text-[26px] text-ink mb-3">{t('samples')}</h2>
         <div className="grid grid-cols-2 gap-3">
-          {samples.map(([name, icon, key]) => (
+          {samples.map(([name, icon, key, tone]) => (
             <button
               key={name}
               onClick={() => onNavigate('READING', { input: { sample: name } })}
-              className="bg-white border-2 border-gray-300 rounded-2xl py-4 px-3 text-[19px] font-bold text-gray-800 active:bg-gray-100 min-h-[64px]"
+              className="slip min-h-[72px] px-4 pb-3 flex items-center gap-3 text-left active:translate-y-0.5"
             >
-              <span aria-hidden="true">{icon} </span>{t(key)}
+              <Icon name={icon} size={30} className={tone} />
+              <span className="text-[19px] font-bold leading-tight">{t(key)}</span>
             </button>
           ))}
         </div>
-      </div>
+      </section>
 
-      <p className="text-center text-[15px] text-gray-600 mt-8 mb-2">{t('footer')}</p>
+      <p className="font-display text-[19px] text-stamp mt-auto pt-10 leading-snug">{t('footer')}</p>
     </div>
   );
 }
