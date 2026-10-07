@@ -5,7 +5,7 @@
   "description": "Vaachak: reads any bill, medicine strip or notice and tells an elderly person, in Marathi or Hindi, exactly what to do.",
   "type": "module",
   "engines": {
-    "node": ">=18.17"
+    "node": "22.x"
   },
   "scripts": {
     "dev": "node server.js",
