@@ -8,3 +8,10 @@ dist/
 .vercel
 .env*
 !.env.example
+
+# frontend build output and copied assets (regenerated on build)
+frontend/node_modules/
+frontend/dist/
+frontend/public/samples/
+frontend/public/vaachak-offline.js
+frontend/public/classic.html

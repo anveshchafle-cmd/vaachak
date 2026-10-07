@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+html, body { margin: 0; background: #f9fafb; overflow-x: hidden; }
+body { font-family: "Noto Sans Devanagari", system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
+
+/* Clear keyboard focus for everyone who does not use touch. */
+:focus-visible { outline: 4px solid #2563eb; outline-offset: 3px; }
+
+@keyframes fade-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.animate-fade-in { animation: fade-in .25s ease-out; }
+
+@keyframes danger-pulse { 50% { filter: brightness(1.2); } }
+.animate-danger { animation: danger-pulse 1.1s ease-in-out 3; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}

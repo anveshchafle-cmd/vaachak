@@ -23,7 +23,7 @@ async function processImage(file, maxSize = 1600) {
         ctx.drawImage(img, 0, 0, width, height);
 
         canvas.toBlob(
-          (blob) => resolve(new File([blob], file.name, { type: 'image/jpeg' })),
+          (blob) => resolve(new File([blob], file.name || 'photo.jpg', { type: 'image/jpeg' })),
           'image/jpeg',
           0.8 
         );
@@ -39,31 +39,22 @@ async function fetchWithTimeout(resource, options = {}) {
   const controller = new AbortController();
   const id = setTimeout(() => controller.abort(), timeout);
   
-  const response = await fetch(resource, {
-    ...options,
-    signal: controller.signal
-  });
-  clearTimeout(id);
-  return response;
+  try {
+    return await fetch(resource, { ...options, signal: controller.signal });
+  } finally {
+    clearTimeout(id);
+  }
 }
 
-export async function read(file, lang, history, familyPhone, userName, edgeText) {
-  const processedFile = await processImage(file);
-  const formData = new FormData();
-  
-  formData.append('file', processedFile);
-  formData.append('lang', lang);
-  formData.append('history', JSON.stringify(history || {}));
-  
-  if (familyPhone) formData.append('familyPhone', familyPhone);
-  if (userName) formData.append('userName', userName);
-  if (edgeText) formData.append('edgeText', edgeText);
+// The backend can take 10-40 s on Gemini's free tier; after this we show the offline result instead.
+const READ_TIMEOUT_MS = 30000;
 
+async function postRead(formData) {
   try {
     const res = await fetchWithTimeout(`${API}/api/read`, {
       method: 'POST',
       body: formData,
-      timeout: 25000
+      timeout: READ_TIMEOUT_MS
     });
 
     if (!res.ok) {
@@ -76,12 +67,43 @@ export async function read(file, lang, history, familyPhone, userName, edgeText)
   }
 }
 
+function addCommon(formData, { lang, history, familyPhone, userName }) {
+  formData.append('lang', lang);
+  formData.append('history', JSON.stringify(history || {}));
+  if (familyPhone) formData.append('familyPhone', familyPhone);
+  if (userName) formData.append('userName', userName);
+}
+
+export { processImage };
+
+// A pasted SMS / WhatsApp message, or a link to a web page or PDF.
+export async function readText(value, opts) {
+  const formData = new FormData();
+  formData.append(/^https?://S+$/i.test(value.trim()) ? 'url' : 'text', value.trim());
+  addCommon(formData, opts);
+  return postRead(formData);
+}
+
+export async function read(file, lang, history, familyPhone, userName, edgeText) {
+  const processedFile = await processImage(file);
+  const formData = new FormData();
+  
+  formData.append('file', processedFile, processedFile.name || 'photo.jpg');
+  formData.append('lang', lang);
+  formData.append('history', JSON.stringify(history || {}));
+  
+  if (familyPhone) formData.append('familyPhone', familyPhone);
+  if (userName) formData.append('userName', userName);
+  if (edgeText) formData.append('edgeText', edgeText);
+  return postRead(formData);
+}
+
 export async function ask(payload, isAudio = false) {
   const options = { method: 'POST' };
   
   if (isAudio) {
     const formData = new FormData();
-    formData.append('audio', payload.audio);
+    formData.append('audio', payload.audio, 'question.webm');
     formData.append('card', payload.card);
     formData.append('lang', payload.lang);
     options.body = formData;
