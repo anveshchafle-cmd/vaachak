@@ -27,7 +27,10 @@ Built for THINK AI 4.0 (IETE TCET Mumbai), PS10: AI-Powered Accessibility Assist
 | **Dual-engine verification** | Gemini's amount/date must agree with on-device Tesseract OCR (Levenshtein-tolerant of OCR slips) → "Verified by 2 engines"; disagreement lowers confidence and hides Pay |
 | **Zero-type payment** | Pay opens a UPI link pre-filled with the amount (only for a UPI ID printed on the bill), or copies the consumer number and opens the official biller page. Never a guessed UPI ID |
 | **Haptic danger alerts** | Distinct vibration patterns for scam/expired vs urgent, for users who can't see the screen well |
-| **Works with zero internet** | The same rule engine runs in the browser on Tesseract text, with an offline directory of ~35 common Indian medicines, so an expired Crocin strip still gets a red card |
+| **Works with zero internet** | The same rule engine runs in the browser on Tesseract text, with an offline directory of 50 common Indian medicines, so an expired Crocin strip still gets a red card |
+| **Audio-assisted camera** | Measures brightness and sharpness of the live camera: low light → "प्रकाश कमी आहे" + torch on; shaking → "फोन स्थिर धरा"; takes the photo by itself when it's clear |
+| **Rule-based dose reading** | "1-0-1 after food" → ☀️ 1 · 🌤️ 0 · 🌙 1 · after food, even offline |
+| **Speaks to the person by name** | "प्रकाश काका, MSEDCL चे वीज बिल…" |
 | **Natural Indian voice** | Sarvam AI Bulbul v3 (handles Marathi-English mixing), Gemini TTS as backup, pre-recorded clips offline |
 
 > **"हे साफ दिसत नाही. कृपया कुणालातरी विचारून घ्या."** Vaachak never guesses with someone's money or medicine.

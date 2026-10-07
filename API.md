@@ -29,6 +29,7 @@ without telling the other person.
 | `lang` | no | `mr` (default), `hi`, `en` |
 | `history` | no | JSON string from localStorage: `{"msedcl:000123456789": 300}` (see Bill spike below) |
 | `familyPhone` | no | 10-digit number for the WhatsApp button, e.g. `9876543210` |
+| `userName` | no | How to address the person, e.g. `प्रकाश काका`; the spoken card then starts "प्रकाश काका, …" |
 | `edgeText` | no | Text from **Tesseract.js run on the same photo in the browser**; turns on the dual-engine check (see below) |
 
 JSON also works: `{ "fileBase64": "data:image/jpeg;base64,...", "lang": "mr", "history": {...}, "familyPhone": "...", "edgeText": "..." }`
@@ -125,6 +126,23 @@ Every card from `/api/read` (and from offline mode) also has these:
 }
 ```
 
+### Verified badge: `consensus.label`
+Ready-made text in the chosen language: green **"✓ दोन वेळा तपासले"** when `consensus.badge === "VERIFIED_BY_EDGE"`,
+amber **"मजकूर स्पष्ट नाही. कृपया घरच्यांकडून तपासून घ्या."** when the engines disagree, `null` otherwise.
+
+### Send to family with the photo: `actions`
+`wa.me` links can only carry text. To send **the photo + summary**, use the phone's share sheet (Android Chrome), and fall back to the link:
+```js
+const file = new File([photoBlob], 'document.jpg', { type: 'image/jpeg' });
+if (navigator.canShare?.({ files: [file] })) {
+  await navigator.share({ files: [file], text: card.actions.whatsappText });   // user picks WhatsApp → son
+} else {
+  location.href = card.actions.whatsappUrl;
+}
+```
+`whatsappText` includes a plain English line for the family, e.g. *"🇬🇧 MSEDCL electricity bill of ₹840 due on 10 Oct 2026. Please verify."*
+(also on its own as `actions.familySummaryEn`).
+
 ### Haptic alerts: `alert`
 Right after showing the card: `if (navigator.vibrate) navigator.vibrate(card.alert.vibrate)`.
 `level` is `danger` (SCAM/EXPIRED, long buzz), `warning` (URGENT/BILL_SPIKE), `info` (LOW_CONFIDENCE) or `ok` (tiny tick).
@@ -160,13 +178,40 @@ const { data } = await Tesseract.recognize(photoFile, 'eng');
 const card = offlineRead(data.text, { lang: 'mr', history });   // same card shape as /api/read
 ```
 
-- Knows ~35 common Indian medicines (Crocin, Dolo, Pantocid, Metformin, Telma, Thyronorm, Azithral…), tolerant of OCR spelling mistakes.
+- Knows 50 common Indian medicines (Crocin, Dolo, Pantocid, Metformin, Telma, Thyronorm, Azithral…), tolerant of OCR spelling mistakes.
 - Still runs **expiry, due-date, scam and bill-spike rules**, so an expired Crocin strip gives a red `EXPIRED` card offline.
 - `card.mode === "offline"`, `card.offline.note` = "इंटरनेट नाही. फोनवरच वाचले." (show it as a small badge).
 - No boxes, no Q&A offline. For voice, play `samples/audio/*.wav` (expired / scam / low-confidence) or use `speechSynthesis`.
 
 Recommended flow: run Tesseract **first** (it's needed for `edgeText` anyway). If `navigator.onLine` is false or `/api/read`
 fails (`GEMINI_BUSY`, `QUOTA`, network error), show `offlineRead(...)` instead of an error.
+
+---
+
+## Camera helper: auto-torch, "hold steady", auto-capture
+
+`lib/viewfinder.js` (browser only) watches the live camera so the person never has to aim or press a tiny button:
+- too dark → speaks **"प्रकाश कमी आहे. टॉर्च चालू करत आहे."** and switches on the phone's flashlight (Android Chrome);
+- blurry/shaking → speaks **"फोन स्थिर धरा."**;
+- bright and sharp for ~1 second → speaks **"छान. फोटो घेत आहे."** and captures a ≤1600 px JPEG by itself.
+
+```js
+import { startViewfinder } from '../lib/viewfinder.js';
+
+const stop = await startViewfinder(document.querySelector('video'), {
+  lang: 'mr',
+  onStatus: (status) => setHint(status),          // 'dark' | 'blurry' | 'ok', for an on-screen hint
+  onCapture: async (blob) => { /* run Tesseract on blob, then POST blob to /api/read */ },
+});
+// call stop() if the user leaves the camera screen
+```
+Thresholds are in `THRESHOLDS` (`dark: 60`, `blurry: 60`); tune them on the demo phone if needed.
+
+---
+
+## Pill schedule
+`pills` comes from Gemini, or from our own rule that reads doctor's shorthand like **"1-0-1 after food"**, so it
+also works offline. Draw ☀️ (morning) 🍽️/🌤️ (noon) 🌙 (night) with the count, plus "before/after food".
 
 ---
 
