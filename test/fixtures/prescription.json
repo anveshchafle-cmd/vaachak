@@ -1,0 +1,20 @@
+{
+  "docType": "prescription",
+  "readable": true,
+  "rawText": "Dr. S. Kulkarni, MBBS\nThane (W)\nRx\nTab. Metformin 500 mg   1-0-1   after food   x 30 days\nNext visit: 05/11/2026",
+  "issuer": "Dr. S. Kulkarni",
+  "accountId": null,
+  "fields": {
+    "what": { "text": "डॉक्टरांची चिठ्ठी: मेटफॉर्मिन 500 mg (साखरेसाठी)", "confidence": 0.9, "box": [200, 60, 280, 940] },
+    "action": { "text": "सकाळी 1 आणि रात्री 1 गोळी जेवणानंतर, 30 दिवस", "confidence": 0.88, "box": [200, 60, 280, 940] },
+    "deadline": { "text": "पुढील भेट 5 नोव्हेंबर 2026", "confidence": 0.86, "box": [400, 60, 450, 600] },
+    "amount": { "text": "", "confidence": 1, "box": null },
+    "warning": { "text": "", "confidence": 1, "box": null }
+  },
+  "deadlineIso": "2026-11-05",
+  "expiryIso": null,
+  "amountValue": null,
+  "amountWords": null,
+  "pills": { "morning": 1, "noon": 0, "night": 1, "food": "after" },
+  "checklist": null
+}

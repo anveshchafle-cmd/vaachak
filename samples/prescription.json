@@ -1,0 +1,83 @@
+{
+  "docType": "prescription",
+  "lang": "mr",
+  "fields": {
+    "what": {
+      "text": "डॉक्टरांची चिठ्ठी: मेटफॉर्मिन 500 mg (साखरेसाठी)",
+      "confidence": 0.9,
+      "box": [
+        200,
+        60,
+        280,
+        940
+      ],
+      "source": "ai"
+    },
+    "action": {
+      "text": "सकाळी 1 आणि रात्री 1 गोळी जेवणानंतर, 30 दिवस",
+      "confidence": 0.88,
+      "box": [
+        200,
+        60,
+        280,
+        940
+      ],
+      "source": "ai"
+    },
+    "deadline": {
+      "text": "पुढील भेट 5 नोव्हेंबर 2026",
+      "confidence": 0.86,
+      "box": [
+        400,
+        60,
+        450,
+        600
+      ],
+      "source": "ai",
+      "iso": "2026-11-05",
+      "verified": true
+    },
+    "amount": {
+      "text": "",
+      "confidence": 1,
+      "box": null,
+      "source": "ai",
+      "value": null
+    },
+    "warning": {
+      "text": "",
+      "confidence": 1,
+      "box": null,
+      "source": "ai"
+    }
+  },
+  "flags": [],
+  "scam": {
+    "isSuspect": false,
+    "score": 0,
+    "reasons": []
+  },
+  "pills": {
+    "morning": 1,
+    "noon": 0,
+    "night": 1,
+    "food": "after"
+  },
+  "checklist": null,
+  "dates": {
+    "today": "2026-10-09",
+    "deadline": "2026-11-05",
+    "expiry": null,
+    "daysLeft": 27,
+    "overdue": false
+  },
+  "spike": null,
+  "billerKey": null,
+  "actions": {
+    "whatsappText": "📄 वाचकने माझ्यासाठी हे कागद वाचले:\n\nडॉक्टरांची चिठ्ठी: मेटफॉर्मिन 500 mg (साखरेसाठी)\nसकाळी 1 आणि रात्री 1 गोळी जेवणानंतर, 30 दिवस\nपुढील भेट 5 नोव्हेंबर 2026\n\nहे भरू / करू का? कृपया YES किंवा NO लिहून उत्तर द्या.",
+    "whatsappUrl": "https://wa.me/?text=%F0%9F%93%84%20%E0%A4%B5%E0%A4%BE%E0%A4%9A%E0%A4%95%E0%A4%A8%E0%A5%87%20%E0%A4%AE%E0%A4%BE%E0%A4%9D%E0%A5%8D%E0%A4%AF%E0%A4%BE%E0%A4%B8%E0%A4%BE%E0%A4%A0%E0%A5%80%20%E0%A4%B9%E0%A5%87%20%E0%A4%95%E0%A4%BE%E0%A4%97%E0%A4%A6%20%E0%A4%B5%E0%A4%BE%E0%A4%9A%E0%A4%B2%E0%A5%87%3A%0A%0A%E0%A4%A1%E0%A5%89%E0%A4%95%E0%A5%8D%E0%A4%9F%E0%A4%B0%E0%A4%BE%E0%A4%82%E0%A4%9A%E0%A5%80%20%E0%A4%9A%E0%A4%BF%E0%A4%A0%E0%A5%8D%E0%A4%A0%E0%A5%80%3A%20%E0%A4%AE%E0%A5%87%E0%A4%9F%E0%A4%AB%E0%A5%89%E0%A4%B0%E0%A5%8D%E0%A4%AE%E0%A4%BF%E0%A4%A8%20500%20mg%20(%E0%A4%B8%E0%A4%BE%E0%A4%96%E0%A4%B0%E0%A5%87%E0%A4%B8%E0%A4%BE%E0%A4%A0%E0%A5%80)%0A%E0%A4%B8%E0%A4%95%E0%A4%BE%E0%A4%B3%E0%A5%80%201%20%E0%A4%86%E0%A4%A3%E0%A4%BF%20%E0%A4%B0%E0%A4%BE%E0%A4%A4%E0%A5%8D%E0%A4%B0%E0%A5%80%201%20%E0%A4%97%E0%A5%8B%E0%A4%B3%E0%A5%80%20%E0%A4%9C%E0%A5%87%E0%A4%B5%E0%A4%A3%E0%A4%BE%E0%A4%A8%E0%A4%82%E0%A4%A4%E0%A4%B0%2C%2030%20%E0%A4%A6%E0%A4%BF%E0%A4%B5%E0%A4%B8%0A%E0%A4%AA%E0%A5%81%E0%A4%A2%E0%A5%80%E0%A4%B2%20%E0%A4%AD%E0%A5%87%E0%A4%9F%205%20%E0%A4%A8%E0%A5%8B%E0%A4%B5%E0%A5%8D%E0%A4%B9%E0%A5%87%E0%A4%82%E0%A4%AC%E0%A4%B0%202026%0A%0A%E0%A4%B9%E0%A5%87%20%E0%A4%AD%E0%A4%B0%E0%A5%82%20%2F%20%E0%A4%95%E0%A4%B0%E0%A5%82%20%E0%A4%95%E0%A4%BE%3F%20%E0%A4%95%E0%A5%83%E0%A4%AA%E0%A4%AF%E0%A4%BE%20YES%20%E0%A4%95%E0%A4%BF%E0%A4%82%E0%A4%B5%E0%A4%BE%20NO%20%E0%A4%B2%E0%A4%BF%E0%A4%B9%E0%A5%82%E0%A4%A8%20%E0%A4%89%E0%A4%A4%E0%A5%8D%E0%A4%A4%E0%A4%B0%20%E0%A4%A6%E0%A5%8D%E0%A4%AF%E0%A4%BE.",
+    "calendarUrl": "https://calendar.google.com/calendar/render?action=TEMPLATE&text=%E0%A4%B5%E0%A4%BE%E0%A4%9A%E0%A4%95+%E0%A4%86%E0%A4%A0%E0%A4%B5%E0%A4%A3%3A+%E0%A4%B8%E0%A4%95%E0%A4%BE%E0%A4%B3%E0%A5%80+1+%E0%A4%86%E0%A4%A3%E0%A4%BF+%E0%A4%B0%E0%A4%BE%E0%A4%A4%E0%A5%8D%E0%A4%B0%E0%A5%80+1+%E0%A4%97%E0%A5%8B%E0%A4%B3%E0%A5%80+%E0%A4%9C%E0%A5%87%E0%A4%B5%E0%A4%A3%E0%A4%BE%E0%A4%A8%E0%A4%82%E0%A4%A4%E0%A4%B0%2C+30+%E0%A4%A6%E0%A4%BF%E0%A4%B5%E0%A4%B8&dates=20261104%2F20261105&details=%E0%A4%A1%E0%A5%89%E0%A4%95%E0%A5%8D%E0%A4%9F%E0%A4%B0%E0%A4%BE%E0%A4%82%E0%A4%9A%E0%A5%80+%E0%A4%9A%E0%A4%BF%E0%A4%A0%E0%A5%8D%E0%A4%A0%E0%A5%80%3A+%E0%A4%AE%E0%A5%87%E0%A4%9F%E0%A4%AB%E0%A5%89%E0%A4%B0%E0%A5%8D%E0%A4%AE%E0%A4%BF%E0%A4%A8+500+mg+%28%E0%A4%B8%E0%A4%BE%E0%A4%96%E0%A4%B0%E0%A5%87%E0%A4%B8%E0%A4%BE%E0%A4%A0%E0%A5%80%29%0A%E0%A4%B8%E0%A4%95%E0%A4%BE%E0%A4%B3%E0%A5%80+1+%E0%A4%86%E0%A4%A3%E0%A4%BF+%E0%A4%B0%E0%A4%BE%E0%A4%A4%E0%A5%8D%E0%A4%B0%E0%A5%80+1+%E0%A4%97%E0%A5%8B%E0%A4%B3%E0%A5%80+%E0%A4%9C%E0%A5%87%E0%A4%B5%E0%A4%A3%E0%A4%BE%E0%A4%A8%E0%A4%82%E0%A4%A4%E0%A4%B0%2C+30+%E0%A4%A6%E0%A4%BF%E0%A4%B5%E0%A4%B8%0A%E0%A4%AA%E0%A5%81%E0%A4%A2%E0%A5%80%E0%A4%B2+%E0%A4%AD%E0%A5%87%E0%A4%9F+5+%E0%A4%A8%E0%A5%8B%E0%A4%B5%E0%A5%8D%E0%A4%B9%E0%A5%87%E0%A4%82%E0%A4%AC%E0%A4%B0+2026"
+  },
+  "speak": "डॉक्टरांची चिठ्ठी: मेटफॉर्मिन 500 mg (साखरेसाठी). सकाळी 1 आणि रात्री 1 गोळी जेवणानंतर, 30 दिवस. शेवटची तारीख: पुढील भेट 5 नोव्हेंबर 2026. सकाळी 1, दुपारी 0, रात्री 1, जेवणानंतर.",
+  "rawText": "Dr. S. Kulkarni, MBBS\nThane (W)\nRx\nTab. Metformin 500 mg   1-0-1   after food   x 30 days\nNext visit: 05/11/2026"
+}

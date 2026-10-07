@@ -1,0 +1,20 @@
+{
+  "docType": "medicine",
+  "readable": true,
+  "rawText": "PARACIP-500\nParacetamol Tablets IP 500 mg\nB.No. PT2341\nMFG. 09/2024\nEXP. 08/2026\nM.R.P. Rs. 30.00 for 10 tablets\nStore below 25°C. Keep out of reach of children.",
+  "issuer": null,
+  "accountId": null,
+  "fields": {
+    "what": { "text": "पॅरासिटामॉल 500 mg गोळी (ताप आणि दुखण्यासाठी)", "confidence": 0.95, "box": [60, 80, 160, 900] },
+    "action": { "text": "डॉक्टरांनी सांगितल्याप्रमाणे घ्या", "confidence": 0.7, "box": null },
+    "deadline": { "text": "", "confidence": 1, "box": null },
+    "amount": { "text": "", "confidence": 1, "box": null },
+    "warning": { "text": "मुलांपासून दूर ठेवा", "confidence": 0.9, "box": [800, 80, 860, 900] }
+  },
+  "deadlineIso": null,
+  "expiryIso": "2026-08-31",
+  "amountValue": null,
+  "amountWords": null,
+  "pills": null,
+  "checklist": null
+}

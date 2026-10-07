@@ -1,0 +1,16 @@
+{
+  "name": "vaachak",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Vaachak: reads any bill, medicine strip or notice and tells an elderly person, in Marathi or Hindi, exactly what to do.",
+  "type": "module",
+  "engines": {
+    "node": ">=18.17"
+  },
+  "scripts": {
+    "dev": "node server.js",
+    "test": "node --test \"test/*.test.js\"",
+    "try": "node scripts/try.js",
+    "samples": "node scripts/make-samples.js"
+  }
+}

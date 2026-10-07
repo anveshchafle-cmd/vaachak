@@ -1,0 +1,20 @@
+{
+  "docType": "sms_message",
+  "readable": true,
+  "rawText": "Dear Consumer, your electricity power will be disconnected tonight at 9.30 pm because your previous month bill was not updated. Please immediately contact our electricity officer 7894561230. Thank you",
+  "issuer": null,
+  "accountId": null,
+  "fields": {
+    "what": { "text": "वीज कापण्याबद्दल SMS", "confidence": 0.95, "box": [100, 50, 200, 950] },
+    "action": { "text": "7894561230 वर फोन करा", "confidence": 0.9, "box": [300, 50, 360, 950] },
+    "deadline": { "text": "आज रात्री 9.30", "confidence": 0.85, "box": null },
+    "amount": { "text": "", "confidence": 1, "box": null },
+    "warning": { "text": "आज रात्री वीज कापली जाईल", "confidence": 0.9, "box": [150, 50, 220, 950] }
+  },
+  "deadlineIso": null,
+  "expiryIso": null,
+  "amountValue": null,
+  "amountWords": null,
+  "pills": null,
+  "checklist": null
+}
