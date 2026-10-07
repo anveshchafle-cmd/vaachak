@@ -46,8 +46,8 @@ async function fetchWithTimeout(resource, options = {}) {
   }
 }
 
-// The backend can take 10-40 s on Gemini's free tier; after this we show the offline result instead.
-const READ_TIMEOUT_MS = 30000;
+// The backend tries several Gemini models within 40 s; after 45 s we show the offline result instead.
+const READ_TIMEOUT_MS = 45000;
 
 async function postRead(formData) {
   try {

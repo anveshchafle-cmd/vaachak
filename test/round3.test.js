@@ -88,3 +88,9 @@ test('viewfinder: dark, blurry and sharp frames', () => {
   const sharp = analyzeFrame(frame((x, y) => ((Math.floor(x / 4) + Math.floor(y / 4)) % 2 ? 230 : 60))); // printed text-like edges
   assert.equal(assessFrame(sharp), 'ok');
 });
+
+test('offline reader handles shop / GST invoices', async () => {
+  const { parseBillText } = await import('../lib/offline.js');
+  assert.deepEqual(parseBillText('TAX INVOICE\nDue date : 07-Oct-2026\nGrand Total (₹) 32,180.00'), { amountValue: 32180, deadlineIso: '2026-10-07', accountId: null });
+  assert.equal(parseBillText('Items 3\nTotal 1,240.50').amountValue, 1240.5);
+});
