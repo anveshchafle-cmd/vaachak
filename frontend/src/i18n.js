@@ -15,7 +15,7 @@ const T = {
     askPh: 'प्रश्न विचारा… उदा. UPI ने भरू शकतो का?', askBtn: 'विचारा', mic: 'बोलून विचारा', stop: 'थांबा', listening: 'बोला… थांबवण्यासाठी पुन्हा दाबा',
     yes: 'हो', no: 'नाही', morning: 'सकाळ', noon: 'दुपार', night: 'रात्र', before: 'जेवणाआधी', after: 'जेवणानंतर', carry: 'सोबत न्या',
     b_SCAM: 'फसवणूक!', b_EXPIRED: 'मुदत संपलेले औषध', b_URGENT: 'लवकर करा', b_BILL_SPIKE: 'बिल खूप जास्त', b_LOW_CONFIDENCE: 'साफ दिसत नाही',
-    error: 'काहीतरी चुकले. पुन्हा प्रयत्न करा.', linkError: 'ही लिंक उघडता आली नाही.', footer: 'वाचक कधीही पैसे किंवा औषधांबद्दल अंदाज लावत नाही.',
+    error: 'काहीतरी चुकले. पुन्हा प्रयत्न करा.', linkError: 'ही लिंक उघडता आली नाही. पानाचा स्क्रीनशॉट घेऊन तो फोटो म्हणून पाठवा.', footer: 'वाचक कधीही पैसे किंवा औषधांबद्दल अंदाज लावत नाही.',
   },
   hi: {
     tagline: 'कोई भी कागज़, बिल, दवा या मैसेज: पढ़कर बताता है कि ठीक क्या करना है.',
@@ -32,7 +32,7 @@ const T = {
     askPh: 'सवाल पूछिए… जैसे UPI से भर सकते हैं?', askBtn: 'पूछो', mic: 'बोलकर पूछें', stop: 'रुकें', listening: 'बोलिए… रोकने के लिए फिर दबाइए',
     yes: 'हाँ', no: 'नहीं', morning: 'सुबह', noon: 'दोपहर', night: 'रात', before: 'खाने से पहले', after: 'खाने के बाद', carry: 'साथ ले जाएँ',
     b_SCAM: 'धोखाधड़ी!', b_EXPIRED: 'एक्सपायर दवा', b_URGENT: 'जल्दी कीजिए', b_BILL_SPIKE: 'बिल बहुत ज़्यादा', b_LOW_CONFIDENCE: 'साफ़ नहीं दिख रहा',
-    error: 'कुछ गड़बड़ हुई. फिर कोशिश करें.', linkError: 'यह लिंक नहीं खुल सकी.', footer: 'वाचक पैसे या दवा के बारे में कभी अंदाज़ा नहीं लगाता.',
+    error: 'कुछ गड़बड़ हुई. फिर कोशिश करें.', linkError: 'यह लिंक नहीं खुल सकी. पेज का स्क्रीनशॉट लेकर उसे फोटो की तरह भेजें.', footer: 'वाचक पैसे या दवा के बारे में कभी अंदाज़ा नहीं लगाता.',
   },
   en: {
     tagline: 'Any bill, medicine strip or message: read out, with exactly what to do.',
@@ -49,7 +49,7 @@ const T = {
     askPh: 'Ask a question… e.g. Can I pay by UPI?', askBtn: 'Ask', mic: 'Ask by voice', stop: 'Stop', listening: 'Speak… tap again to stop',
     yes: 'Yes', no: 'No', morning: 'Morning', noon: 'Afternoon', night: 'Night', before: 'Before food', after: 'After food', carry: 'Take with you',
     b_SCAM: 'Scam!', b_EXPIRED: 'Expired medicine', b_URGENT: 'Act soon', b_BILL_SPIKE: 'Bill unusually high', b_LOW_CONFIDENCE: 'Not clear',
-    error: 'Something went wrong. Please try again.', linkError: 'Could not open that link.', footer: 'Vaachak never guesses with money or medicine.',
+    error: 'Something went wrong. Please try again.', linkError: 'Could not open that link. Take a screenshot of the page and send it as a photo.', footer: 'Vaachak never guesses with money or medicine.',
   },
 };
 
