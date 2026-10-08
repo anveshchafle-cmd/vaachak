@@ -1,0 +1,101 @@
+{
+  "mode": "online",
+  "docType": "prescription",
+  "lang": "en",
+  "fields": {
+    "what": {
+      "text": "Doctor's prescription: Metformin 500 mg (for sugar)",
+      "confidence": 0.9,
+      "box": [
+        200,
+        60,
+        280,
+        940
+      ],
+      "source": "ai"
+    },
+    "action": {
+      "text": "1 tablet morning and 1 at night after food, 30 days",
+      "confidence": 0.88,
+      "box": [
+        200,
+        60,
+        280,
+        940
+      ],
+      "source": "ai"
+    },
+    "deadline": {
+      "text": "Next visit 5 November 2026",
+      "confidence": 0.86,
+      "box": [
+        400,
+        60,
+        450,
+        600
+      ],
+      "source": "ai",
+      "iso": "2026-11-05",
+      "verified": true
+    },
+    "amount": {
+      "text": "",
+      "confidence": 1,
+      "box": null,
+      "source": "ai",
+      "value": null
+    },
+    "warning": {
+      "text": "",
+      "confidence": 1,
+      "box": null,
+      "source": "ai"
+    }
+  },
+  "flags": [],
+  "alert": {
+    "flag": null,
+    "level": "ok",
+    "vibrate": [
+      60
+    ]
+  },
+  "consensus": {
+    "available": false,
+    "engines": [
+      "gemini"
+    ],
+    "badge": null
+  },
+  "payment": null,
+  "scam": {
+    "isSuspect": false,
+    "score": 0,
+    "reasons": []
+  },
+  "pills": {
+    "morning": 1,
+    "noon": 0,
+    "night": 1,
+    "food": "after"
+  },
+  "medicines": null,
+  "checklist": null,
+  "dates": {
+    "today": "2026-10-09",
+    "deadline": "2026-11-05",
+    "expiry": null,
+    "daysLeft": 27,
+    "overdue": false
+  },
+  "spike": null,
+  "billerKey": null,
+  "actions": {
+    "whatsappText": "📄 Vaachak read this document for me:\n\nDoctor's prescription: Metformin 500 mg (for sugar)\n1 tablet morning and 1 at night after food, 30 days\nNext visit 5 November 2026\n\nShould I pay / do this? Please reply YES or NO.",
+    "whatsappUrl": "https://wa.me/?text=%F0%9F%93%84%20Vaachak%20read%20this%20document%20for%20me%3A%0A%0ADoctor's%20prescription%3A%20Metformin%20500%20mg%20(for%20sugar)%0A1%20tablet%20morning%20and%201%20at%20night%20after%20food%2C%2030%20days%0ANext%20visit%205%20November%202026%0A%0AShould%20I%20pay%20%2F%20do%20this%3F%20Please%20reply%20YES%20or%20NO.",
+    "calendarUrl": "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Reminder+from+Vaachak%3A+1+tablet+morning+and+1+at+night+after+food%2C+30+days&dates=20261104%2F20261105&details=Doctor%27s+prescription%3A+Metformin+500+mg+%28for+sugar%29%0A1+tablet+morning+and+1+at+night+after+food%2C+30+days%0ANext+visit+5+November+2026",
+    "familySummaryEn": "Dr. S. Kulkarni prescription due on 5 Nov 2026. Please verify."
+  },
+  "speak": "Doctor's prescription: Metformin 500 mg (for sugar). 1 tablet morning and 1 at night after food, 30 days. Last date: Next visit 5 November 2026. Morning 1, afternoon 0, night 1, after food.",
+  "rawText": "Dr. S. Kulkarni, MBBS\nThane (W)\nRx\nTab. Metformin 500 mg   1-0-1   after food   x 30 days\nNext visit: 05/11/2026"
+}

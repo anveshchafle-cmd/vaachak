@@ -1,0 +1,123 @@
+{
+  "mode": "online",
+  "docType": "electricity_bill",
+  "lang": "en",
+  "fields": {
+    "what": {
+      "text": "MSEDCL electricity bill",
+      "confidence": 0.97,
+      "box": [
+        20,
+        40,
+        70,
+        960
+      ],
+      "source": "ai"
+    },
+    "action": {
+      "text": "Pay ₹840",
+      "confidence": 0.94,
+      "box": [
+        430,
+        520,
+        470,
+        900
+      ],
+      "source": "ai"
+    },
+    "deadline": {
+      "text": "10 October 2026",
+      "confidence": 0.93,
+      "box": [
+        380,
+        520,
+        420,
+        900
+      ],
+      "source": "ai",
+      "iso": "2026-10-10",
+      "verified": true
+    },
+    "amount": {
+      "text": "₹840",
+      "confidence": 0.96,
+      "box": [
+        430,
+        520,
+        470,
+        900
+      ],
+      "source": "ai",
+      "value": 840,
+      "verified": true
+    },
+    "warning": {
+      "text": "If paid late, you must pay ₹850",
+      "confidence": 0.88,
+      "box": [
+        480,
+        520,
+        520,
+        900
+      ],
+      "source": "ai"
+    }
+  },
+  "flags": [
+    "URGENT"
+  ],
+  "alert": {
+    "flag": "URGENT",
+    "level": "warning",
+    "vibrate": [
+      200,
+      100,
+      200
+    ]
+  },
+  "consensus": {
+    "available": false,
+    "engines": [
+      "gemini"
+    ],
+    "badge": null
+  },
+  "payment": {
+    "method": "official_site",
+    "billerId": "msedcl",
+    "billerName": "MSEDCL (Mahavitaran)",
+    "amount": 840,
+    "consumerNumber": "000123456789",
+    "upiUrl": null,
+    "upiSource": null,
+    "officialUrl": "https://wss.mahadiscom.in/wss/wss?uiActionName=getViewPayBill",
+    "copyText": "000123456789",
+    "confirmText": "You are paying ₹840 to MSEDCL (Mahavitaran). Is this correct?",
+    "copiedText": "Consumer number copied. Paste it on the next page."
+  },
+  "scam": {
+    "isSuspect": false,
+    "score": 0,
+    "reasons": []
+  },
+  "pills": null,
+  "medicines": null,
+  "checklist": null,
+  "dates": {
+    "today": "2026-10-09",
+    "deadline": "2026-10-10",
+    "expiry": null,
+    "daysLeft": 1,
+    "overdue": false
+  },
+  "spike": null,
+  "billerKey": "msedcl:000123456789",
+  "actions": {
+    "whatsappText": "📄 Vaachak read this document for me:\n\nMSEDCL electricity bill\nPay ₹840\n₹840\n10 October 2026\n⚠️ If paid late, you must pay ₹850\n\nShould I pay / do this? Please reply YES or NO.",
+    "whatsappUrl": "https://wa.me/?text=%F0%9F%93%84%20Vaachak%20read%20this%20document%20for%20me%3A%0A%0AMSEDCL%20electricity%20bill%0APay%20%E2%82%B9840%0A%E2%82%B9840%0A10%20October%202026%0A%E2%9A%A0%EF%B8%8F%20If%20paid%20late%2C%20you%20must%20pay%20%E2%82%B9850%0A%0AShould%20I%20pay%20%2F%20do%20this%3F%20Please%20reply%20YES%20or%20NO.",
+    "calendarUrl": "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Reminder+from+Vaachak%3A+Pay+%E2%82%B9840&dates=20261010%2F20261011&details=MSEDCL+electricity+bill%0APay+%E2%82%B9840%0A%E2%82%B9840%0A10+October+2026%0A%E2%9A%A0%EF%B8%8F+If+paid+late%2C+you+must+pay+%E2%82%B9850",
+    "familySummaryEn": "MSEDCL electricity bill of ₹840 due on 10 Oct 2026. Please verify."
+  },
+  "speak": "MSEDCL electricity bill. Pay ₹840. Amount: ₹840. eight hundred and forty rupees. Last date: 10 October 2026. Only 1 day left. If paid late, you must pay ₹850",
+  "rawText": "MAHARASHTRA STATE ELECTRICITY DISTRIBUTION CO. LTD. (MSEDCL)\nConsumer No: 000123456789\nName: PRAKASH JOSHI\nBill Month: SEP-2026\nBill Date: 25/09/2026\nDue Date: 10/10/2026\nNet Amount Payable Rs. 840.00\nIf paid after due date Rs. 850.00\nRegistered Mobile No: 9876543210\nPay online at www.mahadiscom.in\nToll Free: 1912 / 18002333435\nSupply is liable to be disconnected if the bill is not paid within 15 days of the due date."
+}

@@ -1,0 +1,102 @@
+{
+  "mode": "online",
+  "docType": "sms_message",
+  "lang": "hi",
+  "fields": {
+    "what": {
+      "text": "बिजली काटने के बारे में SMS",
+      "confidence": 0.95,
+      "box": [
+        100,
+        50,
+        200,
+        950
+      ],
+      "source": "ai"
+    },
+    "action": {
+      "text": "फ़ोन मत कीजिए, पैसे मत भरिए, किसी को OTP मत बताइए. पहले घरवालों से पूछिए.",
+      "confidence": 1,
+      "box": null,
+      "source": "rule"
+    },
+    "deadline": {
+      "text": "",
+      "confidence": 1,
+      "box": null,
+      "source": "rule",
+      "iso": null
+    },
+    "amount": {
+      "text": "",
+      "confidence": 1,
+      "box": null,
+      "source": "rule",
+      "value": null
+    },
+    "warning": {
+      "text": "सावधान! यह धोखाधड़ी का मैसेज लगता है.",
+      "confidence": 1,
+      "box": null,
+      "source": "rule"
+    }
+  },
+  "flags": [
+    "SCAM"
+  ],
+  "alert": {
+    "flag": "SCAM",
+    "level": "danger",
+    "vibrate": [
+      400,
+      200,
+      400,
+      200,
+      800
+    ]
+  },
+  "consensus": {
+    "available": false,
+    "engines": [
+      "gemini"
+    ],
+    "badge": null
+  },
+  "payment": null,
+  "scam": {
+    "isSuspect": true,
+    "score": 4,
+    "reasons": [
+      {
+        "code": "PERSONAL_NUMBER",
+        "weight": 2,
+        "text": "किसी निजी मोबाइल नंबर पर फ़ोन करने को कहा गया है. यह सरकारी हेल्पलाइन नहीं है."
+      },
+      {
+        "code": "THREAT_URGENCY",
+        "weight": 2,
+        "text": "आज ही सेवा बंद करने की धमकी दी गई है. ऐसी जल्दबाज़ी धोखाधड़ी का संकेत है."
+      }
+    ]
+  },
+  "pills": null,
+  "medicines": null,
+  "checklist": null,
+  "dates": {
+    "today": "2026-10-09",
+    "deadline": null,
+    "expiry": null,
+    "daysLeft": null,
+    "overdue": false
+  },
+  "spike": null,
+  "billerKey": null,
+  "actions": {
+    "whatsappText": "📄 वाचक ने मेरे लिए यह कागज़ पढ़ा:\n\nबिजली काटने के बारे में SMS\nफ़ोन मत कीजिए, पैसे मत भरिए, किसी को OTP मत बताइए. पहले घरवालों से पूछिए.\n⚠️ सावधान! यह धोखाधड़ी का मैसेज लगता है.\n\n🇬🇧 Looks like a SCAM message. Please call me before I do anything.\n\nक्या मैं इसे भरूँ / करूँ? कृपया YES या NO लिखकर जवाब दीजिए.",
+    "whatsappUrl": "https://wa.me/?text=%F0%9F%93%84%20%E0%A4%B5%E0%A4%BE%E0%A4%9A%E0%A4%95%20%E0%A4%A8%E0%A5%87%20%E0%A4%AE%E0%A5%87%E0%A4%B0%E0%A5%87%20%E0%A4%B2%E0%A4%BF%E0%A4%8F%20%E0%A4%AF%E0%A4%B9%20%E0%A4%95%E0%A4%BE%E0%A4%97%E0%A4%9C%E0%A4%BC%20%E0%A4%AA%E0%A4%A2%E0%A4%BC%E0%A4%BE%3A%0A%0A%E0%A4%AC%E0%A4%BF%E0%A4%9C%E0%A4%B2%E0%A5%80%20%E0%A4%95%E0%A4%BE%E0%A4%9F%E0%A4%A8%E0%A5%87%20%E0%A4%95%E0%A5%87%20%E0%A4%AC%E0%A4%BE%E0%A4%B0%E0%A5%87%20%E0%A4%AE%E0%A5%87%E0%A4%82%20SMS%0A%E0%A4%AB%E0%A4%BC%E0%A5%8B%E0%A4%A8%20%E0%A4%AE%E0%A4%A4%20%E0%A4%95%E0%A5%80%E0%A4%9C%E0%A4%BF%E0%A4%8F%2C%20%E0%A4%AA%E0%A5%88%E0%A4%B8%E0%A5%87%20%E0%A4%AE%E0%A4%A4%20%E0%A4%AD%E0%A4%B0%E0%A4%BF%E0%A4%8F%2C%20%E0%A4%95%E0%A4%BF%E0%A4%B8%E0%A5%80%20%E0%A4%95%E0%A5%8B%20OTP%20%E0%A4%AE%E0%A4%A4%20%E0%A4%AC%E0%A4%A4%E0%A4%BE%E0%A4%87%E0%A4%8F.%20%E0%A4%AA%E0%A4%B9%E0%A4%B2%E0%A5%87%20%E0%A4%98%E0%A4%B0%E0%A4%B5%E0%A4%BE%E0%A4%B2%E0%A5%8B%E0%A4%82%20%E0%A4%B8%E0%A5%87%20%E0%A4%AA%E0%A5%82%E0%A4%9B%E0%A4%BF%E0%A4%8F.%0A%E2%9A%A0%EF%B8%8F%20%E0%A4%B8%E0%A4%BE%E0%A4%B5%E0%A4%A7%E0%A4%BE%E0%A4%A8!%20%E0%A4%AF%E0%A4%B9%20%E0%A4%A7%E0%A5%8B%E0%A4%96%E0%A4%BE%E0%A4%A7%E0%A4%A1%E0%A4%BC%E0%A5%80%20%E0%A4%95%E0%A4%BE%20%E0%A4%AE%E0%A5%88%E0%A4%B8%E0%A5%87%E0%A4%9C%20%E0%A4%B2%E0%A4%97%E0%A4%A4%E0%A4%BE%20%E0%A4%B9%E0%A5%88.%0A%0A%F0%9F%87%AC%F0%9F%87%A7%20Looks%20like%20a%20SCAM%20message.%20Please%20call%20me%20before%20I%20do%20anything.%0A%0A%E0%A4%95%E0%A5%8D%E0%A4%AF%E0%A4%BE%20%E0%A4%AE%E0%A5%88%E0%A4%82%20%E0%A4%87%E0%A4%B8%E0%A5%87%20%E0%A4%AD%E0%A4%B0%E0%A5%82%E0%A4%81%20%2F%20%E0%A4%95%E0%A4%B0%E0%A5%82%E0%A4%81%3F%20%E0%A4%95%E0%A5%83%E0%A4%AA%E0%A4%AF%E0%A4%BE%20YES%20%E0%A4%AF%E0%A4%BE%20NO%20%E0%A4%B2%E0%A4%BF%E0%A4%96%E0%A4%95%E0%A4%B0%20%E0%A4%9C%E0%A4%B5%E0%A4%BE%E0%A4%AC%20%E0%A4%A6%E0%A5%80%E0%A4%9C%E0%A4%BF%E0%A4%8F.",
+    "calendarUrl": null,
+    "familySummaryEn": "Looks like a SCAM message. Please call me before I do anything."
+  },
+  "speak": "सावधान! यह धोखाधड़ी का मैसेज लगता है. किसी निजी मोबाइल नंबर पर फ़ोन करने को कहा गया है. यह सरकारी हेल्पलाइन नहीं है. आज ही सेवा बंद करने की धमकी दी गई है. ऐसी जल्दबाज़ी धोखाधड़ी का संकेत है. फ़ोन मत कीजिए, पैसे मत भरिए, किसी को OTP मत बताइए. पहले घरवालों से पूछिए.",
+  "rawText": "Dear Consumer, your electricity power will be disconnected tonight at 9.30 pm because your previous month bill was not updated. Please immediately contact our electricity officer 7894561230. Thank you"
+}

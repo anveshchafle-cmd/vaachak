@@ -1,0 +1,91 @@
+{
+  "mode": "online",
+  "docType": "medicine",
+  "lang": "hi",
+  "fields": {
+    "what": {
+      "text": "पैरासिटामोल 500 mg गोली (बुखार और दर्द के लिए)",
+      "confidence": 0.95,
+      "box": [
+        60,
+        80,
+        160,
+        900
+      ],
+      "source": "ai"
+    },
+    "action": {
+      "text": "यह दवाई मत लीजिए. केमिस्ट को दिखाइए.",
+      "confidence": 1,
+      "box": null,
+      "source": "rule"
+    },
+    "deadline": {
+      "text": "",
+      "confidence": 1,
+      "box": null,
+      "source": "ai",
+      "iso": null
+    },
+    "amount": {
+      "text": "",
+      "confidence": 1,
+      "box": null,
+      "source": "ai",
+      "value": null
+    },
+    "warning": {
+      "text": "इस दवाई की तारीख निकल चुकी है. यह दवाई मत लीजिए.",
+      "confidence": 1,
+      "box": null,
+      "source": "rule"
+    }
+  },
+  "flags": [
+    "EXPIRED"
+  ],
+  "alert": {
+    "flag": "EXPIRED",
+    "level": "danger",
+    "vibrate": [
+      400,
+      200,
+      400,
+      200,
+      800
+    ]
+  },
+  "consensus": {
+    "available": false,
+    "engines": [
+      "gemini"
+    ],
+    "badge": null
+  },
+  "payment": null,
+  "scam": {
+    "isSuspect": false,
+    "score": 0,
+    "reasons": []
+  },
+  "pills": null,
+  "medicines": null,
+  "checklist": null,
+  "dates": {
+    "today": "2026-10-09",
+    "deadline": null,
+    "expiry": "2026-08-31",
+    "daysLeft": null,
+    "overdue": false
+  },
+  "spike": null,
+  "billerKey": null,
+  "actions": {
+    "whatsappText": "📄 वाचक ने मेरे लिए यह कागज़ पढ़ा:\n\nपैरासिटामोल 500 mg गोली (बुखार और दर्द के लिए)\nयह दवाई मत लीजिए. केमिस्ट को दिखाइए.\n⚠️ इस दवाई की तारीख निकल चुकी है. यह दवाई मत लीजिए.\n\n🇬🇧 Medicine (EXPIRED). Please verify.\n\nक्या मैं इसे भरूँ / करूँ? कृपया YES या NO लिखकर जवाब दीजिए.",
+    "whatsappUrl": "https://wa.me/?text=%F0%9F%93%84%20%E0%A4%B5%E0%A4%BE%E0%A4%9A%E0%A4%95%20%E0%A4%A8%E0%A5%87%20%E0%A4%AE%E0%A5%87%E0%A4%B0%E0%A5%87%20%E0%A4%B2%E0%A4%BF%E0%A4%8F%20%E0%A4%AF%E0%A4%B9%20%E0%A4%95%E0%A4%BE%E0%A4%97%E0%A4%9C%E0%A4%BC%20%E0%A4%AA%E0%A4%A2%E0%A4%BC%E0%A4%BE%3A%0A%0A%E0%A4%AA%E0%A5%88%E0%A4%B0%E0%A4%BE%E0%A4%B8%E0%A4%BF%E0%A4%9F%E0%A4%BE%E0%A4%AE%E0%A5%8B%E0%A4%B2%20500%20mg%20%E0%A4%97%E0%A5%8B%E0%A4%B2%E0%A5%80%20(%E0%A4%AC%E0%A5%81%E0%A4%96%E0%A4%BE%E0%A4%B0%20%E0%A4%94%E0%A4%B0%20%E0%A4%A6%E0%A4%B0%E0%A5%8D%E0%A4%A6%20%E0%A4%95%E0%A5%87%20%E0%A4%B2%E0%A4%BF%E0%A4%8F)%0A%E0%A4%AF%E0%A4%B9%20%E0%A4%A6%E0%A4%B5%E0%A4%BE%E0%A4%88%20%E0%A4%AE%E0%A4%A4%20%E0%A4%B2%E0%A5%80%E0%A4%9C%E0%A4%BF%E0%A4%8F.%20%E0%A4%95%E0%A5%87%E0%A4%AE%E0%A4%BF%E0%A4%B8%E0%A5%8D%E0%A4%9F%20%E0%A4%95%E0%A5%8B%20%E0%A4%A6%E0%A4%BF%E0%A4%96%E0%A4%BE%E0%A4%87%E0%A4%8F.%0A%E2%9A%A0%EF%B8%8F%20%E0%A4%87%E0%A4%B8%20%E0%A4%A6%E0%A4%B5%E0%A4%BE%E0%A4%88%20%E0%A4%95%E0%A5%80%20%E0%A4%A4%E0%A4%BE%E0%A4%B0%E0%A5%80%E0%A4%96%20%E0%A4%A8%E0%A4%BF%E0%A4%95%E0%A4%B2%20%E0%A4%9A%E0%A5%81%E0%A4%95%E0%A5%80%20%E0%A4%B9%E0%A5%88.%20%E0%A4%AF%E0%A4%B9%20%E0%A4%A6%E0%A4%B5%E0%A4%BE%E0%A4%88%20%E0%A4%AE%E0%A4%A4%20%E0%A4%B2%E0%A5%80%E0%A4%9C%E0%A4%BF%E0%A4%8F.%0A%0A%F0%9F%87%AC%F0%9F%87%A7%20Medicine%20(EXPIRED).%20Please%20verify.%0A%0A%E0%A4%95%E0%A5%8D%E0%A4%AF%E0%A4%BE%20%E0%A4%AE%E0%A5%88%E0%A4%82%20%E0%A4%87%E0%A4%B8%E0%A5%87%20%E0%A4%AD%E0%A4%B0%E0%A5%82%E0%A4%81%20%2F%20%E0%A4%95%E0%A4%B0%E0%A5%82%E0%A4%81%3F%20%E0%A4%95%E0%A5%83%E0%A4%AA%E0%A4%AF%E0%A4%BE%20YES%20%E0%A4%AF%E0%A4%BE%20NO%20%E0%A4%B2%E0%A4%BF%E0%A4%96%E0%A4%95%E0%A4%B0%20%E0%A4%9C%E0%A4%B5%E0%A4%BE%E0%A4%AC%20%E0%A4%A6%E0%A5%80%E0%A4%9C%E0%A4%BF%E0%A4%8F.",
+    "calendarUrl": null,
+    "familySummaryEn": "Medicine (EXPIRED). Please verify."
+  },
+  "speak": "पैरासिटामोल 500 mg गोली (बुखार और दर्द के लिए). इस दवाई की तारीख निकल चुकी है. यह दवाई मत लीजिए.",
+  "rawText": "PARACIP-500\nParacetamol Tablets IP 500 mg\nB.No. PT2341\nMFG. 09/2024\nEXP. 08/2026\nM.R.P. Rs. 30.00 for 10 tablets\nStore below 25°C. Keep out of reach of children."
+}

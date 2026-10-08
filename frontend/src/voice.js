@@ -97,6 +97,8 @@ export async function speak(text, lang, clip = null) {
 
 // Pre-recorded warnings that work with no internet at all.
 export function offlineClip(card, lang) {
+  // Clips exist in Marathi and Hindi; for English the phone's own voice is better.
+  if (lang === 'en') return null;
   const l = lang === 'hi' ? 'hi' : 'mr';
   if (card.flags.includes('SCAM')) return `/samples/audio/scam.${l}.wav`;
   if (card.flags.includes('EXPIRED')) return `/samples/audio/expired.${l}.wav`;

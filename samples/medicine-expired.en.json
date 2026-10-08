@@ -1,0 +1,91 @@
+{
+  "mode": "online",
+  "docType": "medicine",
+  "lang": "en",
+  "fields": {
+    "what": {
+      "text": "Paracetamol 500 mg tablet (for fever and pain)",
+      "confidence": 0.95,
+      "box": [
+        60,
+        80,
+        160,
+        900
+      ],
+      "source": "ai"
+    },
+    "action": {
+      "text": "Do not take this. Show it to the chemist.",
+      "confidence": 1,
+      "box": null,
+      "source": "rule"
+    },
+    "deadline": {
+      "text": "",
+      "confidence": 1,
+      "box": null,
+      "source": "ai",
+      "iso": null
+    },
+    "amount": {
+      "text": "",
+      "confidence": 1,
+      "box": null,
+      "source": "ai",
+      "value": null
+    },
+    "warning": {
+      "text": "This medicine has expired. Do not take it.",
+      "confidence": 1,
+      "box": null,
+      "source": "rule"
+    }
+  },
+  "flags": [
+    "EXPIRED"
+  ],
+  "alert": {
+    "flag": "EXPIRED",
+    "level": "danger",
+    "vibrate": [
+      400,
+      200,
+      400,
+      200,
+      800
+    ]
+  },
+  "consensus": {
+    "available": false,
+    "engines": [
+      "gemini"
+    ],
+    "badge": null
+  },
+  "payment": null,
+  "scam": {
+    "isSuspect": false,
+    "score": 0,
+    "reasons": []
+  },
+  "pills": null,
+  "medicines": null,
+  "checklist": null,
+  "dates": {
+    "today": "2026-10-09",
+    "deadline": null,
+    "expiry": "2026-08-31",
+    "daysLeft": null,
+    "overdue": false
+  },
+  "spike": null,
+  "billerKey": null,
+  "actions": {
+    "whatsappText": "📄 Vaachak read this document for me:\n\nParacetamol 500 mg tablet (for fever and pain)\nDo not take this. Show it to the chemist.\n⚠️ This medicine has expired. Do not take it.\n\nShould I pay / do this? Please reply YES or NO.",
+    "whatsappUrl": "https://wa.me/?text=%F0%9F%93%84%20Vaachak%20read%20this%20document%20for%20me%3A%0A%0AParacetamol%20500%20mg%20tablet%20(for%20fever%20and%20pain)%0ADo%20not%20take%20this.%20Show%20it%20to%20the%20chemist.%0A%E2%9A%A0%EF%B8%8F%20This%20medicine%20has%20expired.%20Do%20not%20take%20it.%0A%0AShould%20I%20pay%20%2F%20do%20this%3F%20Please%20reply%20YES%20or%20NO.",
+    "calendarUrl": null,
+    "familySummaryEn": "Medicine (EXPIRED). Please verify."
+  },
+  "speak": "Paracetamol 500 mg tablet (for fever and pain). This medicine has expired. Do not take it.",
+  "rawText": "PARACIP-500\nParacetamol Tablets IP 500 mg\nB.No. PT2341\nMFG. 09/2024\nEXP. 08/2026\nM.R.P. Rs. 30.00 for 10 tablets\nStore below 25°C. Keep out of reach of children."
+}

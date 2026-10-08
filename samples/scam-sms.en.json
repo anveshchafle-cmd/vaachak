@@ -1,0 +1,102 @@
+{
+  "mode": "online",
+  "docType": "sms_message",
+  "lang": "en",
+  "fields": {
+    "what": {
+      "text": "SMS about cutting electricity",
+      "confidence": 0.95,
+      "box": [
+        100,
+        50,
+        200,
+        950
+      ],
+      "source": "ai"
+    },
+    "action": {
+      "text": "Do not call, do not pay, do not share any OTP. Ask your family first.",
+      "confidence": 1,
+      "box": null,
+      "source": "rule"
+    },
+    "deadline": {
+      "text": "",
+      "confidence": 1,
+      "box": null,
+      "source": "rule",
+      "iso": null
+    },
+    "amount": {
+      "text": "",
+      "confidence": 1,
+      "box": null,
+      "source": "rule",
+      "value": null
+    },
+    "warning": {
+      "text": "Warning! This looks like a fraud message.",
+      "confidence": 1,
+      "box": null,
+      "source": "rule"
+    }
+  },
+  "flags": [
+    "SCAM"
+  ],
+  "alert": {
+    "flag": "SCAM",
+    "level": "danger",
+    "vibrate": [
+      400,
+      200,
+      400,
+      200,
+      800
+    ]
+  },
+  "consensus": {
+    "available": false,
+    "engines": [
+      "gemini"
+    ],
+    "badge": null
+  },
+  "payment": null,
+  "scam": {
+    "isSuspect": true,
+    "score": 4,
+    "reasons": [
+      {
+        "code": "PERSONAL_NUMBER",
+        "weight": 2,
+        "text": "It asks you to call a private mobile number, not an official helpline."
+      },
+      {
+        "code": "THREAT_URGENCY",
+        "weight": 2,
+        "text": "It threatens to cut your service today. This hurry is a sign of fraud."
+      }
+    ]
+  },
+  "pills": null,
+  "medicines": null,
+  "checklist": null,
+  "dates": {
+    "today": "2026-10-09",
+    "deadline": null,
+    "expiry": null,
+    "daysLeft": null,
+    "overdue": false
+  },
+  "spike": null,
+  "billerKey": null,
+  "actions": {
+    "whatsappText": "📄 Vaachak read this document for me:\n\nSMS about cutting electricity\nDo not call, do not pay, do not share any OTP. Ask your family first.\n⚠️ Warning! This looks like a fraud message.\n\nShould I pay / do this? Please reply YES or NO.",
+    "whatsappUrl": "https://wa.me/?text=%F0%9F%93%84%20Vaachak%20read%20this%20document%20for%20me%3A%0A%0ASMS%20about%20cutting%20electricity%0ADo%20not%20call%2C%20do%20not%20pay%2C%20do%20not%20share%20any%20OTP.%20Ask%20your%20family%20first.%0A%E2%9A%A0%EF%B8%8F%20Warning!%20This%20looks%20like%20a%20fraud%20message.%0A%0AShould%20I%20pay%20%2F%20do%20this%3F%20Please%20reply%20YES%20or%20NO.",
+    "calendarUrl": null,
+    "familySummaryEn": "Looks like a SCAM message. Please call me before I do anything."
+  },
+  "speak": "Warning! This looks like a fraud message. It asks you to call a private mobile number, not an official helpline. It threatens to cut your service today. This hurry is a sign of fraud. Do not call, do not pay, do not share any OTP. Ask your family first.",
+  "rawText": "Dear Consumer, your electricity power will be disconnected tonight at 9.30 pm because your previous month bill was not updated. Please immediately contact our electricity officer 7894561230. Thank you"
+}

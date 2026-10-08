@@ -24,13 +24,18 @@ function withEdgeText(card, edgeText, { history, familyPhone, userName }) {
   return { ...rebuilt, source: card.source, extraction: card.extraction };
 }
 
-function nextDemoSample() {
+// samples/<name>.json is Marathi; <name>.hi.json and <name>.en.json are the same card in Hindi and English.
+function sampleCard(name, lang) {
+  return SAMPLES[`${name}.${lang}`] || SAMPLES[name];
+}
+
+function nextDemoSample(lang) {
   let i = 0;
   try {
     i = Number(sessionStorage.getItem('vaachak.demoIndex') || 0);
     sessionStorage.setItem('vaachak.demoIndex', String((i + 1) % SAMPLE_ORDER.length));
   } catch {}
-  return SAMPLES[SAMPLE_ORDER[i % SAMPLE_ORDER.length]];
+  return sampleCard(SAMPLE_ORDER[i % SAMPLE_ORDER.length], lang);
 }
 
 export default function Reading({ input, isDemo, onSuccess, onError, onCancel }) {
@@ -52,7 +57,7 @@ export default function Reading({ input, isDemo, onSuccess, onError, onCancel })
     async function run() {
       if (input?.sample || (isDemo && !input?.text)) {
         setStatus(t('reading'));
-        const card = SAMPLES[input?.sample] || nextDemoSample();
+        const card = (input?.sample && sampleCard(input.sample, lang)) || nextDemoSample(lang);
         setTimeout(() => done(card), 900);
         return;
       }
