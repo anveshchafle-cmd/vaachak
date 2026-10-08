@@ -67,13 +67,10 @@ export default function Card({ card, lang, photoUrl, photoBlob, onAgain }) {
       location.href = p.upiUrl;
       return;
     }
-    if (p.copyText) {
-      try {
-        await navigator.clipboard.writeText(p.copyText);
-      } catch {}
-      if (p.copiedText) speak(p.copiedText, lang);
-    }
+    // No await before window.open: iPhone Safari blocks a new tab that isn't opened right in the tap.
+    if (p.copyText) navigator.clipboard?.writeText(p.copyText).catch(() => {});
     if (p.officialUrl) window.open(p.officialUrl, '_blank', 'noopener');
+    if (p.copyText && p.copiedText) speak(p.copiedText, lang);
   };
 
   // Photo + summary through the phone's share sheet (WhatsApp); a wa.me link when files can't be shared.
@@ -85,7 +82,9 @@ export default function Card({ card, lang, photoUrl, photoBlob, onAgain }) {
         try {
           await navigator.share({ files: [file], text });
           return;
-        } catch {}
+        } catch (e) {
+          if (e?.name === 'AbortError') return; // they closed the share sheet
+        }
       }
     }
     window.open(card.actions.whatsappUrl, '_blank', 'noopener');
@@ -198,6 +197,30 @@ export default function Card({ card, lang, photoUrl, photoBlob, onAgain }) {
           );
         })}
       </article>
+
+      {card.medicines && (
+        <section className="mt-5 space-y-3">
+          {card.medicines.map((m, i) => (
+            <div key={`${m.name}-${i}`} className="bg-ink rounded-[22px] p-3 text-paper">
+              <p className="font-display text-[24px] leading-tight px-1 break-words">{m.name}</p>
+              <div className="grid grid-cols-3 gap-2 mt-2">
+                {[['sun', m.morning, 'morning'], ['noon', m.noon, 'noon'], ['moon', m.night, 'night']].map(([icon, n, key]) => (
+                  <div key={key} className={`rounded-2xl py-2 flex flex-col items-center ${n > 0 ? 'bg-turmeric text-ink' : 'bg-ink-soft/60 text-paper/70'}`}>
+                    <Icon name={icon} size={28} />
+                    <span className="font-display text-[36px] leading-none mt-1">{n}</span>
+                    <span className="text-[16px] font-bold">{t(key)}</span>
+                  </div>
+                ))}
+              </div>
+              {m.food !== 'any' && (
+                <p className="flex items-center gap-2 text-[19px] font-bold mt-2 px-1">
+                  <Icon name="plate" size={26} className="text-turmeric" /> {t(m.food)}
+                </p>
+              )}
+            </div>
+          ))}
+        </section>
+      )}
 
       {card.pills && (
         <section className="mt-5">

@@ -1,10 +1,11 @@
 // Keeps the app shell, offline voice clips and samples on the phone, so Demo mode and the
 // offline reader still open with no internet. API calls always go to the network.
-const CACHE = 'vaachak-v1';
+const CACHE = 'vaachak-v2';
 const PRECACHE = [
   '/',
   '/manifest.webmanifest',
   '/icon-192.png',
+  '/silence.wav',
   '/samples/audio/scam.mr.wav',
   '/samples/audio/expired.mr.wav',
   '/samples/audio/low-confidence.mr.wav',

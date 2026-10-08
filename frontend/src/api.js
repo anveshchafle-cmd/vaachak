@@ -79,16 +79,16 @@ export { processImage };
 // A pasted SMS / WhatsApp message, or a link to a web page or PDF.
 export async function readText(value, opts) {
   const formData = new FormData();
-  formData.append(/^https?://S+$/i.test(value.trim()) ? 'url' : 'text', value.trim());
+  formData.append(/^https?:\/\/\S+$/i.test(value.trim()) ? 'url' : 'text', value.trim());
   addCommon(formData, opts);
   return postRead(formData);
 }
 
+// `file` should already be shrunk with processImage (Reading does it once, before OCR).
 export async function read(file, lang, history, familyPhone, userName, edgeText) {
-  const processedFile = await processImage(file);
   const formData = new FormData();
-  
-  formData.append('file', processedFile, processedFile.name || 'photo.jpg');
+
+  formData.append('file', file, file.name || 'photo.jpg');
   formData.append('lang', lang);
   formData.append('history', JSON.stringify(history || {}));
   

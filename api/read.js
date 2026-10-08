@@ -100,6 +100,9 @@ export const POST = handle(async (req) => {
     lang, history, familyPhone: input.familyPhone, isPdf: doc.source !== 'image', edgeText, userName: input.userName,
   });
   card.source = { kind: doc.source, url: doc.sourceUrl };
+  // Photos: the phone runs its own OCR in parallel instead of making the person wait for it first,
+  // then rebuilds the card from this extraction with that text (same buildCard, dual-engine check).
+  if (doc.source === 'image') card.extraction = extraction;
   return json(card);
 });
 

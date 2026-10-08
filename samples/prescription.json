@@ -79,6 +79,7 @@
     "night": 1,
     "food": "after"
   },
+  "medicines": null,
   "checklist": null,
   "dates": {
     "today": "2026-10-09",
