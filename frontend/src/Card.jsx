@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { ask, warmApi } from './api';
 import { makeT } from './i18n';
 import { speak, stopVoice, offlineClip } from './voice';
-import { rememberBill } from './storage';
+import { rememberBill, load, save } from './storage';
 import { savePaper } from './papers';
 import { doseEvents, encodeReminders, googleCalendarUrl } from '../../lib/reminders.js';
 import Icon from './Icons';
@@ -26,6 +26,51 @@ const VERDICT = {
 const ROWS = ['what', 'action', 'deadline', 'amount', 'warning'];
 // iPhone/iPad Safari opens a calendar file with "Add All"; elsewhere we add each dose time on Google Calendar.
 const isApple = () => /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent);
+
+// Family guardian alert: scam, expired medicine or overdue bill → one tap sends the son or daughter
+// a ready WhatsApp message (in this language plus English). Asks for their number once if not saved.
+function GuardianAlert({ guardian, t }) {
+  const [phone, setPhone] = useState(() => load('vaachak.familyPhone', ''));
+  const [draft, setDraft] = useState('');
+  const digits = phone.replace(/\D/g, '').slice(-10);
+  const send = () => {
+    const to = digits.length === 10 ? `91${digits}` : '';
+    window.open(`https://wa.me/${to}?text=${encodeURIComponent(guardian.text)}`, '_blank', 'noopener');
+  };
+  const saveNumber = () => {
+    const d = draft.replace(/\D/g, '').slice(-10);
+    if (d.length !== 10) return;
+    save('vaachak.familyPhone', d);
+    setPhone(d);
+  };
+  return (
+    <section className="mb-5 bg-leaf rounded-[26px] p-4 text-paper" aria-label={t('tellFamily')}>
+      <button onClick={send} className="press w-full flex items-center gap-4 text-left">
+        <span className="w-16 h-16 shrink-0 rounded-full bg-paper/20 grid place-items-center">
+          <Icon name="family" size={38} />
+        </span>
+        <span className="min-w-0">
+          <span className="block font-display text-[28px] leading-tight">{t('tellFamily')}</span>
+          <span className="block text-[18px] font-bold mt-1">{digits.length === 10 ? t('tellFamilyTo')(digits) : t('tellFamilyWhy')}</span>
+        </span>
+      </button>
+      {digits.length !== 10 && (
+        <div className="flex gap-2 mt-3">
+          <input
+            type="tel"
+            inputMode="tel"
+            value={draft}
+            onChange={(e) => setDraft(e.target.value)}
+            placeholder={t('tellFamilyAdd')}
+            aria-label={t('tellFamilyAdd')}
+            className="flex-1 min-w-0 px-4 py-3 text-[20px] rounded-2xl bg-paper text-ink outline-none"
+          />
+          <button onClick={saveNumber} className="bg-paper text-leaf text-[19px] font-bold rounded-2xl px-4 min-h-[56px]">{t('save')}</button>
+        </div>
+      )}
+    </section>
+  );
+}
 
 function Action({ icon, label, onClick, primary }) {
   return (
@@ -200,6 +245,8 @@ export default function Card({ card, lang, photoUrl, photoBlob, onAgain }) {
           )}
         </section>
       )}
+
+      {card.guardian && <GuardianAlert guardian={card.guardian} t={t} />}
 
       {card.helplines?.length > 0 && (
         <section className="mb-5 bg-paper rounded-[26px] p-4 border-[3px] border-postred">

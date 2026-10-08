@@ -89,6 +89,10 @@
     "calendarUrl": null,
     "familySummaryEn": "Medicine (EXPIRED). Please verify."
   },
-  "speak": "पॅरासिटामॉल 500 mg गोळी (ताप आणि दुखण्यासाठी). या औषधाची मुदत संपली आहे. हे औषध घेऊ नका.",
-  "rawText": "PARACIP-500\nParacetamol Tablets IP 500 mg\nB.No. PT2341\nMFG. 09/2024\nEXP. 08/2026\nM.R.P. Rs. 30.00 for 10 tablets\nStore below 25°C. Keep out of reach of children."
+  "speak": "पॅरासिटामॉल 500 mg गोळी (ताप आणि दुखण्यासाठी). या औषधाची मुदत संपली आहे. हे औषध घेऊ नका. घरच्यांना कळवण्यासाठी हिरवे बटण दाबा.",
+  "rawText": "PARACIP-500\nParacetamol Tablets IP 500 mg\nB.No. PT2341\nMFG. 09/2024\nEXP. 08/2026\nM.R.P. Rs. 30.00 for 10 tablets\nStore below 25°C. Keep out of reach of children.",
+  "guardian": {
+    "reason": "EXPIRED",
+    "text": "🚨 वाचक सुरक्षा सूचना\n\nमी मुदत संपलेले औषध घेणार होतो.\nवाचकने पैसे न भरण्यास सांगितले आहे. कृपया मला फोन करा.\n\n🇬🇧 I was about to take a medicine that has EXPIRED.\nVaachak told me not to pay or share anything. Please call me."
+  }
 }

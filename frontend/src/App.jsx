@@ -3,6 +3,7 @@ import Home from './Home';
 import Camera from './Camera';
 import Reading from './Reading';
 import Paste from './Paste';
+import CallCheck from './CallCheck';
 import Card from './Card';
 import { load, save } from './storage';
 import { makeT } from './i18n';
@@ -104,6 +105,8 @@ export default function App() {
       {screen === 'CAMERA' && <Camera lang={lang} onClose={goHome} onCapture={onCapture} />}
 
       {screen === 'PASTE' && <Paste lang={lang} onBack={goHome} onRead={(text) => navigate('READING', { input: { text } })} />}
+
+      {screen === 'CALL' && <CallCheck lang={lang} onBack={goHome} onRead={(input) => navigate('READING', { input })} />}
 
       {screen === 'READING' && (
         <Reading input={input} isDemo={demoMode} onSuccess={onSuccess} onError={onError} onCancel={goHome} />

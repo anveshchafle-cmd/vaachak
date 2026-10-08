@@ -106,6 +106,10 @@
     "calendarUrl": null,
     "familySummaryEn": "Looks like a SCAM message. Please call me before I do anything."
   },
-  "speak": "Warning! This looks like a fraud message. It asks you to call a private mobile number, not an official helpline. It threatens to cut your service today. This hurry is a sign of fraud. Do not call, do not pay, do not share any OTP. Ask your family first. If you already paid or shared an OTP, call 1930 right now.",
-  "rawText": "Dear Consumer, your electricity power will be disconnected tonight at 9.30 pm because your previous month bill was not updated. Please immediately contact our electricity officer 7894561230. Thank you"
+  "speak": "Warning! This looks like a fraud message. It asks you to call a private mobile number, not an official helpline. It threatens to cut your service today. This hurry is a sign of fraud. Do not call, do not pay, do not share any OTP. Ask your family first. If you already paid or shared an OTP, call 1930 right now. To tell your family, press the green button.",
+  "rawText": "Dear Consumer, your electricity power will be disconnected tonight at 9.30 pm because your previous month bill was not updated. Please immediately contact our electricity officer 7894561230. Thank you",
+  "guardian": {
+    "reason": "SCAM",
+    "text": "🚨 Vaachak safety alert\n\nI got a message that looks like a FRAUD.\n• It asks you to call a private mobile number, not an official helpline.\nVaachak told me not to pay or share anything. Please call me."
+  }
 }

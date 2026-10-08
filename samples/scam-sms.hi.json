@@ -106,6 +106,10 @@
     "calendarUrl": null,
     "familySummaryEn": "Looks like a SCAM message. Please call me before I do anything."
   },
-  "speak": "सावधान! यह धोखाधड़ी का मैसेज लगता है. किसी निजी मोबाइल नंबर पर फ़ोन करने को कहा गया है. यह सरकारी हेल्पलाइन नहीं है. आज ही सेवा बंद करने की धमकी दी गई है. ऐसी जल्दबाज़ी धोखाधड़ी का संकेत है. फ़ोन मत कीजिए, पैसे मत भरिए, किसी को OTP मत बताइए. पहले घरवालों से पूछिए. अगर पैसे भर दिए हैं या OTP बता दिया है, तो अभी 1930 पर फ़ोन कीजिए.",
-  "rawText": "Dear Consumer, your electricity power will be disconnected tonight at 9.30 pm because your previous month bill was not updated. Please immediately contact our electricity officer 7894561230. Thank you"
+  "speak": "सावधान! यह धोखाधड़ी का मैसेज लगता है. किसी निजी मोबाइल नंबर पर फ़ोन करने को कहा गया है. यह सरकारी हेल्पलाइन नहीं है. आज ही सेवा बंद करने की धमकी दी गई है. ऐसी जल्दबाज़ी धोखाधड़ी का संकेत है. फ़ोन मत कीजिए, पैसे मत भरिए, किसी को OTP मत बताइए. पहले घरवालों से पूछिए. अगर पैसे भर दिए हैं या OTP बता दिया है, तो अभी 1930 पर फ़ोन कीजिए. घरवालों को बताने के लिए हरा बटन दबाइए.",
+  "rawText": "Dear Consumer, your electricity power will be disconnected tonight at 9.30 pm because your previous month bill was not updated. Please immediately contact our electricity officer 7894561230. Thank you",
+  "guardian": {
+    "reason": "SCAM",
+    "text": "🚨 वाचक सुरक्षा सूचना\n\nमुझे धोखाधड़ी जैसा मैसेज आया है.\n• किसी निजी मोबाइल नंबर पर फ़ोन करने को कहा गया है. यह सरकारी हेल्पलाइन नहीं है.\nवाचक ने पैसे न भरने को कहा है. कृपया मुझे फ़ोन करें.\n\n🇬🇧 I got a message that looks like a FRAUD.\n• It asks you to call a private mobile number, not an official helpline.\nVaachak told me not to pay or share anything. Please call me."
+  }
 }

@@ -144,6 +144,20 @@ export default function Home({ lang, onLang, onNavigate, demoMode, onToggleDemo,
           <span className="font-display text-[38px] leading-tight">{t('snap')}</span>
         </button>
 
+        <button
+          id="tour-call"
+          onClick={() => onNavigate('CALL')}
+          className="press w-full bg-postred text-paper rounded-[28px] px-6 py-6 flex items-center gap-5 text-left"
+        >
+          <span className="w-16 h-16 shrink-0 rounded-full bg-paper/15 grid place-items-center">
+            <Icon name="phone" size={38} />
+          </span>
+          <span>
+            <span className="block font-display text-[30px] leading-tight">{t('callCheck')}</span>
+            <span className="block text-[18px] font-bold mt-1 leading-snug">{t('callCheckSub')}</span>
+          </span>
+        </button>
+
         <div className="grid grid-cols-2 gap-4">
           <button
             id="tour-upload"

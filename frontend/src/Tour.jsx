@@ -10,6 +10,7 @@ const STEPS = {
   mr: [
     [null, 'नमस्कार! मी वाचक.', 'मी तुमची बिले, औषधे आणि मेसेज वाचून सांगतो की नक्की काय करायचं. चला, एक छोटी फेरी मारूया.'],
     ['tour-snap', 'फोटो काढा', 'कोणतेही बिल, औषधाची पट्टी किंवा सरकारी कागद कॅमेऱ्यासमोर धरा. प्रकाश कमी असेल तर मी सांगेन, आणि फोटो आपोआप काढेन.'],
+    ['tour-call', 'फोन कॉल तपासा', 'कोणी फोन करून पोलीस, बँक किंवा लॉटरीच्या नावाने पैसे किंवा OTP मागितले? इथे दाबा आणि त्याने काय सांगितले ते बोला. फसवणूक असेल तर मी लगेच सांगेन आणि घरच्यांना कळवेन.'],
     ['tour-upload', 'स्क्रीनशॉट किंवा PDF', 'फोनमधला स्क्रीनशॉट, ई-बिल किंवा PDF इथून निवडा.'],
     ['tour-paste', 'मेसेज किंवा लिंक', 'संशयास्पद SMS, WhatsApp मेसेज किंवा लिंक इथे पेस्ट करा. फसवणूक असेल तर मी लगेच लाल रंगात सावध करेन, आणि खरा हेल्पलाइन नंबर देईन.'],
     ['tour-samples', 'नमुना पाहा', 'एखादा नमुना दाबून पाहा. मी कागद मोठ्याने वाचेन: काय आहे, काय करायचं, कधीपर्यंत आणि किती पैसे. तुम्ही बोलून प्रश्नही विचारू शकता.'],
@@ -20,6 +21,7 @@ const STEPS = {
   hi: [
     [null, 'नमस्ते! मैं वाचक हूँ.', 'मैं आपके बिल, दवाइयाँ और मैसेज पढ़कर बताता हूँ कि ठीक क्या करना है. चलिए, एक छोटा सा परिचय देखते हैं.'],
     ['tour-snap', 'फ़ोटो लें', 'कोई भी बिल, दवा की पट्टी या सरकारी कागज़ कैमरे के सामने रखिए. रोशनी कम हो तो मैं बताऊँगा, और फ़ोटो अपने आप ले लूँगा.'],
+    ['tour-call', 'फ़ोन कॉल जाँचें', 'किसी ने पुलिस, बैंक या लॉटरी के नाम पर फ़ोन करके पैसे या OTP माँगे? यहाँ दबाइए और बताइए उसने क्या कहा. धोखा हो तो मैं तुरंत बताऊँगा और घरवालों को खबर कर दूँगा.'],
     ['tour-upload', 'स्क्रीनशॉट या PDF', 'फ़ोन में रखा स्क्रीनशॉट, ई-बिल या PDF यहाँ से चुनिए.'],
     ['tour-paste', 'मैसेज या लिंक', 'शक वाला SMS, WhatsApp मैसेज या लिंक यहाँ पेस्ट कीजिए. धोखा हो तो मैं तुरंत लाल रंग में सावधान करूँगा, और असली हेल्पलाइन नंबर दूँगा.'],
     ['tour-samples', 'नमूना देखें', 'कोई नमूना दबाकर देखिए. मैं कागज़ ज़ोर से पढ़ूँगा: क्या है, क्या करना है, कब तक और कितने पैसे. आप बोलकर सवाल भी पूछ सकते हैं.'],
@@ -30,6 +32,7 @@ const STEPS = {
   en: [
     [null, 'Hello! I am Vaachak.', 'I read your bills, medicines and messages, and tell you exactly what to do. Let me show you around.'],
     ['tour-snap', 'Take a photo', 'Hold any bill, medicine strip or government letter in front of the camera. I will tell you if the light is low, and take the photo by myself.'],
+    ['tour-call', 'Check a phone call', 'Did someone call in the name of police, a bank or a lottery and ask for money or an OTP? Tap here and tell me what they said. If it is a fraud, I tell you at once and help you alert your family.'],
     ['tour-upload', 'Screenshot or PDF', 'Pick a screenshot, an e-bill or a PDF from your phone here.'],
     ['tour-paste', 'Message or link', 'Paste a suspicious SMS, WhatsApp message or link here. If it is a scam, I warn you in red right away and give you the real helpline number.'],
     ['tour-samples', 'Try a sample', 'Tap a sample to see me work. I read it aloud: what it is, what to do, by when and how much. You can also ask me questions by voice.'],

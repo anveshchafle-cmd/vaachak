@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { recognize } from './ocr';
-import { read, readText, processImage } from './api';
+import { read, readText, readCallAudio, processImage } from './api';
 import { offlineRead } from '../../lib/offline.js';
 import { buildCard } from '../../lib/card.js';
 import { settings } from './storage';
@@ -41,7 +41,7 @@ function nextDemoSample(lang) {
 export default function Reading({ input, isDemo, onSuccess, onError, onCancel }) {
   const { lang } = settings();
   const t = makeT(lang);
-  const [status, setStatus] = useState(input?.text ? t('reading') : t('scanning'));
+  const [status, setStatus] = useState(input?.text || input?.audio ? t('reading') : t('scanning'));
   const [note, setNote] = useState(t('wait'));
   // Keep the latest callbacks without re-running the whole read on every render.
   const cb = useRef({ onSuccess, onError });
@@ -62,22 +62,33 @@ export default function Reading({ input, isDemo, onSuccess, onError, onCancel })
         return;
       }
 
-      // Pasted message or link.
+      // Spoken account of a phone call that the phone could not turn into words: the server listens.
+      if (input?.audio) {
+        try {
+          done(await readCallAudio(input.audio, { ...opts, kind: 'call' }));
+        } catch {
+          if (isMounted) cb.current.onError(t('error'));
+        }
+        return;
+      }
+
+      // Pasted message or link, or what a caller said (kind 'call').
       if (input?.text) {
         const value = input.text.trim();
-        const isLink = /^https?:\/\//i.test(value);
+        const kind = input.kind || null;
+        const isLink = !kind && /^https?:\/\//i.test(value);
         if (isDemo || !navigator.onLine) {
           if (isLink) return isMounted && cb.current.onError(t('linkError'));
-          return done(offlineRead(value, opts));
+          return done(offlineRead(value, { ...opts, kind }));
         }
         try {
-          const card = await readText(value, opts);
+          const card = await readText(value, { ...opts, kind });
           preloadVoice(card.speak, lang);
           done(card);
         } catch {
           if (!isMounted) return;
           if (isLink) return cb.current.onError(t('linkError'));
-          done(offlineRead(value, opts));
+          done(offlineRead(value, { ...opts, kind }));
         }
         return;
       }

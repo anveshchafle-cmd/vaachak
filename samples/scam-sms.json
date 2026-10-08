@@ -106,6 +106,10 @@
     "calendarUrl": null,
     "familySummaryEn": "Looks like a SCAM message. Please call me before I do anything."
   },
-  "speak": "सावधान! हा फसवणुकीचा मेसेज वाटतो. खाजगी मोबाईल नंबरवर फोन करायला सांगितले आहे. हा अधिकृत हेल्पलाइन नंबर नाही. आजच सेवा बंद करण्याची धमकी आहे. अशी घाई फसवणुकीचे लक्षण आहे. फोन करू नका, पैसे भरू नका, कोणालाही OTP सांगू नका. आधी घरच्यांना विचारा. जर पैसे भरले असतील किंवा OTP सांगितला असेल, तर आत्ताच 1930 वर फोन करा.",
-  "rawText": "Dear Consumer, your electricity power will be disconnected tonight at 9.30 pm because your previous month bill was not updated. Please immediately contact our electricity officer 7894561230. Thank you"
+  "speak": "सावधान! हा फसवणुकीचा मेसेज वाटतो. खाजगी मोबाईल नंबरवर फोन करायला सांगितले आहे. हा अधिकृत हेल्पलाइन नंबर नाही. आजच सेवा बंद करण्याची धमकी आहे. अशी घाई फसवणुकीचे लक्षण आहे. फोन करू नका, पैसे भरू नका, कोणालाही OTP सांगू नका. आधी घरच्यांना विचारा. जर पैसे भरले असतील किंवा OTP सांगितला असेल, तर आत्ताच 1930 वर फोन करा. घरच्यांना कळवण्यासाठी हिरवे बटण दाबा.",
+  "rawText": "Dear Consumer, your electricity power will be disconnected tonight at 9.30 pm because your previous month bill was not updated. Please immediately contact our electricity officer 7894561230. Thank you",
+  "guardian": {
+    "reason": "SCAM",
+    "text": "🚨 वाचक सुरक्षा सूचना\n\nमला फसवणुकीचा वाटणारा मेसेज आला आहे.\n• खाजगी मोबाईल नंबरवर फोन करायला सांगितले आहे. हा अधिकृत हेल्पलाइन नंबर नाही.\nवाचकने पैसे न भरण्यास सांगितले आहे. कृपया मला फोन करा.\n\n🇬🇧 I got a message that looks like a FRAUD.\n• It asks you to call a private mobile number, not an official helpline.\nVaachak told me not to pay or share anything. Please call me."
+  }
 }

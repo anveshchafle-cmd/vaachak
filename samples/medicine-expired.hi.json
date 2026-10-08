@@ -89,6 +89,10 @@
     "calendarUrl": null,
     "familySummaryEn": "Medicine (EXPIRED). Please verify."
   },
-  "speak": "पैरासिटामोल 500 mg गोली (बुखार और दर्द के लिए). इस दवाई की तारीख निकल चुकी है. यह दवाई मत लीजिए.",
-  "rawText": "PARACIP-500\nParacetamol Tablets IP 500 mg\nB.No. PT2341\nMFG. 09/2024\nEXP. 08/2026\nM.R.P. Rs. 30.00 for 10 tablets\nStore below 25°C. Keep out of reach of children."
+  "speak": "पैरासिटामोल 500 mg गोली (बुखार और दर्द के लिए). इस दवाई की तारीख निकल चुकी है. यह दवाई मत लीजिए. घरवालों को बताने के लिए हरा बटन दबाइए.",
+  "rawText": "PARACIP-500\nParacetamol Tablets IP 500 mg\nB.No. PT2341\nMFG. 09/2024\nEXP. 08/2026\nM.R.P. Rs. 30.00 for 10 tablets\nStore below 25°C. Keep out of reach of children.",
+  "guardian": {
+    "reason": "EXPIRED",
+    "text": "🚨 वाचक सुरक्षा सूचना\n\nमैं एक्सपायर हो चुकी दवा लेने वाला था.\nवाचक ने पैसे न भरने को कहा है. कृपया मुझे फ़ोन करें.\n\n🇬🇧 I was about to take a medicine that has EXPIRED.\nVaachak told me not to pay or share anything. Please call me."
+  }
 }

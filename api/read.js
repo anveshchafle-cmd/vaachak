@@ -12,6 +12,8 @@ import { fetchDocument } from '../lib/webpage.js';
 const MAX_BYTES = 4 * 1024 * 1024;
 const MAX_TEXT = 30_000;
 const ALLOWED = ['image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/heif', 'application/pdf'];
+// A spoken description of a phone call ("Is this call a scam?"), when the phone cannot turn speech into text itself.
+const AUDIO = ['audio/webm', 'audio/mp4', 'audio/ogg', 'audio/mpeg', 'audio/wav', 'audio/aac', 'audio/x-m4a'];
 
 async function readInput(req) {
   if (isMultipart(req)) {
@@ -27,6 +29,7 @@ async function readInput(req) {
       familyPhone: form.get('familyPhone'),
       edgeText: form.get('edgeText'),
       userName: form.get('userName'),
+      kind: form.get('kind'),
     };
   }
 
@@ -43,6 +46,7 @@ async function readInput(req) {
     familyPhone: body.familyPhone,
     edgeText: body.edgeText,
     userName: body.userName,
+    kind: body.kind,
   };
 }
 
@@ -61,7 +65,15 @@ async function resolveDocument(input) {
 
   if (bytes?.length) {
     if (bytes.length > MAX_BYTES) throw new HttpError(413, 'TOO_LARGE', 'File is over 4 MB. Shrink the photo before sending.');
-    mimeType = String(mimeType || '').toLowerCase().replace('image/jpg', 'image/jpeg');
+    mimeType = String(mimeType || '').toLowerCase().replace('image/jpg', 'image/jpeg').split(';')[0];
+    if (input.kind === 'call' && AUDIO.includes(mimeType)) {
+      return {
+        source: 'call',
+        parts: [inlinePart(bytes.toString('base64'), mimeType), { text: 'This recording is the person describing a phone call they got. Return the action card JSON.' }],
+        sourceText: null,
+        sourceUrl: null,
+      };
+    }
     if (!ALLOWED.includes(mimeType)) throw new HttpError(415, 'BAD_TYPE', 'Send a JPEG, PNG, WEBP or HEIC photo, or a PDF');
     return {
       source: mimeType === 'application/pdf' ? 'pdf' : 'image',
@@ -73,6 +85,18 @@ async function resolveDocument(input) {
 
   if (sourceText) {
     sourceText = sourceText.slice(0, MAX_TEXT);
+    if (input.kind === 'call') {
+      return {
+        source: 'call',
+        parts: [{ text: `WHAT THE CALLER SAID (in the person's own words)
+"""
+${sourceText}
+"""
+Return the action card JSON.` }],
+        sourceText,
+        sourceUrl: null,
+      };
+    }
     return {
       source: 'text',
       parts: [{ text: `${sourceUrl ? `WEB PAGE ${sourceUrl}\n` : 'MESSAGE / DOCUMENT TEXT\n'}"""\n${sourceText}\n"""\nReturn the action card JSON.` }],
@@ -92,12 +116,13 @@ export const POST = handle(async (req) => {
   const extraction = await generateJson({
     system: extractPrompt(lang, doc.source), parts: doc.parts, schema: EXTRACT_SCHEMA,
     // Text answers come back faster than photos, so a stuck model is spotted sooner.
-    hedgeMs: doc.source === 'text' ? HEDGE_MS.readText : HEDGE_MS.read,
+    hedgeMs: doc.source === 'text' || doc.source === 'call' ? HEDGE_MS.readText : HEDGE_MS.read,
     check: (x) => inLanguage(cardTexts(x), lang),
   });
   // For text and web pages we have the exact original words, so the rule engine checks against those,
   // not against the AI's copy of them.
   if (doc.sourceText) extraction.rawText = doc.sourceText;
+  if (doc.source === 'call') extraction.docType = 'phone_call';
 
   const history = input.history && typeof input.history === 'object' && !Array.isArray(input.history) ? input.history : {};
   const edgeText = typeof input.edgeText === 'string' ? input.edgeText.slice(0, 20_000) : null;

@@ -122,5 +122,6 @@
     "familySummaryEn": "MSEDCL electricity bill of ₹840 due on 10 Oct 2026. Please verify."
   },
   "speak": "MSEDCL का बिजली बिल. ₹840 भरें. रकम: ₹840. आठ सौ चालीस रुपये. आखिरी तारीख: 10 अक्टूबर 2026. सिर्फ़ 1 दिन बचा है. देर से भरने पर ₹850 भरने होंगे",
-  "rawText": "MAHARASHTRA STATE ELECTRICITY DISTRIBUTION CO. LTD. (MSEDCL)\nConsumer No: 000123456789\nName: PRAKASH JOSHI\nBill Month: SEP-2026\nBill Date: 25/09/2026\nDue Date: 10/10/2026\nNet Amount Payable Rs. 840.00\nIf paid after due date Rs. 850.00\nRegistered Mobile No: 9876543210\nPay online at www.mahadiscom.in\nToll Free: 1912 / 18002333435\nSupply is liable to be disconnected if the bill is not paid within 15 days of the due date."
+  "rawText": "MAHARASHTRA STATE ELECTRICITY DISTRIBUTION CO. LTD. (MSEDCL)\nConsumer No: 000123456789\nName: PRAKASH JOSHI\nBill Month: SEP-2026\nBill Date: 25/09/2026\nDue Date: 10/10/2026\nNet Amount Payable Rs. 840.00\nIf paid after due date Rs. 850.00\nRegistered Mobile No: 9876543210\nPay online at www.mahadiscom.in\nToll Free: 1912 / 18002333435\nSupply is liable to be disconnected if the bill is not paid within 15 days of the due date.",
+  "guardian": null
 }

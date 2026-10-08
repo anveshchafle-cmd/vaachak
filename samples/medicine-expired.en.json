@@ -89,6 +89,10 @@
     "calendarUrl": null,
     "familySummaryEn": "Medicine (EXPIRED). Please verify."
   },
-  "speak": "Paracetamol 500 mg tablet (for fever and pain). This medicine has expired. Do not take it.",
-  "rawText": "PARACIP-500\nParacetamol Tablets IP 500 mg\nB.No. PT2341\nMFG. 09/2024\nEXP. 08/2026\nM.R.P. Rs. 30.00 for 10 tablets\nStore below 25°C. Keep out of reach of children."
+  "speak": "Paracetamol 500 mg tablet (for fever and pain). This medicine has expired. Do not take it. To tell your family, press the green button.",
+  "rawText": "PARACIP-500\nParacetamol Tablets IP 500 mg\nB.No. PT2341\nMFG. 09/2024\nEXP. 08/2026\nM.R.P. Rs. 30.00 for 10 tablets\nStore below 25°C. Keep out of reach of children.",
+  "guardian": {
+    "reason": "EXPIRED",
+    "text": "🚨 Vaachak safety alert\n\nI was about to take a medicine that has EXPIRED.\nVaachak told me not to pay or share anything. Please call me."
+  }
 }

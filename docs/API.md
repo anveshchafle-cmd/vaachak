@@ -34,6 +34,9 @@ without telling the other person.
 | `familyPhone` | no | 10-digit number for the WhatsApp button, e.g. `9876543210` |
 | `userName` | no | How to address the person, e.g. `प्रकाश काका`; the spoken card then starts "प्रकाश काका, …" |
 | `edgeText` | no | Text from **Tesseract.js run on the same photo in the browser**; turns on the dual-engine check (see below) |
+| `kind` | no | `call` = **"Is this call a scam?"**: `text` (or an audio `file`: webm / mp4 / ogg / mp3 / wav) is the person's own account of a phone call. Returns a `phone_call` card; call scam rules add digital arrest, "safe account", "don't tell anyone", prize-with-fee and "read me the SMS code". Audio with no clear speech gives a "not clear" card, never a guess. |
+
+Every card also has `guardian`: `null`, or `{ "reason": "SCAM" | "EXPIRED" | "OVERDUE" | "BILL_SPIKE", "text": "🚨 …" }`, a ready WhatsApp message for family (the person's language plus English). Open `https://wa.me/91<number>?text=<encoded text>` on a tap.
 
 JSON also works: `{ "text": "..." }` or `{ "url": "https://..." }` or `{ "fileBase64": "data:image/jpeg;base64,...", "lang": "mr", "history": {...}, "familyPhone": "...", "edgeText": "..." }`
 

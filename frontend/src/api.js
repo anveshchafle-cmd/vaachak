@@ -79,7 +79,18 @@ export { processImage };
 // A pasted SMS / WhatsApp message, or a link to a web page or PDF.
 export async function readText(value, opts) {
   const formData = new FormData();
-  formData.append(/^https?:\/\/\S+$/i.test(value.trim()) ? 'url' : 'text', value.trim());
+  const isCall = opts.kind === 'call';
+  formData.append(!isCall && /^https?:\/\/\S+$/i.test(value.trim()) ? 'url' : 'text', value.trim());
+  if (isCall) formData.append('kind', 'call');
+  addCommon(formData, opts);
+  return postRead(formData);
+}
+
+// A spoken description of a phone call, when the phone could not turn it into text itself.
+export async function readCallAudio(audio, opts) {
+  const formData = new FormData();
+  formData.append('file', audio, 'call.webm');
+  formData.append('kind', 'call');
   addCommon(formData, opts);
   return postRead(formData);
 }

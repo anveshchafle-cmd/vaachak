@@ -60,12 +60,17 @@ Every rupee and date is **checked against the print by rules, not AI**. Scams ge
 <tr>
 <td valign="top"><img src="docs/assets/act.png" width="44" alt=""><br><b>Acts in one tap</b><br>Pay a verified biller, call 1930 or the real helpline, send "Should I pay? YES / NO" to family on WhatsApp.</td>
 <td valign="top"><img src="docs/assets/remind.png" width="44" alt=""><br><b>Remembers for you</b><br>Every dose of every medicine for the whole course in the calendar; <i>My papers</i> shows what is due next.</td>
-<td valign="top"><img src="docs/assets/voice.png" width="44" alt=""><br><b>Natural Indian voice</b><br>Sarvam AI Bulbul v3, slow and clear; first words in about 1.5 s; amounts said in digits and words.</td>
+<td valign="top"><img src="docs/assets/voice.png" width="44" alt=""><br><b>Natural Indian voice</b><br>Sarvam AI Bulbul v3, clear and at a medium pace; first words in about 1 s; amounts said in digits and words.</td>
 </tr>
 <tr>
 <td valign="top"><img src="docs/assets/offline.png" width="44" alt=""><br><b>Works offline</b><br>The same rule engine, Tesseract OCR and a 50-medicine directory run in the browser with no network.</td>
 <td valign="top"><img src="docs/assets/lang.png" width="44" alt=""><br><b>Built for low vision</b><br>Giant text, colour verdicts, pill pictures ☀ 🌤 🌙, danger vibration, a spoken tour in 3 languages.</td>
 <td valign="top"><img src="docs/assets/private.png" width="44" alt=""><br><b>Private by default</b><br>The server stores nothing. Papers, bill history and settings stay on the phone.</td>
+</tr>
+<tr>
+<td valign="top"><img src="docs/assets/scam.png" width="44" alt=""><br><b>🆕 Is this call a scam?</b><br>Say what a caller told you. "Digital arrest" by fake CBI/police, OTP asks, lottery fees, "safe account" transfers and screen-sharing apps get a red card and one tap to 1930, even offline.</td>
+<td valign="top"><img src="docs/assets/act.png" width="44" alt=""><br><b>🆕 Family guardian alert</b><br>A scam, an expired medicine or an overdue bill puts a green button on the card: one tap sends the son or daughter a ready WhatsApp alert, in the parent's language plus English.</td>
+<td valign="top"><img src="docs/assets/read.png" width="44" alt=""><br><b>🆕 Fast on a free tier</b><br>Two Gemini models race on every read and the first answer wins; a camera that waits for focus and keeps the sharpest frame; a medium-pace voice that starts in about 1 s.</td>
 </tr>
 </table>
 
@@ -81,7 +86,8 @@ Every rupee and date is **checked against the print by rules, not AI**. Scams ge
    ```text
    Dear Consumer, your electricity power will be disconnected tonight at 9.30 pm because your previous month bill was not updated. Please immediately contact our electricity officer 9876543210. Thank you
    ```
-4. On any card, tap the mic and ask *"किती पैसे भरायचे?"* ("how much do I pay?"). Questions about anything else are politely refused.
+4. Tap **Check a phone call** (red button) and tap the first example: a fake CBI "digital arrest" call becomes a red card with 1930 and a one-tap WhatsApp alert for family.
+5. On any card, tap the mic and ask *"किती पैसे भरायचे?"* ("how much do I pay?"). Questions about anything else are politely refused.
 
 ## 🧠 How it works
 
@@ -103,7 +109,8 @@ flowchart LR
 | **Amount** | Must appear in the document text (Indian grouping and Devanagari digits handled), else confidence ≤ 0.5 and Pay is hidden |
 | **Date** | Must appear in any common Indian format: `15/10/2026`, `15 Oct 2026`, `Oct 15, 2026` … |
 | **Second engine** | Gemini vs on-device OCR; one wrong digit still counts as agreement |
-| **Scam score** | OTP/PIN +3 · AnyDesk/APK +3 · personal mobile +2 · "cut today" +2 · personal UPI +2 · prize +2 · odd link +1–2 · KYC +1 → **≥ 3 is a scam** |
+| **Scam score** | OTP/PIN (or "the code in the SMS") +3 · AnyDesk/APK/screen share +3 · "digital arrest" by fake police/CBI +3 · "safe account" +3 · prize with a fee +3 · personal mobile +2 · "cut today" +2 · personal UPI +2 · "don't tell anyone" +2 · prize +2 · odd link +1–2 · KYC +1 → **≥ 3 is a scam** |
+| **Family alert** | Scam, expired medicine, overdue bill or bill spike → ready WhatsApp message to the saved family number |
 | **Expiry** | `EXP 08/2026`, `Exp AUG 2026`, `USE BEFORE 07/27` → red EXPIRED card |
 | **Urgency · spike** | ≤ 3 days left → URGENT · bill ≥ 2× the last one → "ask someone before paying" |
 | **Prescriptions** | `1-0-1 after food` → ☀ 1 · 🌤 0 · 🌙 1; every medicine kept as its own schedule |
@@ -114,11 +121,12 @@ Timed on the live app, 8 October 2026.
 
 | Flow | Time | Checked |
 |---|:---:|---|
-| Pasted SMS → spoken card | **1.6–2.6 s** | 4 / 4 test scams caught · 0 real bank or government SMS flagged |
-| Bill photo → verified card | **3.7–5.0 s** | ₹ and date found in the printed text |
-| Voice starts speaking | **1.5–2.2 s** | first sentence first, MP3 |
-| Voice question → answer | **1.3–3.0 s** | answers only from the document |
-| Rule engine | **58 tests** | run on every push by GitHub Actions |
+| Pasted SMS → spoken card | **1.5–2.5 s** | 4 / 4 test scams caught · 0 real bank or government SMS flagged |
+| Bill photo → verified card | **2.3–3.3 s** | ₹ and date found in the printed text (first request after idle ~6 s) |
+| Phone-call check → card | **≈ 2 s** typed · **≈ 3 s** spoken | 5 / 5 test scam calls caught in Marathi, Hindi, English · harmless calls not flagged |
+| Voice starts speaking | **≈ 1 s** | first sentence first, MP3, medium pace |
+| Voice question → answer | **≈ 1 s** | answers only from the document; common questions answered on the phone if the server is slow |
+| Rule engine | **72 tests** | run on every push by GitHub Actions |
 
 <details>
 <summary><b>📱 Screens</b></summary>
@@ -148,7 +156,7 @@ Timed on the live app, 8 October 2026.
 
 | Layer | What it does |
 |---|---|
-| **Reading** | Gemini 3.8 Flash reads photos, PDFs and text into a strict JSON card; falls back across 7 models when busy |
+| **Reading** | Gemini reads photos, PDFs, text and spoken call descriptions into a strict JSON card; the two fastest models race and the first answer wins, with more models on standby |
 | **Safety** | Plain-JavaScript rule engine shared by server and browser; Tesseract.js as a second, on-device engine |
 | **Voice** | Sarvam AI Bulbul v3 for natural Indian speech; Gemini TTS backup; recorded Marathi and Hindi clips offline |
 | **App** | React 19 PWA: installable, share target, camera torch, vibration, offline cache |
@@ -237,9 +245,11 @@ The full request and response format is in **[docs/API.md](docs/API.md)**.
 - [x] Rule-based verification, scam shield, expiry and bill-spike checks
 - [x] Marathi, Hindi and English · offline mode · spoken tour
 - [x] One-tap 1930, whole-course reminders, My papers, Jan Aushadhi tip
+- [x] "Is this call a scam?" for digital-arrest, OTP, lottery and safe-account calls
+- [x] Family guardian alert on WhatsApp for scams, expired medicine and overdue bills
 - [ ] All 22 scheduled Indian languages via Sarvam / Bhashini
 - [ ] WhatsApp bot: forward any document to Vaachak
-- [ ] Family app with alerts for due bills and caught scams
+- [ ] Family app that receives alerts automatically
 - [ ] BBPS payments with verified billers
 - [ ] Fully offline on-device model
 
