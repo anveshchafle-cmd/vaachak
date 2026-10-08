@@ -1,196 +1,212 @@
-<div align="center">
+<p align="center">
+  <a href="https://vaachak-zeta.vercel.app"><img src="docs/assets/banner.png" alt="Vaachak: reads any bill, medicine strip or message and tells an elderly person, in their own language, exactly what to do" width="100%"></a>
+</p>
 
-# Vaachak · वाचक
+<p align="center">
+  <a href="https://github.com/anveshchafle-cmd/vaachak/actions/workflows/test.yml"><img src="https://github.com/anveshchafle-cmd/vaachak/actions/workflows/test.yml/badge.svg" alt="tests"></a>
+  <a href="https://vaachak-zeta.vercel.app"><img src="https://img.shields.io/badge/demo-live-2EC4F1?logo=vercel&logoColor=white" alt="live demo"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-4A2C8F" alt="MIT license"></a>
+  <img src="https://img.shields.io/badge/node-22-5FA04E?logo=nodedotjs&logoColor=white" alt="Node 22">
+  <img src="https://img.shields.io/badge/backend_deps-0-1E6B3A" alt="zero backend dependencies">
+  <img src="https://img.shields.io/badge/THINK_AI_4.0-PS_10-E8A317" alt="THINK AI 4.0 PS 10">
+</p>
 
-### Reads any bill, medicine strip or message, and tells an elderly person, in their own language, exactly what to do.
+<p align="center">
+  <b><a href="https://vaachak-zeta.vercel.app">Live app</a></b> ·
+  <b><a href="#-try-it-in-60-seconds">Try it in 60 s</a></b> ·
+  <b><a href="https://vaachak-zeta.vercel.app/Vaachak-THINK-AI-4.0.pdf">Pitch deck</a></b> ·
+  <b><a href="docs/API.md">API docs</a></b>
+</p>
 
-**THINK AI 4.0 · IETE TCET Mumbai · PS 10: AI-Powered Accessibility Assistant · Team Vaachak**
-
-[![Live app](https://img.shields.io/badge/Live_app-vaachak--zeta.vercel.app-2EC4F1?style=for-the-badge)](https://vaachak-zeta.vercel.app)
-[![Pitch deck](https://img.shields.io/badge/Pitch_deck-PDF-4A2C8F?style=for-the-badge)](https://vaachak-zeta.vercel.app/Vaachak-THINK-AI-4.0.pdf)
-[![Tests](https://img.shields.io/badge/tests-58_passing-1E6B3A?style=for-the-badge)](#testing)
-[![Languages](https://img.shields.io/badge/मराठी_·_हिंदी_·_English-E8A317?style=for-the-badge)](#features)
-
-<img src="docs/solution.jpg" alt="Vaachak: any input, AI reads, rules verify, speaks and acts" width="900">
-
-</div>
-
-> **Gemini answers questions. Vaachak never needs one.** An elderly person should not have to know what to ask. Vaachak gives the answer first: what this is, what to do, by when, how much, and what is dangerous.
-
----
-
-## Contents
-
-[The problem](#the-problem) · [What Vaachak does](#what-vaachak-does) · [Try it in 60 seconds](#try-it-in-60-seconds) · [Features](#features) · [How it works](#how-it-works) · [Safety rules](#safety-rules-no-ai) · [Measured results](#measured-results) · [Tech stack](#tech-stack) · [Run locally](#run-locally) · [Project structure](#project-structure) · [Testing](#testing) · [Roadmap](#roadmap) · [Team](#team)
-
----
-
-## The problem
-
-Meet **Prakash-kaka, 68, from Thane**. Cataract, reads only Marathi. The MSEDCL bill, a new medicine strip and bank SMSes arrive in English jargon and small print while his children are at work. He guesses, misses due dates, takes expired medicine, or trusts a fake *"your power will be cut tonight, call 98xxxxxxxx"* SMS.
-
-| | |
-|---|---|
-| **149 M** | Indians aged 60+ today, 347 M by 2050 (UNFPA India Ageing Report 2023) |
-| **68%** | of women aged 60–75 cannot read (UNFPA India Ageing Report 2023) |
-| **13.8%** | of Indians aged 50+ have visual impairment (National Blindness & VI Survey 2015–19) |
-| **₹22,495 Cr** | lost to cyber fraud in 2025; fake bill SMSes target the elderly (I4C data, via Moneylife) |
-
-Google Lens and Gemini read text aloud, if you know what to ask. **Nobody tells Prakash-kaka what to do, or that the SMS is a trap.**
-
-## What Vaachak does
-
-Point the camera at a document, upload a screenshot or PDF, paste an SMS, or share a link. Vaachak turns it into one **spoken action card** with five fields, in Marathi, Hindi or English:
-
-| What is this | What to do | By when | How much | Warning |
-|---|---|---|---|---|
-| MSEDCL electricity bill | Pay ₹840 | 10 October 2026 | ₹840 (eight hundred forty rupees) | ₹850 if paid late |
-
-Every rupee and date is **checked against the printed text by rules, not AI**. If Vaachak is not sure, it says *"हे साफ दिसत नाही, कृपया कुणालातरी विचारा"* (this is not clear, please ask someone). It never guesses with money or medicine.
+<br>
 
 <table>
 <tr>
-<td align="center" width="25%"><img src="docs/screenshots/scam.png" width="190" alt="Scam card"><br><b>Protect</b><br><sub>Fake power-cut SMS → red scam card with reasons</sub></td>
-<td align="center" width="25%"><img src="docs/screenshots/bill.png" width="190" alt="Bill card"><br><b>Verify</b><br><sub>₹840 by 10 Oct, both found in the print</sub></td>
-<td align="center" width="25%"><img src="docs/screenshots/prescription.png" width="190" alt="Prescription"><br><b>Remind</b><br><sub>3 medicines → 3 separate pill schedules</sub></td>
-<td align="center" width="25%"><img src="docs/screenshots/my-papers.png" width="190" alt="My papers"><br><b>Remember</b><br><sub>What is due next, scams caught</sub></td>
-</tr>
+<td width="44%" align="center" valign="top">
+  <img src="docs/assets/demo.gif" alt="Vaachak demo: a scam SMS is caught, a bill is verified, a 3-medicine prescription becomes 3 schedules" width="100%">
+</td>
+<td width="56%" valign="top">
+
+### Gemini answers questions. Vaachak never needs one.
+
+**Prakash-kaka, 68, Thane.** Cataract; reads only Marathi. His electricity bill, a new medicine strip and bank SMSes arrive in English jargon and small print while his children are at work. Google Lens can read the text aloud, if he knows what to ask.
+
+Vaachak gives the answer first. Point the camera, upload a PDF, paste an SMS or share a link, and it speaks one **action card** in Marathi, Hindi or English:
+
+> **What is this** · **What to do** · **By when** · **How much** · **Warning**
+
+Every rupee and date is **checked against the print by rules, not AI**. Scams get a red card and one tap to **1930**. When unsure, it says *"हे साफ दिसत नाही, कृपया कुणालातरी विचारा"* (this is not clear, please ask someone).
+
+<table>
 <tr>
-<td align="center"><img src="docs/screenshots/scam-helplines.png" width="190" alt="Call 1930"><br><b>One tap to 1930</b><br><sub>and the real MSEDCL / SBI helpline</sub></td>
-<td align="center"><img src="docs/screenshots/reminders.png" width="190" alt="Reminders"><br><b>Whole-course reminders</b><br><sub>every dose time, into the calendar</sub></td>
-<td align="center"><img src="docs/screenshots/home.png" width="190" alt="Home"><br><b>Elder-first home</b><br><sub>giant buttons, 3 languages</sub></td>
-<td align="center"><img src="docs/screenshots/tour.png" width="190" alt="Spoken tour"><br><b>Spoken tour</b><br><sub>guides first-time users aloud</sub></td>
+<td align="center"><b>149 M</b><br><sub>Indians aged 60+</sub></td>
+<td align="center"><b>68%</b><br><sub>of women 60–75 cannot read</sub></td>
+<td align="center"><b>₹22,495 Cr</b><br><sub>lost to cyber fraud, 2025</sub></td>
 </tr>
 </table>
 
-## Try it in 60 seconds
+</td>
+</tr>
+</table>
 
-1. Open **[vaachak-zeta.vercel.app](https://vaachak-zeta.vercel.app)** on a phone (or scan the QR in the [pitch deck](https://vaachak-zeta.vercel.app/Vaachak-THINK-AI-4.0.pdf)). Pick मराठी, हिंदी or English.
-2. Tap a **sample** (electricity bill, expired medicine, scam SMS, prescription). Samples work even with Wi-Fi off. Direct links: [scam SMS](https://vaachak-zeta.vercel.app/?sample=scam-sms) · [bill](https://vaachak-zeta.vercel.app/?sample=electricity-bill) · [prescription](https://vaachak-zeta.vercel.app/?sample=prescription) · [expired medicine](https://vaachak-zeta.vercel.app/?sample=medicine-expired)
-3. Tap **Message or link** and paste a real-looking scam:
-   ```
+## ✨ Highlights
+
+<table>
+<tr>
+<td width="33%" valign="top"><img src="docs/assets/read.png" width="44" alt=""><br><b>Reads anything</b><br>Voice-guided camera that turns on the torch and shoots by itself, screenshots, PDFs, links, pasted SMS, voice questions.</td>
+<td width="33%" valign="top"><img src="docs/assets/verify.png" width="44" alt=""><br><b>Never guesses</b><br>₹ and dates must appear in the print; on-device OCR must agree. Unverified amount means the Pay button is hidden.</td>
+<td width="33%" valign="top"><img src="docs/assets/scam.png" width="44" alt=""><br><b>Scam shield for India</b><br>Rule-based score for OTP asks, AnyDesk, personal numbers, "cut today" threats, KYC traps, personal UPI, prizes.</td>
+</tr>
+<tr>
+<td valign="top"><img src="docs/assets/act.png" width="44" alt=""><br><b>Acts in one tap</b><br>Pay a verified biller, call 1930 or the real helpline, send "Should I pay? YES / NO" to family on WhatsApp.</td>
+<td valign="top"><img src="docs/assets/remind.png" width="44" alt=""><br><b>Remembers for you</b><br>Every dose of every medicine for the whole course in the calendar; <i>My papers</i> shows what is due next.</td>
+<td valign="top"><img src="docs/assets/voice.png" width="44" alt=""><br><b>Natural Indian voice</b><br>Sarvam AI Bulbul v3, slow and clear; first words in about 1.5 s; amounts said in digits and words.</td>
+</tr>
+<tr>
+<td valign="top"><img src="docs/assets/offline.png" width="44" alt=""><br><b>Works offline</b><br>The same rule engine, Tesseract OCR and a 50-medicine directory run in the browser with no network.</td>
+<td valign="top"><img src="docs/assets/lang.png" width="44" alt=""><br><b>Built for low vision</b><br>Giant text, colour verdicts, pill pictures ☀ 🌤 🌙, danger vibration, a spoken tour in 3 languages.</td>
+<td valign="top"><img src="docs/assets/private.png" width="44" alt=""><br><b>Private by default</b><br>The server stores nothing. Papers, bill history and settings stay on the phone.</td>
+</tr>
+</table>
+
+## 🚀 Try it in 60 seconds
+
+1. Open **[vaachak-zeta.vercel.app](https://vaachak-zeta.vercel.app)** on a phone and pick मराठी, हिंदी or English. Tap **?** for a spoken tour.
+2. Open a ready-made example. These work even with Wi-Fi off:
+
+   | [🚨 Scam SMS](https://vaachak-zeta.vercel.app/?sample=scam-sms) | [⚡ Electricity bill](https://vaachak-zeta.vercel.app/?sample=electricity-bill) | [💊 Prescription](https://vaachak-zeta.vercel.app/?sample=prescription) | [⛔ Expired medicine](https://vaachak-zeta.vercel.app/?sample=medicine-expired) |
+   |:---:|:---:|:---:|:---:|
+
+3. Tap **Message or link** and paste this, then listen:
+   ```text
    Dear Consumer, your electricity power will be disconnected tonight at 9.30 pm because your previous month bill was not updated. Please immediately contact our electricity officer 9876543210. Thank you
    ```
-   You get a red **SCAM** card, the reasons in your language, and one-tap buttons to call **1930**.
-4. On any card, tap the mic and ask *"किती पैसे भरायचे?"* ("how much do I pay?"). Off-topic questions are politely refused.
-5. Tap **?** on the home screen for the spoken guided tour.
+4. On any card, tap the mic and ask *"किती पैसे भरायचे?"* ("how much do I pay?"). Questions about anything else are politely refused.
 
-## Features
+## 🧠 How it works
 
-**Reads anything (alternative input)**
-- 📷 **Voice-guided camera**: says *"light is low"* and turns on the torch, *"hold steady"* when blurry, then takes the photo by itself
-- 🖼️ Screenshots and PDF e-bills · 🔗 web links (bills, notices) · 💬 pasted or shared SMS / WhatsApp · 🎙️ questions by voice
-- 📲 **Share to Vaachak** from any Android app (PWA share target)
-
-**Never guesses**
-- ✅ **Amount and date verification**: the ₹ and date the AI reports must appear in the printed text, otherwise they are marked unverified and **Pay is hidden**
-- 🔁 **Two-engine check**: Gemini's reading must agree with on-device Tesseract OCR (tolerant of one-digit OCR slips) → *"✓ checked twice"*
-- 🟡 **Confidence on every field**: unsure fields say *"please ask someone"* instead of guessing
-
-**Protects**
-- 🚨 **Scam shield for Indian frauds** (rules, not AI): OTP or PIN requests, AnyDesk / APK installs, personal mobile numbers, "cut today" threats, KYC traps, personal UPI IDs, lottery bait, look-alike links
-- 📞 **Call the real number**: one tap to **1930** (national cyber-fraud helpline) and the real helpline of the company being impersonated
-- 💊 **Expiry check**: our own parser reads `EXP. 08/2026` / `Exp AUG 2026` → red **EXPIRED** card
-- 📈 **Bill-spike alert**: a bill at least 2× the last one from the same consumer number → *"ask someone before paying"*
-
-**Acts**
-- 💳 **Zero-typing payment**: a UPI link only to an ID printed on the bill, or the consumer number copied and the official biller page opened. Never a guessed UPI ID
-- ⏰ **Medicine reminders for the whole course**: every medicine × every dose time × number of days, into the phone calendar (iPhone: one tap "Add All"; Android: one link per dose)
-- 👨‍👩‍👦 **Ask family**: one tap sends the card to a family member on WhatsApp: *"Should I pay? YES / NO"*
-- 🗂️ **My papers**: the home screen lists upcoming due dates, running medicine courses and scams caught (stored only on the phone)
-- 🏥 **Jan Aushadhi tip**: medicine cards name the generic, which is usually much cheaper at a Jan Aushadhi Kendra
-
-**Accessible**
-- 🔊 Slow, natural **Indian voice** (Sarvam AI Bulbul v3); the first words play in about 1.5 s; amounts said in digits *and* words; addresses the person by name (*"प्रकाश काका, …"*)
-- ☀️🌤️🌙 **Pill-picture schedule** from *"1-0-1 after food"*, one schedule per medicine, readable with zero literacy
-- 🔴 Colour verdicts, giant text, distinct **danger vibration** patterns (Android)
-- 🗣️ **Spoken first-run tour** in the chosen language
-- 📴 **Works offline**: on-device OCR, a 50-medicine directory and the same rule engine run in the browser, with pre-recorded Marathi and Hindi warnings
-
-## How it works
-
-**AI reads, rules decide.** Gemini is the only step that can guess. Every check after it is a deterministic rule with automated tests, and the same rule engine runs inside the phone.
+**AI reads, rules decide.** Gemini is the only step that can guess. Everything after it is a deterministic, tested rule, and the same rule engine is bundled into the phone.
 
 ```mermaid
 flowchart LR
-    A["📱 Elder's phone<br/>photo · PDF · link · SMS · voice"] --> B["Gemini 3.8 Flash<br/>vision → strict JSON<br/>7-model fallback"]
-    A -. on-device OCR .-> T["Tesseract.js<br/>2nd engine"]
-    B --> R{"Rule engine<br/>(no AI)"}
-    T -. must agree .-> R
-    R --> R1["₹ and date<br/>found in print?"]
-    R --> R2["Scam score<br/>≥ 3 = scam"]
-    R --> R3["Expiry · urgency<br/>bill spike"]
-    R1 & R2 & R3 --> C["Action card<br/>5 fields + flags + confidence"]
-    C --> V["🔊 Sarvam voice<br/>Marathi · Hindi · English"]
-    C --> P["💳 Pay · ⏰ Remind<br/>📞 1930 · 👨‍👩‍👦 Family"]
+    IN["📱 Photo · PDF · link<br/>SMS · voice"] --> AI["<b>Gemini 3.8 Flash</b><br/>vision → strict JSON<br/>7-model fallback"]
+    IN -. on the phone .-> OCR["<b>Tesseract.js</b><br/>second engine"]
+    AI --> RULES{{"<b>Rule engine</b><br/>no AI"}}
+    OCR -. must agree .-> RULES
+    RULES --> CARD["<b>Action card</b><br/>5 fields · flags · confidence"]
+    CARD --> VOICE["🔊 Sarvam voice<br/>मराठी · हिंदी · English"]
+    CARD --> ACT["💳 Pay · ⏰ Remind<br/>📞 1930 · 👨‍👩‍👦 Family"]
 ```
 
-<img src="docs/architecture.jpg" alt="Tech stack and system diagram" width="900">
-
-## Safety rules (no AI)
-
-All of these live in [`lib/`](lib) and run identically on the server and in the browser.
-
-| Rule | What it does | Code |
-|---|---|---|
-| Amount check | The AI's amount must appear in the document text (Indian grouping `1,23,456` and Devanagari digits handled). Otherwise confidence ≤ 0.5 and Pay is hidden | [`rules.js`](lib/rules.js) |
-| Date check | The due date must appear in any common Indian format (`15/10/2026`, `15 Oct 2026`, `Oct 15, 2026` …) | [`rules.js`](lib/rules.js) |
-| Two engines | Gemini vs Tesseract on the phone; edit distance ≤ 1 counts as agreement | [`consensus.js`](lib/consensus.js) |
-| Scam score | OTP/PIN +3 · AnyDesk/APK +3 · personal mobile +2 · "cut today" threat +2 · personal UPI +2 · prize/KBC +2 · odd link +1–2 · KYC +1 → **score ≥ 3 = SCAM** | [`scam.js`](lib/scam.js) |
-| Expiry | `EXP 08/2026`, `USE BEFORE 07/27`, `Exp AUG 2026` → last day of that month | [`rules.js`](lib/rules.js) |
-| Urgency | ≤ 3 days left → URGENT; past due → overdue warning | [`card.js`](lib/card.js) |
-| Bill spike | ≥ 2× the previous bill for the same biller and consumer number | [`rules.js`](lib/rules.js) |
-| Dose pattern | `1-0-1 after food` → ☀ 1 · 🌤 0 · 🌙 1, after food; every medicine on a prescription kept separate | [`rules.js`](lib/rules.js) |
-| Safe links | Private and local network addresses are refused before connecting | [`webpage.js`](lib/webpage.js) |
-
-## Measured results
-
-Timed on the live app on 8 October 2026.
-
-| Flow | Time | What was checked |
-|---|---|---|
-| Pasted SMS → spoken action card | 1.6–2.6 s | scam rules: 4/4 test scams caught, 0 real bank or government SMS flagged |
-| Bill photo → verified card | 3.7–5.0 s | ₹ and date found in the printed text |
-| Voice starts speaking | 1.5–2.2 s | first sentence first, MP3 |
-| Voice question → answer | 1.3–3.0 s | off-topic questions refused |
-| Web link → card | 2–11 s | depends on the website |
-
-## Tech stack
-
-| Layer | Technology |
+| Check | Rule |
 |---|---|
-| Reading (AI) | Google **Gemini 3.8 Flash** (vision, strict JSON schema) with a 7-model fallback chain |
-| Voice | **Sarvam AI Bulbul v3** (Indian voices, MP3) · Gemini TTS backup · pre-recorded offline clips |
-| Safety | Own rule engine in plain JavaScript · **Tesseract.js** on-device OCR · 50-medicine directory |
-| Frontend | **React 19** PWA · Vite · Tailwind CSS · Web Share Target, Vibration and camera-torch APIs |
-| Backend | **Node.js** serverless functions on **Vercel** (Mumbai region) · zero npm dependencies |
-| Actions | UPI deep links · Google Calendar / `.ics` reminders · WhatsApp share · `tel:` 1930 |
+| **Amount** | Must appear in the document text (Indian grouping and Devanagari digits handled), else confidence ≤ 0.5 and Pay is hidden |
+| **Date** | Must appear in any common Indian format: `15/10/2026`, `15 Oct 2026`, `Oct 15, 2026` … |
+| **Second engine** | Gemini vs on-device OCR; one wrong digit still counts as agreement |
+| **Scam score** | OTP/PIN +3 · AnyDesk/APK +3 · personal mobile +2 · "cut today" +2 · personal UPI +2 · prize +2 · odd link +1–2 · KYC +1 → **≥ 3 is a scam** |
+| **Expiry** | `EXP 08/2026`, `Exp AUG 2026`, `USE BEFORE 07/27` → red EXPIRED card |
+| **Urgency · spike** | ≤ 3 days left → URGENT · bill ≥ 2× the last one → "ask someone before paying" |
+| **Prescriptions** | `1-0-1 after food` → ☀ 1 · 🌤 0 · 🌙 1; every medicine kept as its own schedule |
 
-## Run locally
+## 📊 Measured, not claimed
 
-Requires Node.js 22.
+Timed on the live app, 8 October 2026.
+
+| Flow | Time | Checked |
+|---|:---:|---|
+| Pasted SMS → spoken card | **1.6–2.6 s** | 4 / 4 test scams caught · 0 real bank or government SMS flagged |
+| Bill photo → verified card | **3.7–5.0 s** | ₹ and date found in the printed text |
+| Voice starts speaking | **1.5–2.2 s** | first sentence first, MP3 |
+| Voice question → answer | **1.3–3.0 s** | answers only from the document |
+| Rule engine | **58 tests** | run on every push by GitHub Actions |
+
+<details>
+<summary><b>📱 Screens</b></summary>
+<br>
+
+| Scam caught | Call the real number | Bill verified | Three medicines |
+|:---:|:---:|:---:|:---:|
+| <img src="docs/screenshots/scam.png" width="190" alt=""> | <img src="docs/screenshots/scam-helplines.png" width="190" alt=""> | <img src="docs/screenshots/bill.png" width="190" alt=""> | <img src="docs/screenshots/prescription.png" width="190" alt=""> |
+| **Whole-course reminders** | **My papers** | **Home** | **Spoken tour** |
+| <img src="docs/screenshots/reminders.png" width="190" alt=""> | <img src="docs/screenshots/my-papers.png" width="190" alt=""> | <img src="docs/screenshots/home.png" width="190" alt=""> | <img src="docs/screenshots/tour.png" width="190" alt=""> |
+
+</details>
+
+## 🧰 Tech stack
+
+<p>
+  <img src="https://img.shields.io/badge/Gemini_3.8_Flash-8E75FF?logo=googlegemini&logoColor=white" alt="Gemini">
+  <img src="https://img.shields.io/badge/Sarvam_AI_Bulbul_v3-14213D" alt="Sarvam AI">
+  <img src="https://img.shields.io/badge/Tesseract.js-3A4A66" alt="Tesseract.js">
+  <img src="https://img.shields.io/badge/React_19-20232A?logo=react&logoColor=61DAFB" alt="React">
+  <img src="https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=white" alt="Vite">
+  <img src="https://img.shields.io/badge/Tailwind_CSS-0F172A?logo=tailwindcss&logoColor=38BDF8" alt="Tailwind CSS">
+  <img src="https://img.shields.io/badge/PWA-5A0FC8?logo=pwa&logoColor=white" alt="PWA">
+  <img src="https://img.shields.io/badge/Node.js-5FA04E?logo=nodedotjs&logoColor=white" alt="Node.js">
+  <img src="https://img.shields.io/badge/Vercel_(Mumbai)-000000?logo=vercel&logoColor=white" alt="Vercel">
+</p>
+
+| Layer | What it does |
+|---|---|
+| **Reading** | Gemini 3.8 Flash reads photos, PDFs and text into a strict JSON card; falls back across 7 models when busy |
+| **Safety** | Plain-JavaScript rule engine shared by server and browser; Tesseract.js as a second, on-device engine |
+| **Voice** | Sarvam AI Bulbul v3 for natural Indian speech; Gemini TTS backup; recorded Marathi and Hindi clips offline |
+| **App** | React 19 PWA: installable, share target, camera torch, vibration, offline cache |
+| **Backend** | Node.js serverless functions on Vercel, Mumbai region, zero npm dependencies |
+
+## 🛠️ Getting started
+
+**Requirements:** Node.js 22 · a free [Gemini API key](https://aistudio.google.com/apikey) · optionally a [Sarvam AI](https://dashboard.sarvam.ai) key for the Indian voice
 
 ```bash
 git clone https://github.com/anveshchafle-cmd/vaachak.git
 cd vaachak
-cp .env.example .env          # add GEMINI_API_KEY (free: https://aistudio.google.com/apikey); SARVAM_API_KEY optional
-npm test                      # 58 rule-engine and card tests, no API key needed
-npm run dev                   # API on http://localhost:3000
+cp .env.example .env            # add GEMINI_API_KEY (and SARVAM_API_KEY)
+
+npm test                        # 58 tests, no key needed
+npm run dev                     # API on http://localhost:3000
 
 cd frontend && npm install
 VITE_PROXY=http://localhost:3000 npm run dev    # app on http://localhost:5173
 ```
 
-Useful scripts:
+<details>
+<summary><b>Environment variables</b></summary>
+<br>
+
+| Variable | Required | Purpose |
+|---|:---:|---|
+| `GEMINI_API_KEY` | ✅ | Reading documents and answering questions |
+| `SARVAM_API_KEY` | | Natural Indian voice (falls back to Gemini TTS) |
+| `GEMINI_MODEL` | | Override the main model (default `gemini-3.8-flash`) |
+| `GEMINI_FALLBACK_MODELS` | | Comma-separated backup models |
+| `SARVAM_SPEAKER`, `SARVAM_PACE` | | Voice and speed (default `shubh`, `0.85`) |
+
+</details>
+
+<details>
+<summary><b>Useful scripts</b></summary>
+<br>
 
 ```bash
-npm run try -- "path/to/bill.jpg" mr     # send a real photo, print the card
-npm run samples -- 2026-10-09            # rebuild the demo sample cards for a given day
+npm run try -- "path/to/bill.jpg" mr     # read a real photo, print the card
+npm run samples -- 2026-10-09            # rebuild demo cards (mr, hi, en) for a given day
+npm run audio                            # record the offline warning clips
 ```
 
-**Deploy:** import the repo in Vercel, add `GEMINI_API_KEY` (and optionally `SARVAM_API_KEY`) as environment variables, deploy. `vercel.json` builds the frontend and serves the API from the same URL.
+</details>
 
-## Project structure
+<details>
+<summary><b>Deploy to Vercel</b></summary>
+<br>
+
+Import the repo in Vercel, add `GEMINI_API_KEY` (and `SARVAM_API_KEY`) as environment variables, and deploy. [`vercel.json`](vercel.json) builds the frontend and serves the API from the same URL in the Mumbai region.
+
+</details>
+
+<details>
+<summary><b>Project structure</b></summary>
+<br>
 
 ```
 api/              Serverless endpoints: read, ask (voice Q&A), tts, reminders (.ics), health
@@ -206,49 +222,44 @@ lib/              The engine, shared by server and browser
   gemini.js         model calls with fallback and cooldowns
   speech.js         Sarvam voice with Gemini backup
 frontend/src/     React app: Home, Camera, Reading, Card, Tour, My papers
-samples/          Ready-made cards (Marathi, Hindi, English) for demo and offline mode
+samples/          Ready-made cards in Marathi, Hindi and English
 test/             node:test suites and fixtures
-docs/             API contract, screenshots, architecture
+docs/             API contract, screenshots, assets
 ```
 
-Full API reference: **[docs/API.md](docs/API.md)**.
+The full request and response format is in **[docs/API.md](docs/API.md)**.
 
-## Testing
+</details>
 
-```bash
-npm test
-```
+## 🗺️ Roadmap
 
-58 automated tests cover the rule engine and card builder: amount and date verification, Indian number and date formats, expiry parsing, scam signals (and genuine messages that must *not* be flagged), dose patterns, multi-medicine prescriptions, helplines, reminder files, the offline reader and the camera's brightness and sharpness checks.
+- [x] Bills, medicines, prescriptions, notices, SMS and links → spoken action card
+- [x] Rule-based verification, scam shield, expiry and bill-spike checks
+- [x] Marathi, Hindi and English · offline mode · spoken tour
+- [x] One-tap 1930, whole-course reminders, My papers, Jan Aushadhi tip
+- [ ] All 22 scheduled Indian languages via Sarvam / Bhashini
+- [ ] WhatsApp bot: forward any document to Vaachak
+- [ ] Family app with alerts for due bills and caught scams
+- [ ] BBPS payments with verified billers
+- [ ] Fully offline on-device model
 
-## Privacy
+## 👥 Team
 
-- Documents are sent to the AI only to read them; the server stores nothing.
-- "My papers", bill history and settings stay in the phone's own storage.
-- Links are fetched server-side with private and local addresses blocked.
+<table>
+<tr>
+<td align="center" width="25%"><img src="docs/assets/team-A.png" width="72" alt=""><br><b>Anvesh Chafle</b><br><sub>Backend, AI pipeline & safety rules</sub></td>
+<td align="center" width="25%"><img src="docs/assets/team-M.png" width="72" alt=""><br><b>Maulik Parshionikar</b><br><sub>Frontend, UI/UX & accessibility</sub></td>
+<td align="center" width="25%"><img src="docs/assets/team-N.png" width="72" alt=""><br><b>Nimisha Jain</b><br><sub>Presenter · research & live demo</sub></td>
+<td align="center" width="25%"><img src="docs/assets/team-J.png" width="72" alt=""><br><b>Jiya Khut</b><br><sub>Presenter · pitch & user testing</sub></td>
+</tr>
+</table>
 
-## Roadmap
+Built for **THINK AI 4.0** at IETE TCET Mumbai · problem statement **PS 10: AI-Powered Accessibility Assistant**.
 
-| Phase | Plan |
-|---|---|
-| **1 · Live today** | Bills, medicines, scams, reminders in Marathi, Hindi and English |
-| **2** | All 22 scheduled Indian languages (Sarvam / Bhashini) · WhatsApp bot: forward any document to Vaachak |
-| **3** | Family app with alerts for due bills and caught scams · BBPS payments with verified billers |
-| **Future** | Fully offline on-device model · government-scheme notices turned into checklists |
+## 📚 Sources
 
-## Team
+UNFPA *India Ageing Report 2023* · *National Blindness & Visual Impairment Survey 2015–19* · Indian Cybercrime Coordination Centre (I4C) data, via Moneylife (2025).
 
-| | Name | Role |
-|---|---|---|
-| 🛠️ | **Anvesh Chafle** | Backend, AI pipeline & safety rule engine |
-| 🎨 | **Maulik Parshionikar** | Frontend, UI/UX & accessibility |
-| 🎤 | **Nimisha Jain** | Presenter · research & live demo |
-| 🎤 | **Jiya Khut** | Presenter · pitch & user testing |
+## 📄 License
 
-Built for **THINK AI 4.0** at IETE TCET Mumbai, problem statement **PS 10: AI-Powered Accessibility Assistant**.
-
-<div align="center">
-
-**[Open the live app](https://vaachak-zeta.vercel.app)** · **[Pitch deck (PDF)](https://vaachak-zeta.vercel.app/Vaachak-THINK-AI-4.0.pdf)** · **[API docs](docs/API.md)**
-
-</div>
+[MIT](LICENSE) © 2026 Team Vaachak
