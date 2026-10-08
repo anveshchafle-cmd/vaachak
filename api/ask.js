@@ -1,7 +1,7 @@
 // POST /api/ask: a spoken or typed question about the card → a short answer from that document only.
 import { handle, json, preflight, HttpError, isMultipart, readJson, parseJsonField } from '../lib/http.js';
 import { generateJson, inlinePart, ASK_MODELS, HEDGE_MS, PER_CALL_MS } from '../lib/gemini.js';
-import { ASK_SCHEMA, askPrompt } from '../lib/prompts.js';
+import { ASK_SCHEMA, askPrompt, inLanguage } from '../lib/prompts.js';
 import { messages, normalizeLang } from '../lib/i18n.js';
 
 const MAX_AUDIO_BYTES = 3 * 1024 * 1024;
@@ -52,6 +52,7 @@ export const POST = handle(async (req) => {
 
   const result = await generateJson({
     system: askPrompt(lang, messages(lang).notInDocument), parts, schema: ASK_SCHEMA, models: ASK_MODELS, hedgeMs: HEDGE_MS.ask, perCallMs: PER_CALL_MS.ask,
+    check: (r) => inLanguage([r.answer], lang),
   });
   const answer = String(result.answer || '').trim() || messages(lang).notInDocument;
   return json({ heard: result.heard || question || '', answer, answerable: result.answerable !== false, speak: answer });

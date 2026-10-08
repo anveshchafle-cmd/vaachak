@@ -83,3 +83,22 @@ test('quick answer: common questions are answered from the card when the server 
   assert.equal(quickAnswer('UPI ने भरू शकतो का?', card, 'mr'), null);
   assert.equal(quickAnswer('Can I pay by UPI?', card, 'en'), null);
 });
+
+test('language check: a Hindi card that drifted into Marathi is caught', async () => {
+  const { inLanguage } = await import('../lib/prompts.js');
+  assert.equal(inLanguage(['महावितरण कंपनी का बिजली बिल', '₹1,740 भरें'], 'hi'), true);
+  assert.equal(inLanguage(['महावितरण कंपनीचे वीज बिल', '₹1,740 भरा'], 'hi'), false);
+  assert.equal(inLanguage(['MSEDCL चे वीज बिल', '₹840 भरा', 'हे औषध घेऊ नका'], 'mr'), true);
+  assert.equal(inLanguage(['बिजली बिल है', '₹840 भरें'], 'mr'), false);
+  assert.equal(inLanguage(['Pay ₹840'], 'en'), true);
+});
+
+test('gemini: an answer that fails the check is used only when nothing better comes', async () => {
+  fakeGemini({ drift1: { ms: 5 }, good1: { ms: 60 } });
+  const check = (r) => r.model !== 'drift1';
+  let res = await generateJson({ system: '', parts: [], schema: {}, models: ['drift1', 'good1'], hedgeMs: 5000, check });
+  assert.equal(res.model, 'good1');
+  fakeGemini({ drift2: { ms: 5 }, dead2: { status: 503 } });
+  res = await generateJson({ system: '', parts: [], schema: {}, models: ['drift2', 'dead2'], hedgeMs: 5000, check: (r) => r.model !== 'drift2' });
+  assert.equal(res.model, 'drift2');
+});

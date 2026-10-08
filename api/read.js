@@ -3,7 +3,7 @@
 // e.g. a pasted SMS or WhatsApp forward). Paper or screen, it all becomes the same card.
 import { handle, json, preflight, HttpError, isMultipart, readJson, parseJsonField } from '../lib/http.js';
 import { generateJson, inlinePart, HEDGE_MS } from '../lib/gemini.js';
-import { EXTRACT_SCHEMA, extractPrompt } from '../lib/prompts.js';
+import { EXTRACT_SCHEMA, extractPrompt, inLanguage, cardTexts } from '../lib/prompts.js';
 import { buildCard } from '../lib/card.js';
 import { normalizeLang } from '../lib/i18n.js';
 import { fetchDocument } from '../lib/webpage.js';
@@ -93,6 +93,7 @@ export const POST = handle(async (req) => {
     system: extractPrompt(lang, doc.source), parts: doc.parts, schema: EXTRACT_SCHEMA,
     // Text answers come back faster than photos, so a stuck model is spotted sooner.
     hedgeMs: doc.source === 'text' ? HEDGE_MS.readText : HEDGE_MS.read,
+    check: (x) => inLanguage(cardTexts(x), lang),
   });
   // For text and web pages we have the exact original words, so the rule engine checks against those,
   // not against the AI's copy of them.
