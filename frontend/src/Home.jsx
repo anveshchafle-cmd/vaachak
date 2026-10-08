@@ -2,10 +2,14 @@ import { useState, useEffect, useRef } from 'react';
 import { makeT } from './i18n';
 import { load, save } from './storage';
 import Icon from './Icons';
+import { loadPapers, removePaper, upcoming, scamsCaught } from './papers';
 
 const LANGS = [['mr', 'मराठी'], ['hi', 'हिंदी'], ['en', 'Eng']];
 
-export default function Home({ lang, onLang, onNavigate, demoMode, onToggleDemo }) {
+export default function Home({ lang, onLang, onNavigate, demoMode, onToggleDemo, onTour }) {
+  const [papers, setPapers] = useState(loadPapers);
+  const due = upcoming(papers);
+  const caught = scamsCaught(papers);
   const [userName, setUserName] = useState(load('vaachak.userName', ''));
   const [familyPhone, setFamilyPhone] = useState(load('vaachak.familyPhone', ''));
   const [showSettings, setShowSettings] = useState(false);
@@ -59,7 +63,17 @@ export default function Home({ lang, onLang, onNavigate, demoMode, onToggleDemo 
         >
           वाचक
         </h1>
+        <div className="flex gap-2">
         <button
+          id="tour-help"
+          onClick={onTour}
+          aria-label={t('help')}
+          className="mt-3 w-14 h-14 rounded-full bg-paper text-ink grid place-items-center border-2 border-ink/15 active:bg-stamp-soft"
+        >
+          <Icon name="help" size={30} />
+        </button>
+        <button
+          id="tour-settings"
           onClick={() => setShowSettings(!showSettings)}
           aria-label={t('settings')}
           aria-expanded={showSettings}
@@ -67,11 +81,12 @@ export default function Home({ lang, onLang, onNavigate, demoMode, onToggleDemo 
         >
           <Icon name="gear" size={28} />
         </button>
+        </div>
       </header>
 
       <p className="text-[21px] leading-snug text-ink-soft mt-1 max-w-[30ch]">{t('tagline')}</p>
 
-      <div role="radiogroup" aria-label="भाषा / Language" className="flex gap-2 mt-5">
+      <div id="tour-lang" role="radiogroup" aria-label="भाषा / Language" className="flex gap-2 mt-5">
         {LANGS.map(([code, label]) => (
           <button
             key={code}
@@ -115,6 +130,7 @@ export default function Home({ lang, onLang, onNavigate, demoMode, onToggleDemo 
 
       <div className="flex flex-col gap-4 mt-7">
         <button
+          id="tour-snap"
           onClick={() => onNavigate('CAMERA')}
           className="press w-full bg-stamp text-paper rounded-[28px] px-6 py-8 flex items-center gap-5 text-left"
         >
@@ -126,6 +142,7 @@ export default function Home({ lang, onLang, onNavigate, demoMode, onToggleDemo 
 
         <div className="grid grid-cols-2 gap-4">
           <button
+            id="tour-upload"
             onClick={() => fileRef.current?.click()}
             className="press bg-paper text-ink rounded-[24px] p-5 min-h-[150px] flex flex-col justify-between text-left border-2 border-ink"
           >
@@ -133,6 +150,7 @@ export default function Home({ lang, onLang, onNavigate, demoMode, onToggleDemo 
             <span className="text-[22px] font-bold leading-tight">{t('upload')}</span>
           </button>
           <button
+            id="tour-paste"
             onClick={() => onNavigate('PASTE')}
             className="press bg-paper text-ink rounded-[24px] p-5 min-h-[150px] flex flex-col justify-between text-left border-2 border-ink"
           >
@@ -143,7 +161,45 @@ export default function Home({ lang, onLang, onNavigate, demoMode, onToggleDemo 
         <input ref={fileRef} type="file" accept="image/*,application/pdf" hidden onChange={onFile} />
       </div>
 
-      <section className="mt-9" aria-labelledby="samples-h">
+      <section id="tour-papers" className="mt-9" aria-labelledby="papers-h">
+        <h2 id="papers-h" className="font-display text-[26px] text-ink mb-3">{t('papers')}</h2>
+        {caught > 0 && (
+          <p className="flex items-center gap-2 bg-leaf text-paper rounded-2xl px-4 py-3 mb-3 text-[19px] font-bold">
+            <Icon name="shield" size={28} /> {t('scamsBlocked')(caught)}
+          </p>
+        )}
+        {due.length === 0 ? (
+          <p className="text-[19px] text-ink-soft leading-snug">{t('papersEmpty')}</p>
+        ) : (
+          <ul className="space-y-3">
+            {due.slice(0, 5).map(({ paper, kind, days, amount }) => {
+              const tone = days < 0 ? 'bg-postred text-paper' : days <= 3 ? 'bg-turmeric text-ink' : 'bg-paper text-ink';
+              return (
+                <li key={paper.id} className={`${tone} rounded-[20px] flex items-stretch border-2 border-ink/10`}>
+                  <button onClick={() => onNavigate('CARD', { card: paper.card, fromPapers: true })} className="flex-1 min-w-0 flex items-center gap-3 p-4 text-left">
+                    <Icon name={kind === 'course' || /medicine|prescription/.test(paper.card.docType) ? 'pill' : /bill/.test(paper.card.docType) ? 'bolt' : 'note'} size={32} className="shrink-0" />
+                    <span className="min-w-0">
+                      <span className="block text-[19px] font-bold leading-snug break-words">{paper.card.fields.what.text}</span>
+                      <span className="block text-[17px] font-medium mt-0.5">
+                        {kind === 'course' ? t('courseLeft')(days) : t('daysLeft')(days)}{amount ? ` · ${amount}` : ''}
+                      </span>
+                    </span>
+                  </button>
+                  <button
+                    onClick={() => { removePaper(paper.id); setPapers(loadPapers()); }}
+                    aria-label={t('remove')}
+                    className="px-4 text-[28px] leading-none opacity-70"
+                  >
+                    ×
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        )}
+      </section>
+
+      <section id="tour-samples" className="mt-9" aria-labelledby="samples-h">
         <h2 id="samples-h" className="font-display text-[26px] text-ink mb-3">{t('samples')}</h2>
         <div className="grid grid-cols-2 gap-3">
           {samples.map(([name, icon, key, tone]) => (

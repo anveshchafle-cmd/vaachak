@@ -10,8 +10,8 @@ const TWO_MEDS = 'Rx: 1) Tab Metformin 500mg 1-0-1 after food x 30 days 2) Tab A
 
 test('every medicine on a prescription gets its own schedule', () => {
   assert.deepEqual(parseAllDoses(TWO_MEDS), [
-    { name: 'Metformin 500mg', morning: 1, noon: 0, night: 1, food: 'after' },
-    { name: 'Amlodipine 5mg', morning: 0, noon: 0, night: 1, food: 'any' },
+    { name: 'Metformin 500mg', morning: 1, noon: 0, night: 1, food: 'after', days: 30 },
+    { name: 'Amlodipine 5mg', morning: 0, noon: 0, night: 1, food: 'any', days: 30 },
   ]);
 });
 

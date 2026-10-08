@@ -22,6 +22,7 @@ const routes = {
   '/api/ask': await import('./api/ask.js'),
   '/api/tts': await import('./api/tts.js'),
   '/api/health': await import('./api/health.js'),
+  '/api/reminders': await import('./api/reminders.js'),
 };
 
 const PORT = Number(process.env.PORT) || 3000;

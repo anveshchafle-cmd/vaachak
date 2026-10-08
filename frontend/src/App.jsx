@@ -7,6 +7,7 @@ import Card from './Card';
 import { load, save } from './storage';
 import { makeT } from './i18n';
 import { stopVoice } from './voice';
+import Tour from './Tour';
 
 // Text or a link shared into Vaachak from another app (PWA share target), or ?sample=name.
 function initialInput() {
@@ -26,6 +27,8 @@ export default function App() {
   const [cardData, setCardData] = useState(null);
   const [photo, setPhoto] = useState(null);
   const [toast, setToast] = useState('');
+  // First visit: walk through the app in the person's own language (the ? button replays it).
+  const [touring, setTouring] = useState(!first && !load('vaachak.toured', false));
   const t = makeT(lang);
 
   useEffect(() => {
@@ -46,6 +49,7 @@ export default function App() {
       setPhoto(file ? { blob: file, url: file.type?.startsWith('image/') ? URL.createObjectURL(file) : null } : null);
     }
     if (data?.card) setCardData(data.card);
+    if (data?.fromPapers) setPhoto(null);
     setToast('');
     setScreen(newScreen);
     window.scrollTo(0, 0);
@@ -83,7 +87,18 @@ export default function App() {
       )}
 
       {screen === 'HOME' && (
-        <Home lang={lang} onLang={changeLang} onNavigate={navigate} demoMode={demoMode} onToggleDemo={toggleDemo} />
+        <Home lang={lang} onLang={changeLang} onNavigate={navigate} demoMode={demoMode} onToggleDemo={toggleDemo} onTour={() => setTouring(true)} />
+      )}
+
+      {touring && screen === 'HOME' && (
+        <Tour
+          lang={lang}
+          onLang={changeLang}
+          onDone={() => {
+            save('vaachak.toured', true);
+            setTouring(false);
+          }}
+        />
       )}
 
       {screen === 'CAMERA' && <Camera lang={lang} onClose={goHome} onCapture={onCapture} />}

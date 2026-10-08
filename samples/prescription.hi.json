@@ -80,6 +80,18 @@
     "food": "after"
   },
   "medicines": null,
+  "reminders": [
+    {
+      "name": "Metformin 500 mg",
+      "morning": 1,
+      "noon": 0,
+      "night": 1,
+      "food": "after",
+      "days": 30
+    }
+  ],
+  "janAushadhi": "यही दवा (metformin) जन औषधि केंद्र पर आमतौर पर बहुत सस्ती मिलती है. डॉक्टर या केमिस्ट से पूछिए.",
+  "helplines": null,
   "checklist": null,
   "dates": {
     "today": "2026-10-09",

@@ -81,6 +81,15 @@
   },
   "pills": null,
   "medicines": null,
+  "reminders": null,
+  "janAushadhi": null,
+  "helplines": [
+    {
+      "kind": "cyber",
+      "number": "1930",
+      "label": "सायबर फसवणूक हेल्पलाइन 1930"
+    }
+  ],
   "checklist": null,
   "dates": {
     "today": "2026-10-09",
@@ -97,6 +106,6 @@
     "calendarUrl": null,
     "familySummaryEn": "Looks like a SCAM message. Please call me before I do anything."
   },
-  "speak": "सावधान! हा फसवणुकीचा मेसेज वाटतो. खाजगी मोबाईल नंबरवर फोन करायला सांगितले आहे. हा अधिकृत हेल्पलाइन नंबर नाही. आजच सेवा बंद करण्याची धमकी आहे. अशी घाई फसवणुकीचे लक्षण आहे. फोन करू नका, पैसे भरू नका, कोणालाही OTP सांगू नका. आधी घरच्यांना विचारा.",
+  "speak": "सावधान! हा फसवणुकीचा मेसेज वाटतो. खाजगी मोबाईल नंबरवर फोन करायला सांगितले आहे. हा अधिकृत हेल्पलाइन नंबर नाही. आजच सेवा बंद करण्याची धमकी आहे. अशी घाई फसवणुकीचे लक्षण आहे. फोन करू नका, पैसे भरू नका, कोणालाही OTP सांगू नका. आधी घरच्यांना विचारा. जर पैसे भरले असतील किंवा OTP सांगितला असेल, तर आत्ताच 1930 वर फोन करा.",
   "rawText": "Dear Consumer, your electricity power will be disconnected tonight at 9.30 pm because your previous month bill was not updated. Please immediately contact our electricity officer 7894561230. Thank you"
 }

@@ -80,6 +80,18 @@
     "food": "after"
   },
   "medicines": null,
+  "reminders": [
+    {
+      "name": "Metformin 500 mg",
+      "morning": 1,
+      "noon": 0,
+      "night": 1,
+      "food": "after",
+      "days": 30
+    }
+  ],
+  "janAushadhi": "The same medicine (metformin) is usually much cheaper at a Jan Aushadhi Kendra. Ask your doctor or chemist.",
+  "helplines": null,
   "checklist": null,
   "dates": {
     "today": "2026-10-09",

@@ -3,6 +3,8 @@ import { ask } from './api';
 import { makeT } from './i18n';
 import { speak, stopVoice, offlineClip } from './voice';
 import { rememberBill } from './storage';
+import { savePaper } from './papers';
+import { doseEvents, encodeReminders, googleCalendarUrl } from '../../lib/reminders.js';
 import Icon from './Icons';
 
 // Severity decides the colour of the verdict slab.
@@ -14,6 +16,8 @@ const VERDICT = {
   LOW_CONFIDENCE: { slab: 'bg-ink text-paper' },
 };
 const ROWS = ['what', 'action', 'deadline', 'amount', 'warning'];
+// iPhone/iPad Safari opens a calendar file with "Add All"; elsewhere we add each dose time on Google Calendar.
+const isApple = () => /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent);
 
 function Action({ icon, label, onClick, primary }) {
   return (
@@ -37,12 +41,14 @@ export default function Card({ card, lang, photoUrl, photoBlob, onAgain }) {
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState('');
   const [recording, setRecording] = useState(false);
+  const [doseSheet, setDoseSheet] = useState(null);
   const recorderRef = useRef(null);
   const photoRef = useRef(null);
 
   // On arrival: remember the bill amount, buzz for danger, and read the card aloud.
   useEffect(() => {
     rememberBill(card);
+    savePaper(card);
     if (card.alert?.vibrate) navigator.vibrate?.(card.alert.vibrate);
     const clip = card.mode === 'offline' || !photoUrl ? offlineClip(card, lang) : null;
     speak(card.speak, lang, clip);
@@ -129,6 +135,15 @@ export default function Card({ card, lang, photoUrl, photoBlob, onAgain }) {
     }
   };
 
+  const setReminders = () => {
+    if (isApple()) {
+      location.href = `/api/reminders?lang=${card.lang}&d=${encodeReminders(card.reminders)}`;
+      return;
+    }
+    setDoseSheet(doseEvents(card.reminders, { lang: card.lang }));
+  };
+  const dosesPerDay = (card.reminders || []).reduce((n, r) => n + [r.morning, r.noon, r.night].filter((x) => x > 0).length, 0);
+
   const consensus = card.consensus;
 
   const verdict = flag && VERDICT[flag];
@@ -147,6 +162,28 @@ export default function Card({ card, lang, photoUrl, photoBlob, onAgain }) {
               ))}
             </ul>
           )}
+        </section>
+      )}
+
+      {card.helplines?.length > 0 && (
+        <section className="mb-5 bg-paper rounded-[26px] p-4 border-[3px] border-postred">
+          <h3 className="font-display text-[24px] text-postred mb-3">{t('callTitle')}</h3>
+          <div className="space-y-3">
+            {card.helplines.map((h) => (
+              <a
+                key={h.number}
+                href={`tel:${h.number.replace(/\s/g, '')}`}
+                className={`press flex items-center gap-4 rounded-[20px] px-4 py-4 ${h.kind === 'cyber' ? 'bg-postred text-paper' : 'bg-ink text-paper'}`}
+              >
+                <Icon name="phone" size={34} />
+                <span className="flex-1 min-w-0">
+                  <span className="block font-display text-[30px] leading-none">{h.number}</span>
+                  <span className="block text-[17px] font-bold mt-1 leading-snug">{h.label}</span>
+                </span>
+                <span className="text-[19px] font-bold">{t('call')}</span>
+              </a>
+            ))}
+          </div>
         </section>
       )}
 
@@ -255,6 +292,23 @@ export default function Card({ card, lang, photoUrl, photoBlob, onAgain }) {
         </section>
       )}
 
+      {card.reminders?.length > 0 && !card.flags.includes('EXPIRED') && (
+        <button onClick={setReminders} className="press w-full mt-5 bg-leaf text-paper rounded-[22px] p-4 flex items-center gap-4 text-left">
+          <Icon name="alarm" size={40} />
+          <span>
+            <span className="block text-[23px] font-bold leading-tight">{t('medRemind')}</span>
+            <span className="block text-[17px] mt-1">{t('medRemindSub')(dosesPerDay)}</span>
+          </span>
+        </button>
+      )}
+
+      {card.janAushadhi && (
+        <section className="mt-5 rounded-[22px] p-4 bg-turmeric/25 border-2 border-turmeric">
+          <h3 className="flex items-center gap-2 font-display text-[22px]"><Icon name="pill" size={26} className="text-leaf" /> {t('cheaper')}</h3>
+          <p className="text-[19px] font-medium mt-1 leading-snug">{card.janAushadhi}</p>
+        </section>
+      )}
+
       {photoUrl && (
         <div ref={photoRef} className="relative mt-5 rounded-[18px] overflow-hidden border-4 border-paper shadow-lg">
           <img src={photoUrl} alt="" className="w-full block" />
@@ -305,6 +359,27 @@ export default function Card({ card, lang, photoUrl, photoBlob, onAgain }) {
       <button onClick={onAgain} className="w-full mt-7 min-h-[68px] rounded-full border-[3px] border-ink text-[22px] font-bold flex items-center justify-center gap-2 active:bg-paper">
         <Icon name="back" size={26} /> {t('again')}
       </button>
+
+      {doseSheet && (
+        <div className="fixed inset-0 bg-ink/70 z-50 flex items-end sm:items-center justify-center p-4" role="dialog" aria-modal="true" onClick={() => setDoseSheet(null)}>
+          <div className="slip px-5 pb-5 w-full max-w-[420px] max-h-[85vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+            <p className="font-display text-[24px] leading-snug mb-4 mt-3">{t('pickTimes')}</p>
+            <ul className="space-y-3">
+              {doseSheet.map((e, i) => (
+                <li key={i} className="flex items-center gap-3 border-b-2 border-dashed border-ink/15 pb-3">
+                  <Icon name={{ morning: 'sun', noon: 'noon', night: 'moon' }[e.slot]} size={30} className="text-stamp shrink-0" />
+                  <span className="flex-1 min-w-0 text-[18px] font-bold leading-snug">
+                    {e.title.replace('💊 ', '')}
+                    <span className="block text-[16px] font-medium text-ink-soft">{e.time} · {t('days')(e.days)}</span>
+                  </span>
+                  <a href={googleCalendarUrl(e)} target="_blank" rel="noopener" className="press bg-leaf text-paper text-[18px] font-bold rounded-2xl px-4 py-3">{t('add')}</a>
+                </li>
+              ))}
+            </ul>
+            <button onClick={() => setDoseSheet(null)} className="w-full mt-4 min-h-[56px] rounded-full border-[3px] border-ink text-[20px] font-bold">{t('close')}</button>
+          </div>
+        </div>
+      )}
 
       {confirm && (
         <div className="fixed inset-0 bg-ink/70 z-50 flex items-end sm:items-center justify-center p-4" role="dialog" aria-modal="true">

@@ -102,6 +102,9 @@
   },
   "pills": null,
   "medicines": null,
+  "reminders": null,
+  "janAushadhi": null,
+  "helplines": null,
   "checklist": null,
   "dates": {
     "today": "2026-10-09",
