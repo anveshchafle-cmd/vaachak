@@ -3,6 +3,7 @@ import { makeT } from './i18n';
 import { load, save } from './storage';
 import Icon from './Icons';
 import { loadPapers, removePaper, upcoming, scamsCaught } from './papers';
+import { warmApi } from './api';
 
 const LANGS = [['mr', 'मराठी'], ['hi', 'हिंदी'], ['en', 'Eng']];
 
@@ -16,6 +17,9 @@ export default function Home({ lang, onLang, onNavigate, demoMode, onToggleDemo,
   const fileRef = useRef(null);
   const timerRef = useRef(null);
   const t = makeT(lang);
+
+  // Wake the reader and voice on the server while the person decides what to show.
+  useEffect(() => warmApi('read', 'tts'), []);
 
   useEffect(() => {
     save('vaachak.lang', lang);

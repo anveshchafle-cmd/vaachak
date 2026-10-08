@@ -1,6 +1,6 @@
 // POST /api/ask: a spoken or typed question about the card → a short answer from that document only.
 import { handle, json, preflight, HttpError, isMultipart, readJson, parseJsonField } from '../lib/http.js';
-import { generateJson, inlinePart } from '../lib/gemini.js';
+import { generateJson, inlinePart, ASK_MODELS, HEDGE_MS, PER_CALL_MS } from '../lib/gemini.js';
 import { ASK_SCHEMA, askPrompt } from '../lib/prompts.js';
 import { messages, normalizeLang } from '../lib/i18n.js';
 
@@ -25,7 +25,10 @@ function documentContext(card) {
   const fields = Object.fromEntries(Object.entries(card.fields || {}).map(([k, f]) => [k, f?.text || '']));
   return JSON.stringify({
     document_text: String(card.rawText || '').slice(0, 8000),
-    card: { docType: card.docType, fields, dates: card.dates, flags: card.flags, pills: card.pills, checklist: card.checklist },
+    card: {
+      docType: card.docType, fields, dates: card.dates, flags: card.flags, pills: card.pills, medicines: card.medicines,
+      checklist: card.checklist, payment: card.payment && { method: card.payment.method, to: card.payment.billerName, amount: card.payment.amount },
+    },
   });
 }
 
@@ -47,7 +50,9 @@ export const POST = handle(async (req) => {
     parts.push({ text: `QUESTION: ${String(question).slice(0, 500)}` });
   }
 
-  const result = await generateJson({ system: askPrompt(lang, messages(lang).notInDocument), parts, schema: ASK_SCHEMA });
+  const result = await generateJson({
+    system: askPrompt(lang, messages(lang).notInDocument), parts, schema: ASK_SCHEMA, models: ASK_MODELS, hedgeMs: HEDGE_MS.ask, perCallMs: PER_CALL_MS.ask,
+  });
   const answer = String(result.answer || '').trim() || messages(lang).notInDocument;
   return json({ heard: result.heard || question || '', answer, answerable: result.answerable !== false, speak: answer });
 });

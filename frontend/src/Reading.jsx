@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
-import Tesseract from 'tesseract.js';
+import { recognize } from './ocr';
 import { read, readText, processImage } from './api';
 import { offlineRead } from '../../lib/offline.js';
 import { buildCard } from '../../lib/card.js';
 import { settings } from './storage';
 import { makeT } from './i18n';
-import { warmVoice } from './voice';
+import { warmVoice, preloadVoice } from './voice';
 
 // Ready-made cards built by the backend (repo samples/), used in Demo mode and as named samples.
 const sampleFiles = import.meta.glob('../../samples/*.json', { eager: true });
@@ -15,7 +15,7 @@ export const SAMPLES = Object.fromEntries(
 const SAMPLE_ORDER = ['electricity-bill', 'medicine-expired', 'scam-sms', 'prescription'];
 
 // After the server answers, wait at most this long for on-device OCR to finish.
-const OCR_GRACE_MS = 2000;
+const OCR_GRACE_MS = 1000;
 
 // Rebuilds the server's card with the phone's OCR text, so Gemini and Tesseract must agree
 // on the amount and date (same pure buildCard the server uses).
@@ -51,7 +51,7 @@ export default function Reading({ input, isDemo, onSuccess, onError, onCancel })
     let isMounted = true;
     const opts = settings();
     warmVoice();
-    const slowTimer = setTimeout(() => isMounted && setNote(t('slow')), 12000);
+    const slowTimer = setTimeout(() => isMounted && setNote(t('slow')), 8000);
     const done = (card) => isMounted && cb.current.onSuccess(card);
 
     async function run() {
@@ -71,7 +71,9 @@ export default function Reading({ input, isDemo, onSuccess, onError, onCancel })
           return done(offlineRead(value, opts));
         }
         try {
-          done(await readText(value, opts));
+          const card = await readText(value, opts);
+          preloadVoice(card.speak, lang);
+          done(card);
         } catch {
           if (!isMounted) return;
           if (isLink) return cb.current.onError(t('linkError'));
@@ -85,7 +87,7 @@ export default function Reading({ input, isDemo, onSuccess, onError, onCancel })
       const isImage = file.type?.startsWith('image/');
       const small = isImage ? await processImage(file) : file;
       const ocr = isImage
-        ? Tesseract.recognize(small, 'eng').then((r) => r.data.text || '').catch(() => '')
+        ? recognize(small)
         : Promise.resolve('');
       if (!isMounted) return;
       setStatus(t('reading'));
@@ -103,6 +105,8 @@ export default function Reading({ input, isDemo, onSuccess, onError, onCancel })
         else cb.current.onError(t('error'));
         return;
       }
+      // Start making the voice while the second engine finishes.
+      preloadVoice(card.speak, lang);
       // Second engine: give OCR a short grace period, then re-check the card against it.
       const edgeText = await Promise.race([ocr, new Promise((r) => setTimeout(() => r(''), OCR_GRACE_MS))]);
       done(edgeText && card.extraction ? withEdgeText(card, edgeText, opts) : card);

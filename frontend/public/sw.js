@@ -1,6 +1,6 @@
 // Keeps the app shell, offline voice clips and samples on the phone, so Demo mode and the
 // offline reader still open with no internet. API calls always go to the network.
-const CACHE = 'vaachak-v2';
+const CACHE = 'vaachak-v3';
 const PRECACHE = [
   '/',
   '/manifest.webmanifest',
@@ -30,6 +30,24 @@ self.addEventListener('fetch', (e) => {
   if (e.request.method !== 'GET' || url.origin !== location.origin || url.pathname.startsWith('/api/')) return;
   // Every page load (including shared ?text=... links) is the same single-page app, cached as '/'.
   const key = e.request.mode === 'navigate' ? '/' : e.request;
+  // Built files have a content hash in their name and never change, so the phone's copy is used
+  // right away (the app opens instantly on a slow connection).
+  if (url.pathname.startsWith('/assets/')) {
+    e.respondWith(
+      caches.match(e.request).then(
+        (hit) =>
+          hit ||
+          fetch(e.request).then((res) => {
+            if (res.ok) {
+              const copy = res.clone();
+              caches.open(CACHE).then((c) => c.put(e.request, copy));
+            }
+            return res;
+          }),
+      ),
+    );
+    return;
+  }
   // Network first, so new deploys show up; fall back to the cache when offline.
   e.respondWith(
     fetch(e.request)

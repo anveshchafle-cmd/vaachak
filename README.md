@@ -178,9 +178,9 @@ VITE_PROXY=http://localhost:3000 npm run dev    # app on http://localhost:5173
 |---|:---:|---|
 | `GEMINI_API_KEY` | ✅ | Reading documents and answering questions |
 | `SARVAM_API_KEY` | | Natural Indian voice (falls back to Gemini TTS) |
-| `GEMINI_MODEL` | | Override the main model (default `gemini-3.8-flash`) |
-| `GEMINI_FALLBACK_MODELS` | | Comma-separated backup models |
-| `SARVAM_SPEAKER`, `SARVAM_PACE` | | Voice and speed (default `shubh`, `0.85`) |
+| `GEMINI_MODELS` | | Comma-separated models for reading, fastest first; tried in parallel when one is slow (default: `gemini-3-flash-preview`, then the lite models, then the big flash models) |
+| `GEMINI_ASK_MODELS` | | Same, for spoken/typed questions |
+| `SARVAM_SPEAKER`, `SARVAM_PACE` | | Voice and speed (default `shubh`, `1` = medium) |
 
 </details>
 

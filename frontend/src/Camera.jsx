@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import { startViewfinder } from '../../lib/viewfinder.js';
 import { makeT } from './i18n';
+import { warmOcr } from './ocr';
 
 const STATUS_KEY = { dark: 'camDark', blurry: 'camBlurry', ok: 'camOk' };
 
 export default function Camera({ lang, onCapture, onClose }) {
   const videoRef = useRef(null);
-  const stopRef = useRef(null);
+  const camRef = useRef(null);
   const doneRef = useRef(false);
   // Keep the latest callback without restarting the camera every render.
   const captureRef = useRef(onCapture);
@@ -18,41 +19,35 @@ export default function Camera({ lang, onCapture, onClose }) {
   useEffect(() => {
     let cancelled = false;
     doneRef.current = false;
+    // Load the on-device text reader while the person is still aiming.
+    warmOcr();
     startViewfinder(videoRef.current, {
       lang,
       onStatus: (status) => setStatusMsg(t(STATUS_KEY[status] || 'camOk')),
       onCapture: (blob) => {
         if (doneRef.current) return;
         doneRef.current = true;
-        captureRef.current(blob);
+        captureRef.current(new File([blob], 'photo.jpg', { type: 'image/jpeg' }));
       },
     })
-      .then((stop) => {
-        if (cancelled) stop();
-        else stopRef.current = stop;
+      .then((cam) => {
+        if (cancelled) cam.stop();
+        else camRef.current = cam;
       })
-      .catch(() => setError(t('error')));
+      .catch(() => !cancelled && setError(t('error')));
     return () => {
       cancelled = true;
-      stopRef.current?.();
-      stopRef.current = null;
+      camRef.current?.stop();
+      camRef.current = null;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lang]);
 
+  // The shutter waits for the shake of the tap to pass, then keeps the sharpest frame.
   const handleManualCapture = () => {
-    const video = videoRef.current;
-    if (!video || !video.videoWidth || doneRef.current) return;
-    const canvas = document.createElement('canvas');
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    const ctx = canvas.getContext('2d');
-    ctx.drawImage(video, 0, 0);
-    canvas.toBlob((blob) => {
-      doneRef.current = true;
-      stopRef.current?.();
-      captureRef.current(new File([blob], 'manual_capture.jpg', { type: 'image/jpeg' }));
-    }, 'image/jpeg', 0.9);
+    if (doneRef.current) return;
+    setStatusMsg(t('camOk'));
+    camRef.current?.snap();
   };
 
   return (

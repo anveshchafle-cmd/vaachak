@@ -40,7 +40,7 @@ function browserSpeak(text, lang) {
   if (!globalThis.speechSynthesis) return;
   const u = new SpeechSynthesisUtterance(text);
   u.lang = LANG_TAGS[lang] || 'mr-IN';
-  u.rate = 0.9;
+  u.rate = 1;
   speechSynthesis.speak(u);
 }
 
@@ -58,11 +58,37 @@ function play(src) {
   });
 }
 
-// The first sentence is short, so its voice comes back in about a second while the rest is
-// still being made. Abbreviations like "डॉ." and amounts like "₹1,740.00" are not split.
-function splitFirst(text) {
-  const m = /^(.{12,}?[.!?।])\s+(.{20,})$/s.exec(text);
-  return m ? [m[1], m[2]] : [text];
+// Short pieces come back from the voice server faster, so the text is cut at sentence ends:
+// the first sentence alone (it starts playing in about a second), then pieces of up to ~160
+// characters, all made at the same time while the first one plays.
+// Abbreviations like "डॉ." and amounts like "₹1,740.00" are not split (a break needs a space after it).
+export function splitSpeech(text, max = 160) {
+  const sentences = text.match(/.{12,}?[.!?।](?=\s|$)|.+$/gs)?.map((s) => s.trim()).filter(Boolean) || [text];
+  const parts = [sentences[0]];
+  for (const s of sentences.slice(1)) {
+    const last = parts.length - 1;
+    if (last > 0 && parts[last].length + s.length < max) parts[last] += ` ${s}`;
+    else parts.push(s);
+  }
+  return parts;
+}
+
+// Voice clips already made in this visit, so "Listen again" plays instantly.
+const clips = new Map();
+function voiceClip(text, lang) {
+  const key = `${lang}|${text}`;
+  if (!clips.has(key)) {
+    const p = tts(text, lang);
+    p.catch(() => clips.delete(key));
+    clips.set(key, p);
+    if (clips.size > 40) clips.delete(clips.keys().next().value);
+  }
+  return clips.get(key);
+}
+
+// Starts making the voice early (e.g. while the screen changes), without playing it.
+export function preloadVoice(text, lang) {
+  if (text && navigator.onLine) splitSpeech(text).forEach((p) => voiceClip(p, lang).catch(() => {}));
 }
 
 // Natural Sarvam voice from the backend; if offline or it fails, a pre-recorded clip; last, the phone's own voice.
@@ -70,16 +96,21 @@ export async function speak(text, lang, clip = null) {
   stopVoice();
   if (!text) return;
   const mine = session;
-  const parts = splitFirst(text);
+  const parts = splitSpeech(text);
   let played = 0;
   try {
     if (!navigator.onLine) throw new Error('offline');
-    const blobs = parts.map((p) => tts(p, lang));
+    const blobs = parts.map((p) => voiceClip(p, lang));
     blobs.forEach((b) => b.catch(() => {}));
     for (const b of blobs) {
       const blob = await b;
       if (mine !== session) return;
-      await play(URL.createObjectURL(blob));
+      const url = URL.createObjectURL(blob);
+      try {
+        await play(url);
+      } finally {
+        URL.revokeObjectURL(url);
+      }
       if (mine !== session) return;
       played++;
     }

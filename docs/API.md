@@ -197,20 +197,21 @@ fails (`GEMINI_BUSY`, `QUOTA`, network error), show `offlineRead(...)` instead o
 
 `lib/viewfinder.js` (browser only) watches the live camera so the person never has to aim or press a tiny button:
 - too dark → speaks **"प्रकाश कमी आहे. टॉर्च चालू करत आहे."** and switches on the phone's flashlight (Android Chrome);
-- blurry/shaking → speaks **"फोन स्थिर धरा."**;
-- bright and sharp for ~1 second → speaks **"छान. फोटो घेत आहे."** and captures a ≤1600 px JPEG by itself.
+- blurry, still focusing, or shaking → speaks **"फोन स्थिर धरा."** (sharpness is measured on the middle of the full-resolution frame, and frame-to-frame motion is checked);
+- after a 1.5 s settle, bright, sharp and still for ~1 second → speaks **"छान. फोटो घेत आहे."**, grabs 3 frames and keeps the sharpest as a ≤1600 px JPEG.
+- the shutter button (`snap()`) waits 0.3 s for the tap shake to pass and keeps the sharpest of 5 frames.
 
 ```js
 import { startViewfinder } from '../lib/viewfinder.js';
 
-const stop = await startViewfinder(document.querySelector('video'), {
+const { stop, snap } = await startViewfinder(document.querySelector('video'), {
   lang: 'mr',
   onStatus: (status) => setHint(status),          // 'dark' | 'blurry' | 'ok', for an on-screen hint
   onCapture: async (blob) => { /* run Tesseract on blob, then POST blob to /api/read */ },
 });
-// call stop() if the user leaves the camera screen
+// snap() for the shutter button; stop() if the user leaves the camera screen
 ```
-Thresholds are in `THRESHOLDS` (`dark: 60`, `blurry: 60`); tune them on the demo phone if needed.
+Thresholds are in `THRESHOLDS` (`dark: 60`, `blurry: 250`, `moving: 8`); tune them on the demo phone if needed.
 
 ---
 
@@ -255,7 +256,7 @@ The free Gemini voice quota is small, so **always have a fallback**: the browser
 ---
 
 ## `GET /api/health`
-`{ "ok": true, "model": "gemini-3.8-flash", "ttsModel": "...", "hasKey": true }`
+`{ "ok": true, "model": "gemini-3-flash-preview", "ttsModel": "...", "hasKey": true }`
 
 ---
 

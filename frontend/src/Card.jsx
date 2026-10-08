@@ -1,11 +1,19 @@
 import { useEffect, useRef, useState } from 'react';
-import { ask } from './api';
+import { ask, warmApi } from './api';
 import { makeT } from './i18n';
 import { speak, stopVoice, offlineClip } from './voice';
 import { rememberBill } from './storage';
 import { savePaper } from './papers';
 import { doseEvents, encodeReminders, googleCalendarUrl } from '../../lib/reminders.js';
 import Icon from './Icons';
+import { listen as hearQuestion } from './listen';
+import { quickAnswer } from '../../lib/quick-answer.js';
+
+// Only what /api/ask needs, so the question uploads fast (the full card also carries links and the raw extraction).
+const askCard = (c) => ({
+  lang: c.lang, docType: c.docType, rawText: c.rawText, fields: c.fields, dates: c.dates, flags: c.flags,
+  pills: c.pills, medicines: c.medicines, checklist: c.checklist, payment: c.payment,
+});
 
 // Severity decides the colour of the verdict slab.
 const VERDICT = {
@@ -42,18 +50,32 @@ export default function Card({ card, lang, photoUrl, photoBlob, onAgain }) {
   const [answer, setAnswer] = useState('');
   const [recording, setRecording] = useState(false);
   const [doseSheet, setDoseSheet] = useState(null);
-  const recorderRef = useRef(null);
+  const [heard, setHeard] = useState('');
+  const listenRef = useRef(null);
+  // Every question gets a number; an answer that arrives after a newer question was asked is
+  // dropped, so an old answer is never shown or spoken for the new question.
+  const askSeq = useRef(0);
   const photoRef = useRef(null);
 
   // On arrival: remember the bill amount, buzz for danger, and read the card aloud.
   useEffect(() => {
     rememberBill(card);
+    if (card.mode !== 'offline') warmApi('ask');
     savePaper(card);
     if (card.alert?.vibrate) navigator.vibrate?.(card.alert.vibrate);
     const clip = card.mode === 'offline' || !photoUrl ? offlineClip(card, lang) : null;
     speak(card.speak, lang, clip);
     return () => stopVoice();
   }, [card, lang, photoUrl]);
+
+  // Leaving the card: stop listening and forget any answer still on its way.
+  useEffect(
+    () => () => {
+      askSeq.current++;
+      listenRef.current?.stop();
+    },
+    [],
+  );
 
   const listen = () => speak(card.speak, lang, offlineClip(card, lang));
 
@@ -96,43 +118,57 @@ export default function Card({ card, lang, photoUrl, photoBlob, onAgain }) {
     window.open(card.actions.whatsappUrl, '_blank', 'noopener');
   };
 
-  const sendQuestion = async (payload, isAudio) => {
-    setAnswer('…');
+  const sendQuestion = async ({ question: q, audio }) => {
+    const mine = ++askSeq.current;
+    stopVoice();
+    setHeard(q || '');
+    setAnswer(t('thinking'));
     try {
-      const res = await ask(payload, isAudio);
+      const slim = askCard(card);
+      const res = audio ? await ask({ audio, card: JSON.stringify(slim), lang }, true) : await ask({ question: q, card: slim, lang });
+      if (mine !== askSeq.current) return;
+      if (res.heard) setHeard(res.heard);
       setAnswer(res.answer);
       speak(res.speak, lang);
     } catch {
-      setAnswer(t('error'));
+      if (mine !== askSeq.current) return;
+      // Server busy or slow: the common questions (amount, last date, number) are answered from the card itself.
+      const local = quickAnswer(q, card, lang);
+      setAnswer(local || t('error'));
+      if (local) speak(local, lang);
     }
   };
 
   const toggleMic = async () => {
-    if (recorderRef.current) {
-      recorderRef.current.stop();
+    if (listenRef.current) {
+      listenRef.current.stop();
       return;
     }
+    stopVoice();
+    askSeq.current++;
+    const session = hearQuestion({ lang, onWords: setHeard });
+    listenRef.current = session;
+    setRecording(true);
+    setHeard('');
+    setAnswer(t('listening'));
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const chunks = [];
-      const rec = new MediaRecorder(stream);
-      rec.ondataavailable = (e) => chunks.push(e.data);
-      rec.onstop = () => {
-        stream.getTracks().forEach((tr) => tr.stop());
-        recorderRef.current = null;
-        setRecording(false);
-        const audio = new Blob(chunks, { type: rec.mimeType || 'audio/webm' });
-        sendQuestion({ audio, card: JSON.stringify(card), lang }, true);
-      };
-      stopVoice();
-      rec.start();
-      recorderRef.current = rec;
-      setRecording(true);
-      setAnswer(t('listening'));
-      setTimeout(() => recorderRef.current === rec && rec.stop(), 20000);
+      const { text, audio } = await session.result;
+      if (text) sendQuestion({ question: text });
+      else if (audio?.size > 2000) sendQuestion({ audio });
+      else setAnswer(t('notHeard'));
     } catch {
       setAnswer(t('error'));
+    } finally {
+      listenRef.current = null;
+      setRecording(false);
     }
+  };
+
+  const typeQuestion = () => {
+    const q = question.trim();
+    if (!q) return;
+    setQuestion('');
+    sendQuestion({ question: q });
   };
 
   const setReminders = () => {
@@ -340,19 +376,24 @@ export default function Card({ card, lang, photoUrl, photoBlob, onAgain }) {
             <input
               value={question}
               onChange={(e) => setQuestion(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && question.trim() && sendQuestion({ question, card, lang })}
+              onKeyDown={(e) => e.key === 'Enter' && typeQuestion()}
               placeholder={t('askPh')}
               aria-label={t('askPh')}
               className="flex-1 min-w-0 px-4 py-3 text-[19px] rounded-2xl bg-paper/15 text-paper placeholder:text-paper/70 border-2 border-paper/30 focus:border-paper outline-none"
             />
             <button
-              onClick={() => question.trim() && sendQuestion({ question, card, lang })}
+              onClick={typeQuestion}
               className="bg-turmeric text-ink text-[19px] font-bold rounded-2xl px-4 min-h-[56px]"
             >
               {t('askBtn')}
             </button>
           </div>
-          {answer && <p className="text-[22px] font-bold mt-4 leading-snug">{answer}</p>}
+          {heard && (
+            <p className="text-[18px] mt-4 leading-snug text-paper/85">
+              <span className="font-bold">{t('youAsked')}:</span> {heard}
+            </p>
+          )}
+          {answer && <p className="text-[22px] font-bold mt-3 leading-snug" aria-live="polite">{answer}</p>}
         </section>
       )}
 

@@ -46,8 +46,8 @@ async function fetchWithTimeout(resource, options = {}) {
   }
 }
 
-// The backend tries several Gemini models within 40 s; after 45 s we show the offline result instead.
-const READ_TIMEOUT_MS = 45000;
+// The backend tries several Gemini models within 35 s; after 40 s we show the offline result instead.
+const READ_TIMEOUT_MS = 40000;
 
 async function postRead(formData) {
   try {
@@ -112,7 +112,7 @@ export async function ask(payload, isAudio = false) {
     options.body = JSON.stringify(payload);
   }
   
-  const res = await fetch(`${API}/api/ask`, options);
+  const res = await fetchWithTimeout(`${API}/api/ask`, { ...options, timeout: 15000 });
   if (!res.ok) throw new Error('Ask API failed');
   return res.json();
 }
@@ -126,4 +126,8 @@ export async function tts(text, lang) {
   
   if (!res.ok) throw new Error('TTS API failed');
   return res.blob();
+}
+// Wakes the server functions before they are needed, so the first read or question skips the cold start.
+export function warmApi(...names) {
+  for (const n of names) fetch(`${API}/api/${n}`, { method: 'OPTIONS' }).catch(() => {});
 }

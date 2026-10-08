@@ -1,4 +1,4 @@
-// POST /api/tts: { text, lang } → spoken audio (WAV), slow and clear for elderly listeners.
+// POST /api/tts: { text, lang } → spoken audio (MP3/WAV), clear and at a medium pace.
 // Uses Sarvam AI when configured, otherwise Gemini. The X-Voice-Provider header says which.
 import { handle, preflight, binary, HttpError, readJson } from '../lib/http.js';
 import { synthesize } from '../lib/speech.js';
