@@ -37,8 +37,11 @@ test('amount not printed on the document lowers confidence', () => {
   const card = buildCard(ex, { today: TODAY });
   assert.equal(card.fields.amount.verified, false);
   assert.ok(card.fields.amount.confidence <= 0.5);
-  assert.ok(card.flags.includes('LOW_CONFIDENCE'));
-  assert.match(card.speak, /हे साफ दिसत नाही. कृपया कुणालातरी विचारून घ्या./);
+  // The rest of the bill is still read; only the amount gets "check this on the paper", and no payment.
+  assert.ok(!card.flags.includes('LOW_CONFIDENCE'));
+  assert.match(card.speak, /MSEDCL/);
+  assert.match(card.speak, /रक्कम: [^.]+.[^]*हे एकदा कागदावर तपासून घ्या/);
+  assert.equal(card.payment, null);
 });
 
 test('expired medicine: rule overrides AI, red flag, no pill schedule', () => {

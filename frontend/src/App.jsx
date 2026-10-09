@@ -70,7 +70,10 @@ export default function App() {
     setToast(msg);
   }, []);
   const goHome = useCallback(() => navigate('HOME'), [navigate]);
-  const changeLang = useCallback((l) => setLang(l), []);
+  const changeLang = useCallback((l) => {
+    save('vaachak.lang', l);
+    setLang(l);
+  }, []);
 
   return (
     <div className="w-full max-w-[480px] mx-auto bg-inland min-h-screen relative overflow-hidden font-body text-ink sm:shadow-[0_0_0_1px_rgba(20,33,61,.08),0_30px_60px_-20px_rgba(20,33,61,.4)]">
@@ -109,7 +112,7 @@ export default function App() {
       {screen === 'CALL' && <CallCheck lang={lang} onBack={goHome} onRead={(input) => navigate('READING', { input })} />}
 
       {screen === 'READING' && (
-        <Reading input={input} isDemo={demoMode} onSuccess={onSuccess} onError={onError} onCancel={goHome} />
+        <Reading input={input} lang={lang} isDemo={demoMode} onSuccess={onSuccess} onError={onError} onCancel={goHome} />
       )}
 
       {screen === 'CARD' && cardData && (

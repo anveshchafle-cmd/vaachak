@@ -88,6 +88,9 @@ function Action({ icon, label, onClick, primary }) {
 
 export default function Card({ card, lang, photoUrl, photoBlob, onAgain }) {
   const t = makeT(lang);
+  // The card's own words are spoken in the language they were written in (a saved paper may be
+  // from before the language was changed); answers to questions come in the chosen language.
+  const cardLang = card.lang || lang;
   const flag = card.flags[0];
   const [box, setBox] = useState(null);
   const [confirm, setConfirm] = useState(null);
@@ -108,10 +111,10 @@ export default function Card({ card, lang, photoUrl, photoBlob, onAgain }) {
     if (card.mode !== 'offline') warmApi('ask');
     savePaper(card);
     if (card.alert?.vibrate) navigator.vibrate?.(card.alert.vibrate);
-    const clip = card.mode === 'offline' || !photoUrl ? offlineClip(card, lang) : null;
-    speak(card.speak, lang, clip);
+    const clip = card.mode === 'offline' || !photoUrl ? offlineClip(card, cardLang) : null;
+    speak(card.speak, cardLang, clip);
     return () => stopVoice();
-  }, [card, lang, photoUrl]);
+  }, [card, cardLang, photoUrl]);
 
   // Leaving the card: stop listening and forget any answer still on its way.
   useEffect(
@@ -122,7 +125,7 @@ export default function Card({ card, lang, photoUrl, photoBlob, onAgain }) {
     [],
   );
 
-  const listen = () => speak(card.speak, lang, offlineClip(card, lang));
+  const listen = () => speak(card.speak, cardLang, offlineClip(card, cardLang));
 
   const showWhere = (b) => {
     setBox(b);
@@ -131,7 +134,7 @@ export default function Card({ card, lang, photoUrl, photoBlob, onAgain }) {
 
   const pay = () => {
     setConfirm(card.payment.confirmText);
-    speak(card.payment.confirmText, lang);
+    speak(card.payment.confirmText, cardLang);
   };
   const confirmPay = async () => {
     const p = card.payment;
@@ -143,7 +146,7 @@ export default function Card({ card, lang, photoUrl, photoBlob, onAgain }) {
     // No await before window.open: iPhone Safari blocks a new tab that isn't opened right in the tap.
     if (p.copyText) navigator.clipboard?.writeText(p.copyText).catch(() => {});
     if (p.officialUrl) window.open(p.officialUrl, '_blank', 'noopener');
-    if (p.copyText && p.copiedText) speak(p.copiedText, lang);
+    if (p.copyText && p.copiedText) speak(p.copiedText, cardLang);
   };
 
   // Photo + summary through the phone's share sheet (WhatsApp); a wa.me link when files can't be shared.

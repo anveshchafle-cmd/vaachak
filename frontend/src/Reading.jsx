@@ -38,8 +38,7 @@ function nextDemoSample(lang) {
   return sampleCard(SAMPLE_ORDER[i % SAMPLE_ORDER.length], lang);
 }
 
-export default function Reading({ input, isDemo, onSuccess, onError, onCancel }) {
-  const { lang } = settings();
+export default function Reading({ input, lang, isDemo, onSuccess, onError, onCancel }) {
   const t = makeT(lang);
   const [status, setStatus] = useState(input?.text || input?.audio ? t('reading') : t('scanning'));
   const [note, setNote] = useState(t('wait'));
@@ -49,7 +48,8 @@ export default function Reading({ input, isDemo, onSuccess, onError, onCancel })
 
   useEffect(() => {
     let isMounted = true;
-    const opts = settings();
+    // The language on screen, not only what was saved (saving fails in private windows).
+    const opts = { ...settings(), lang };
     warmVoice();
     const slowTimer = setTimeout(() => isMounted && setNote(t('slow')), 8000);
     const done = (card) => isMounted && cb.current.onSuccess(card);
@@ -83,7 +83,7 @@ export default function Reading({ input, isDemo, onSuccess, onError, onCancel })
         }
         try {
           const card = await readText(value, { ...opts, kind });
-          preloadVoice(card.speak, lang);
+          preloadVoice(card.speak, card.lang || lang);
           done(card);
         } catch {
           if (!isMounted) return;
@@ -117,7 +117,7 @@ export default function Reading({ input, isDemo, onSuccess, onError, onCancel })
         return;
       }
       // Start making the voice while the second engine finishes.
-      preloadVoice(card.speak, lang);
+      preloadVoice(card.speak, card.lang || lang);
       // Second engine: give OCR a short grace period, then re-check the card against it.
       const edgeText = await Promise.race([ocr, new Promise((r) => setTimeout(() => r(''), OCR_GRACE_MS))]);
       done(edgeText && card.extraction ? withEdgeText(card, edgeText, opts) : card);

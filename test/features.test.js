@@ -40,7 +40,9 @@ test('dual-engine consensus: one wrong OCR digit is tolerated, a different amoun
   const card = buildCard(ex, { today: TODAY, edgeText: BILL_OCR.replace('84O.00', '1,290.00') });
   assert.equal(card.fields.amount.edge, 'disagree');
   assert.equal(card.consensus.badge, null);
-  assert.ok(card.flags.includes('LOW_CONFIDENCE'));
+  assert.ok(card.fields.amount.confidence < 0.6, 'the amount is marked unclear');
+  assert.ok(!card.flags.includes('LOW_CONFIDENCE'), 'the rest of the card is still read');
+  assert.match(card.speak, /हे एकदा कागदावर तपासून घ्या/);
   assert.equal(card.payment, null, 'never offer payment when the engines disagree on the amount');
 });
 
