@@ -150,8 +150,8 @@ const CLIP_TIMEOUT_MS = 12_000;
 // Silence feels broken, so when the phone has its own voice for the language the natural voice
 // gets only this long to start, and this long to fill a gap between pieces; after that the
 // phone's voice reads the rest right away (the natural clips still finish into the cache).
-const START_WAIT_MS = 2_000;
-const GAP_WAIT_MS = 1_200;
+const START_WAIT_MS = 3_000;
+const GAP_WAIT_MS = 2_000;
 const late = (ms) => new Promise((_, reject) => setTimeout(() => reject(new Error('voice too slow')), ms));
 
 // Voice clips already made in this visit, so "Listen again" plays instantly.
